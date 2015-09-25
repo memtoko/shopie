@@ -1,0 +1,5 @@
+*.pyc
+*.db
+/node_modules
+/client/node_modules
+/client/bower_components

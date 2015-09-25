@@ -1,0 +1,81 @@
+{% load staticfiles%}<!DOCTYPE html>
+<html lang="en" {% block htmlattribute %}{% endblock %}>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{% endblock %}</title>
+
+  <link rel="stylesheet" href="{% static "css/normalize.css" %}" type="text/css">
+  <link rel="stylesheet" href="{% static "css/app.css" %}" type="text/css">
+  {% block extrastyle %}{% endblock %}
+  {% block extrahead %}{% endblock %}
+  <script src="{% static "js/vendor/webfontloader/webfontloader.js" %}"></script>
+  <script>
+  WebFont.load({
+    google: {
+      families: ['Roboto:400italic,700italic,300,700,400:latin',
+                  'Ubuntu:700italic,700,400,400italic'
+      ]
+    },
+    classes: false,
+    events: false,
+    timeout: 1000
+  });
+  </script>
+  <script href="{% static "js/vendor/modernizr.js" %}" type="text/javascript"></script>
+
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+</head>
+<body id="{{ body_id|default:"app" }}" class="{% block bodyclass %}{% endblock %}">
+  <header class="main-header {{ header_class|default:"app"}}">
+    <nav class="top-bar global-nav {{ navbar_class|default:"navbar-app" }}" data-topbar role="navigation">
+      <ul class="title-area">
+        <li class="name">
+          <h1><a href="/">Memtoko</a></h1>
+        </li>
+        <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+      </ul>
+          <section class="top-bar-section">
+              <ul class="right">
+                <li><a href="{% url 'cart' %}">Cart</li>
+                {% if user.is_authenticated %}
+                  <li class="has-dropdown">
+                    <a href="#">{{ user.username }}</a>
+                      <ul class="dropdown">
+                        <li><a href="#">Dashboard</a></li>
+                        <li><a href="/account/logout">Logout</a></li>
+                      </ul>
+                  </li>
+                {% else %}
+                  <li><a href="/account/login">Login</a></li>
+                  <li><a href="/account/register">Register</a></li>
+                {% endif %}
+              </ul>
+                <ul class="left">
+                  <li><a href="/shop">Shop</a></li>
+              </ul>
+          </section>
+    </nav>
+    {% block header_extra %}{% endblock %}
+  </header>
+  {% block content %}}{{% endblock %}
+  <footer class="memtoko-footer">
+      <script src="{% static "js/build/libs/vendor.js" %}"></script>
+      <script src="{% static "js/build/scripts/app.min.js" %}"></script>
+      <script>
+        $(document).foundation();
+      </script>
+      <div class="row">
+          <p class="pull-left">
+            Memtoko 2015. All rights reserved.
+          </p>
+       </div>
+  </footer>
+</body>
+</html>
