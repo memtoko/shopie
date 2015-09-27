@@ -56,8 +56,7 @@ TEMPLATES = [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-                'cart.context_processors.cart',
+                'django.contrib.messages.context_processors.messages'
             ],
         },
     },
@@ -71,6 +70,11 @@ SHOP_PAYMENT_BACKENDS = [
 SHOP_CART_MODIFIERS = [
 
 ]
+
+
+PAYPAL_API_CLIENT_ID = 'ATeG27lpmYgwViZzVfYli3o_HxKxuYruSpGBMfEXJaEI3PaLDuUkqogS22dnRGvdjhYkzKj6cilY9SY5'
+PAYPAL_API_SECRET = 'EMlFuDt2jjRGZ62o9VmvDtBn_cKtERNjLpeeiEybVEHXhRARs_1Gerl2aTbswQStuvV1sa6UUgBcNPDW'
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 

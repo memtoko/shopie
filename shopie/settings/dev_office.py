@@ -13,3 +13,5 @@ DATABASES = {
         'PORT': '',
     }
 }
+
+PAYPAL_PAYMENT_SANDBOX = True

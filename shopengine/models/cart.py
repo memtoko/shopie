@@ -69,7 +69,7 @@ class Cart(BaseModel):
         if not hasattr(request, 'cart_modifier_state'):
             setattr(request, 'cart_modifier_state', {})
 
-        modifiers = cart_modifier_pool.get_modifiers_list()
+        modifiers = cart_modifier_pool.get_backend_list()
         with ContextModifier(modifiers, self, request):
             for items in items:
                 item.product = prod_dict[item.product_id]
@@ -122,7 +122,7 @@ class CartItem(BaseModel):
         self.line_subtotal = self.product.get_price() * self.quantity
         self.current_total = self.line_subtotal
 
-        for modifier in cart_modifier_pool.get_modifiers_list():
+        for modifier in cart_modifier_pool.get_backend_list():
             # We now loop over every registered price modifier,
             # most of them will simply add a field to extra_payment_fields
             modifier.process_cart_item(self, request)

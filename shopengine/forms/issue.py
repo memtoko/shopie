@@ -4,7 +4,6 @@ from django.utils.translation import ugettext_lazy as _
 
 from shopengine.models import Issue, Reply
 
-
 class IssueCreationForm(forms.ModelForm):
     title = forms.CharField(required=True,
         widget=forms.TextInput(

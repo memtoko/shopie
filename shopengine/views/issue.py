@@ -81,3 +81,27 @@ class IssueListView(ListView):
             ret.append(self.generic_template)
         return ret
 
+class IssueDetailView(DetailView):
+
+    generic_template = "shopengine/issue/issue_detail.html"
+    model = Issue
+
+    def get_template_names(self):
+        ret = super(IssueDetailView, self).get_template_names()
+        if not self.generic_template in ret:
+            ret.append(self.generic_template)
+        return ret
+
+    def get_context_data(self, **kwargs):
+        ctx = super(IssueDetailView, self). get_context_data(**kwargs)
+        replies = Reply.objects.filter(issue=ctx.get('object'))
+        ctx.update({
+            'replies': replies
+        })
+        return ctx
+
+    @method_decorator(login_required)
+    def post(self, *args, **kwargs):
+
+
+

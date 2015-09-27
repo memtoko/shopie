@@ -1,0 +1,13 @@
+{
+    "name"        : "memtoko",
+    "version"     : "0.1.1",
+    "description" : "static files for memtoko.",
+    "author"      : "Syaiful Bahri",
+    "devDependencies": {
+        "grunt": "~0.4.5",
+        "grunt-sass": "~0.14.1",
+        "grunt-contrib-uglify": "~0.5.1",
+        "grunt-contrib-watch": "~0.6.1",
+        "grunt-contrib-concat": "~0.5.0"
+    }
+}

@@ -17,15 +17,15 @@ from shopengine.utils.users import user_model_string
 class OrderQuerySet(models.QuerySet):
 
     def completed(self):
-        return self.filter(status=50)
+        return self.filter(status=60)
 
     def for_user(self, user):
-        return self.filter(customer=user)
+        return self.filter(user=user)
 
     def get_latest_for_user(self, user):
         """Return the last order for the user placed"""
         if user and not isinstance(user, AnonymousUser):
-            return self.filter(customer=user).order_by('-modified')[0]
+            return self.filter(user=user).order_by('-modified')[0]
         return None
 
     def unconfirmed_cart(self, cart):
@@ -38,7 +38,7 @@ class OrderQuerySet(models.QuerySet):
     def create_order_object(self, cart, request, order_status=10):
         order = self.model()
         order.cart_pk = cart.pk
-        order.customer = cart.customer
+        order.user = cart.user
         order.status = order_status
         order.order_subtotal = cart.subtotal_price
         order.order_total = cart.total_price
@@ -46,8 +46,8 @@ class OrderQuerySet(models.QuerySet):
         return order
 
     def create_from_cart(self, cart, request):
-        #import cart item model here
-        from cart.models import CartItem
+        # import cart item model here
+        from .cart import CartItem
         # lets remove old order
         self.remove_old_orders(cart)
         order = self.create_order_object(cart, request)
@@ -89,6 +89,38 @@ class OrderQuerySet(models.QuerySet):
         if isinstance(base, str):
             base = base.encode('utf-8')
         return hashlib.sha1(salt+base).hexdigest()
+
+    def add_order_to_request(self, request, order):
+        if request.user and not isinstance(request.user, AnonymousUser):
+            if order.user != request.user:
+                order.user = request.user
+                order.save()
+        else:
+            if not order.order_key:
+                order.order_key = self._make_order_key(order.cart_pk)
+                order.save()
+            request.session['_order_key'] = order.order_key
+
+    def get_orders_from_request(self, request):
+        orders = None
+        if request.user and not isinstance(request.user, AnonymousUser):
+            orders = Order.objects.for_user(request.user).order_by('-order_date')
+        else:
+            session = getattr(request, 'session', None)
+            if session not None:
+                order_key = session.get('_order_key', None)
+                if order_key is not None:
+                    orders = Order.objects.filter(order_key=order_key)
+        return orders
+
+    def get_order_from_request(self, request):
+        orders = self.get_order_from_request(request)
+        if orders.exists():
+            order = orders[0]
+        else:
+            order = None
+        return order
+
 
 class Order(BaseModel):
     """An Order base class to manage order from customer"""

@@ -1,0 +1,26 @@
+<div class="row">
+    <div class="large-6 small-12 columns center-column">
+      <ul class="pricing-table">
+        <li class="title">{{ object.name }}</li>
+        <li class="price">Mulai Rp {{ object.from_price }}</li>
+        <li class="bullet-item">1 tahun support</li>
+        <li class="bullet-item">1 tahun update support</li>
+        <li class="bullet-item">50% harga perpanjangan lisensi</li>
+        <li class="cta-button">
+          <form class="cart" method="post" action="{% url 'cart' %}">{% csrf_token %}
+            <select name="add_item_id">
+              <option value="">Select an option</option>
+              {% for variant in object.get_variants %}
+                {% if variant.is_active %}
+                 <option value="{{ variant.pk }}">{{ variant.name }} - {{ variant.unit_price }}</option>
+                {% endif %}
+              {% endfor %}
+            </select>
+            <input type="hidden" name="add_item_quantity" value="1">
+            <input type="submit" class="small button secondary round" value="Add to cart">
+          </form>
+        </li>
+      </ul>
+    </div>
+</div>
+

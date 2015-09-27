@@ -1,4 +1,6 @@
 import re
+import hashlib
+import random
 import markdown
 
 from django.utils.text import slugify as _slugify
@@ -42,6 +44,14 @@ class validate_sluggable(object):
 
         if len(slug) > 255:
             raise ValidationError(self.error_long)
+
+def create_sha1_key(based):
+    salt = hashlib.sha1(str(random.random()).encode('ascii')).hexdigest()[:5]
+    salt = salt.encode('ascii')
+    base = str(based)
+    if isinstance(base, str):
+        base = base.encode('utf-8')
+    return hashlib.sha1(salt+base).hexdigest()
 
 # regex to match ``~~strike~~``
 STRIKE_RE = r'(~{2})(.+?)(~{2})'

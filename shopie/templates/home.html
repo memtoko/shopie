@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load staticfiles%}
+{% block title %}Memtoko{% endblock %}
+{% block bodyclass %}home hide-extras{% endblock %}
+{% block header_extra %}
+<div class="header-cover" style="min-height:400px;overflow:hidden;">
+    <div class="text-overlay text-center" style="background: url({{ header_images|random }}) no-repeat center fixed; -webkit-background-size: cover;-moz-background-size: cover;-o-background-size: cover;background-size: cover;background-attachment: scroll;">
+        <div class="text-overlay header-image-color" style="height:400px;overflow:hidden;">
+            <div class="header-text" style="margin-top:132px;">
+                <h1 class="light white-text text-center">Lead by Design</h1>
+                <div class="row">
+                    <div class="large-8 columns large-centered text-center">
+                        <p class="lead white-text"><strong>ZURB</strong> is a product design company since 1998. <br>Through consulting, product design tools and training, we transform the way businesses approach progressive design.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="medium-10 large-9 columns medium-centered">
+    <p class="lead large text-center"><strong>We&rsquo;re a nimble team, doing mighty things!</strong> We&rsquo;re empowering businesses and teams to put Design first by helping them roll up their sleeves and apply customer-centric product design practices to their daily work.</p>
+    <br>
+    <p class="lead large text-center">Have a project or training that you want to get started? Give us a call at 408.341.0600 or email us at <a href="/cdn-cgi/l/email-protection#f196948582859083859495b18b848393df929e9c">this</a>. Learn more about our Studios work.</p>
+    <br>
+    </div>
+</div>
+{% endblock %}

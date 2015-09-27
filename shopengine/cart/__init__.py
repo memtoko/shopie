@@ -1,8 +1,10 @@
 from contextlib import ContextDecorator
 import weakref
 
-from .modifier import CartModifierPool
-cart_modifier_pool = CartModifierPool()
+from shopengine.utils.backend_pool import BaseBackendPool
+
+class CartModifierPool(BaseBackendPool):
+    CONSTANT_SETTINGS = 'SHOP_CART_MODIFIERS'
 
 class ContextModifier(ContextDecorator):
 
@@ -19,3 +21,5 @@ class ContextModifier(ContextDecorator):
     def __exit__(self, *exc):
         for mod in self._modifiers:
             mod.post_process_cart(self._cart(), self._request())
+
+cart_modifier_pool = CartModifierPool()

@@ -135,6 +135,13 @@ class Product(BaseModel, SluggableMixin):
             return self.unit_price
         return min([variant.unit_price for variant in self.get_variants()])
 
+    @property
+    def fullname(self):
+        if not self.is_parent:
+            return self.name
+        else:
+            return self.parent.name + '-' + self.name
+
 class ProductTag(BaseModel, SluggableMixin):
 
     name = models.CharField(max_length=255, verbose_name=_('Name'))

@@ -7,10 +7,11 @@ class ShopView(ListView):
     paginate_by = 20
 
     def get_queryset(self):
+        qeryset = Product.objects.exclude(product_type=Product.VARIANT_PRODUCT)
         if self.request.user.is_staff:
-            return Product.objects.all()
+            return qeryset.all()
         else:
-            return Product.objects.published().active()
+            return queryset.published().active()
 
 class ShopDetailView(DetailView):
     generic_template = "shopengine/product/product_detail.html"

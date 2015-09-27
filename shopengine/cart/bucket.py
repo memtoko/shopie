@@ -2,6 +2,7 @@ from shopengine.models import Cart, Disscount
 from shopengine.signals.cart import cart_created
 
 from django.contrib.auth.models import AnonymousUser
+
 def get_cart_from_database(request):
     """Get cart from database by its user in request. If you use this function,
     make sure that user is logged in
