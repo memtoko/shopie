@@ -107,7 +107,7 @@ class OrderQuerySet(models.QuerySet):
             orders = Order.objects.for_user(request.user).order_by('-order_date')
         else:
             session = getattr(request, 'session', None)
-            if session not None:
+            if session is not None:
                 order_key = session.get('_order_key', None)
                 if order_key is not None:
                     orders = Order.objects.filter(order_key=order_key)

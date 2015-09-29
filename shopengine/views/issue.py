@@ -7,10 +7,11 @@ from django.utils.decorators import method_decorator
 from django.core.urlresolvers import reverse
 import django.contrib.messages.api as message_api
 
+from .base import ShopViewMixins
 from shopengine.models import Product, Issue
 from shopengine.forms.issue import IssueCreationForm, ReplyCreationForm
 
-class IssueListView(ListView):
+class IssueListView(ShopViewMixins, ListView):
 	model = Issue
     ordering = "updated_at"
     generic_template = "shopengine/issue/issue_list.html"
@@ -75,22 +76,10 @@ class IssueListView(ListView):
                     'pk': product.pk
                 }))
 
-    def get_template_names(self):
-        ret = super(IssueListView, self).get_template_names()
-        if not self.generic_template in ret:
-            ret.append(self.generic_template)
-        return ret
-
-class IssueDetailView(DetailView):
+class IssueDetailView(ShopViewMixins, DetailView):
 
     generic_template = "shopengine/issue/issue_detail.html"
     model = Issue
-
-    def get_template_names(self):
-        ret = super(IssueDetailView, self).get_template_names()
-        if not self.generic_template in ret:
-            ret.append(self.generic_template)
-        return ret
 
     def get_context_data(self, **kwargs):
         ctx = super(IssueDetailView, self). get_context_data(**kwargs)

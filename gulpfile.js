@@ -4,25 +4,27 @@ var browserify = require('browserify');
 var vinylSourceStream = require('vinyl-source-stream');
 var vinylBuffer = require('vinyl-buffer');
 var concat = require('gulp-concat');
-var saas = require('gulp-saas');
+var sass = require('gulp-sass');
 
 // Load all gulp plugins into the plugins object.
 var plugins = require('gulp-load-plugins')();
+var static_dirs = 'shopie/static/';
 
 var src = {
-	html: 'shopie/static/js/templates/**/*.html',
-	libs: 'shopie/static/js/libs/**',
-	saas: 'shopie/static/scss',
+	html: static_dirs + 'js/templates/**/*.html',
+	libs: static_dirs + 'js/libs/**',
+	sass: static_dirs + 'scss/',
 	bower: 'bower_components/**',
 	scripts: {
-		all: 'app/**/*.js',
-		app: 'app/app.js'
+		all: static_dirs + 'js/client/**/*.js',
+		app: static_dirs + 'js/client/app.js'
 	}
 };
 
-var build = '../memtoko/static/js/build/';
+var build = static_dirs + 'js/build/';
 var out = {
 	libs: build + 'libs/',
+	css: 'shopie/static/css/',
 	scripts: {
 		file: 'app.min.js',
 		folder: build + 'scripts/',
@@ -39,9 +41,10 @@ gulp.task('html', function() {
 gulp.task('collect-vendor', function() {
 	return gulp.src([
 		'bower_components/jquery/dist/jquery.js',
+		'bower_components/foundation/js/modernizr.js',
+		'bower_components/fastclick/lib/fastclick.js',
 		'bower_components/foundation/js/foundation.js',
 		'bower_components/bower-webfontloader/webfont.js',
-		'bower_components/showdown-ghost/src/showdown.js',
 		'bower_components/commonmark/dist/commonmark.js',
 		'bower_components/blueimp-md5/js/md5.js',
 		'bower_components/angular/angular.js',
@@ -97,6 +100,22 @@ gulp.task('scripts', ['jshint'], function() {
 		.pipe(gulp.dest(out.scripts.folder))
 		.pipe(plugins.connect.reload());
 
+});
+
+gulp.task('styles',function() {
+	var options = {
+        style: 'compressed',
+        includePaths: [
+            'bower_components/foundation/scss',
+            'bower_components/octicons/octicons'
+        ]
+    };
+
+	gulp.src([src.sass + 'app.scss'])
+	.pipe(sass(options).on('error', sass.logError))
+	.pipe(concat('app.css'))
+	.pipe(gulp.dest(out.css))
+	.pipe(plugins.connect.reload());
 });
 
 gulp.task('serve', ['build', 'watch'], function() {
