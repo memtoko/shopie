@@ -1,0 +1,22 @@
+{% load i18n %}
+<div class="row">
+  <div class="medium-10 large-9 columns medium-centered memtoko-alerts">
+    <div class="alerts-list">
+      {% for message in messages %}
+      <div class="alert-div">
+        {% if 'info' in message.tags %}
+        <div data-alert class="alert-box info">
+        {% elif 'success' in message.tags %}
+        <div data-alert class="alert-box success">
+        {% elif 'warning' in message.tags %}
+        <div data-alert class="alert-box warning">
+        {% elif 'error' in message.tags %}
+        <div data-alert class="alert-box warning">
+        {% endif %}
+          {{ message }}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>

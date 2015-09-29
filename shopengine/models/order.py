@@ -114,7 +114,7 @@ class OrderQuerySet(models.QuerySet):
         return orders
 
     def get_order_from_request(self, request):
-        orders = self.get_order_from_request(request)
+        orders = self.get_orders_from_request(request)
         if orders.exists():
             order = orders[0]
         else:

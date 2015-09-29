@@ -102,7 +102,9 @@ class PaypalBackendPaymentStandard(PaymentBackendBase):
                         pass
                     else:
                         payment_order.amount = Decimal(order.order_total)
-                return HttpResponseRedirect(reverse('checkout_thankyou'))
+                return HttpResponseRedirect(reverse('checkout_thankyou', kwargs={
+                        'order_key': order.order_key
+                    }))
             else:
                 message_api.warning('Gagal, memproses pembayaran melalui paypal ' +
                     'silahkan coba lagi. :)')
