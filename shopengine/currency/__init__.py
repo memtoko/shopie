@@ -45,3 +45,7 @@ class Currency:
         return self.money_formats[
             self.get_money_currency()
         ]['money_with_currency_format'].format(amount=amount)
+
+    @property
+    def currency(self):
+    	return self._currency
