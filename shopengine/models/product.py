@@ -8,16 +8,11 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse as _urlreverse
 
 from .base import BaseModel
-
-static_root = getattr(settings, "STATICFILES_DIRS", None)
-if static_root is not None:
-    upload_dir = os.path.join(static_root[0], 'media')
-else:
-    upload_dir = 'uploaded'
-
 from .fields import CurrencyField
 from shopengine.utils.text import slugify
 from shopengine.utils.users import user_model_string
+
+upload_to = 'image'
 
 class SluggableMixin(object):
 

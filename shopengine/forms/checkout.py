@@ -13,24 +13,6 @@ def get_backend_choices():
 
 class CheckoutForm(forms.Form):
     """Manage checkout form"""
-    name = forms.CharField(
-        required=True,
-        widget=forms.TextInput(
-            attrs={
-                'placeholder': 'name'
-            }
-        ),
-        help_text=_("We use this name to personalize your account experience")
-        )
-    email = forms.EmailField(
-        required=True,
-        widget=forms.TextInput(
-            attrs={
-                'placeholder': 'email'
-            }
-        ),
-        help_text=_("We will send receipt to this email address")
-        )
     payment_methods = forms.ChoiceField(choices=get_backend_choices(),
         required=True,
         label=_('Payment method'))

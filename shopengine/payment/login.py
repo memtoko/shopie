@@ -3,12 +3,10 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic.edit import FormView
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth.forms import AuthenticationForm
-from registration.forms import RegistrationForm
-from registration import signals as registration_signal
+from django.contrib.auth import login as auth_login
 
 from shopengine.decorators import cart_nonempty_required
 from .checkout import CheckoutStepMixin
-from django.contrib.auth import login as auth_login
 
 class CheckoutLoginStep(CheckoutStepMixin, FormView):
     identifier = "login"
@@ -22,6 +20,8 @@ class CheckoutLoginStep(CheckoutStepMixin, FormView):
 
     def is_valid(self):
         return self.request.user and not isinstance(self.request.user, AnonymousUser)
+
+    should_skip = is_valid
 
     def process(self):
         pass
