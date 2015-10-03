@@ -8,4 +8,6 @@ from .checkout import CheckoutStepMixin
 class PaymentCheckoutStep(CheckoutStepMixin, FormView):
     identifier = 'payment'
     title = _('Pembayaran')
+    form_class = CheckoutForm
+
 
