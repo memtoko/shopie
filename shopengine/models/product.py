@@ -17,7 +17,7 @@ upload_dir = 'image'
 class SluggableMixin(object):
 
     def set_slug(self, base):
-        if self.slug is None:
+        if not self.slug:
             self.slug = slugify(base)
 
 class ProductQuerySet(models.QuerySet):
@@ -77,7 +77,7 @@ class Product(BaseModel, SluggableMixin):
     status = models.IntegerField(choices=PRODUCT_STATUSES, default=STATUS_DRAFT,
         verbose_name=_('Status'))
 
-    parent = models.ForeignKey('self', verbose_name=_('Product variants'),
+    parent = models.ForeignKey('self', verbose_name=_('Product Parent'),
         blank=True, null=True)
     product_type = models.IntegerField(choices=PRODUCT_TYPES, default=SIMPLE_PRODUCT,
         verbose_name=_('Product type'))
@@ -95,6 +95,12 @@ class Product(BaseModel, SluggableMixin):
         verbose_name = _('Product')
         verbose_name_plural = _('Products')
 
+    def __str__(self):
+        return self.fullname
+
+    def get_price(self):
+        return self.unit_price
+
     def get_absolute_url(self):
         return _urlreverse('product_detail', args=[self.slug, self.pk])
 
@@ -104,17 +110,17 @@ class Product(BaseModel, SluggableMixin):
 
     @property
     def orderable(self):
-        return self.status == STATUS_PUBLISHED and self.is_active
+        return self.status == self.STATUS_PUBLISHED and self.is_active
 
     def get_variants(self):
-        if self.product_type == VARIABLE_PRODUCT:
+        if self.product_type == self.VARIABLE_PRODUCT:
             return Product.objects.filter(parent=self).all()
         else:
             raise ValueError
 
     @property
     def is_parent(self):
-        return self.product_type == VARIABLE_PRODUCT and self.has_variant
+        return self.product_type == self.VARIABLE_PRODUCT and self.has_variant
 
     @property
     def has_varint(self):
@@ -122,7 +128,7 @@ class Product(BaseModel, SluggableMixin):
 
     @property
     def is_variant(self):
-        return self.product_type == VARIANT_PRODUCT
+        return self.product_type == self.VARIANT_PRODUCT
 
     @property
     def from_price(self):

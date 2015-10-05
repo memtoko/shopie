@@ -11,8 +11,11 @@ from paypalrestsdk import Api as PaypalAPI, Payment as PaypalPayment
 import request
 
 from .base import PaymentBackendBase
-from shopengine.models import Order, OrderPayment
+from shopengine.models import (Order, OrderPayment, ExtraPriceOrderField,
+    ExraPriceOrderItemField)
 from shopengine.decorators import order_session_required
+from shopengine.utils.formatting import moneyfmt
+
 
 if getattr(settings, 'PAYPAL_PAYMENT_SANDBOX', True):
     paypalmode = 'sandbox'
@@ -41,24 +44,27 @@ class PaypalBackendPaymentStandard(PaymentBackendBase):
     @method_decorator(order_session_required)
     def payment_view(self, request):
         order = Order.objects.get_order_from_request(request)
+        absolute_uri = request.build_absolute_uri
+        items = self._get_order_items(order)
+        amount_total = sum([Decimal(it['price']) for it in items])
         payment_arguments = {
             'intent': 'sale',
             'payer': {
                 'payment_method': 'paypal'
             },
             'redirect_urls': {
-                'return_url': reverse('paypal_payment_execute',
+                'return_url': absolute_uri(reverse('paypal_payment_execute',
                     kwargs={
                         'payment_key': order.order_key
-                    }),
-                'cancel_url': reverse('checkout')
+                    })),
+                'cancel_url': absolute_uri(reverse('checkout'))
             },
             'transactions': [{
                 'item_list': {
-                    'items': self._get_order_items(order)
+                    'items': items
                 },
                 'amount': {
-                    'total': float(order.order_total / Decimal(rate_exchange)),
+                    'total': moneyfmt(amount_total),
                     'currency': 'USD'
                 },
                 'description': 'Make sure to include'
@@ -114,15 +120,35 @@ class PaypalBackendPaymentStandard(PaymentBackendBase):
                     }))
 
     def _get_order_items(self, order):
-        items = order.items.all()
         output = []
-        for item in items:
+        item_ids = []
+        for item in order.items.all():
+            item_ids.append(item.pk)
+            formatted_price = moneyfmt(item.unit_price / Decimal(rate_exchange))
             transaction = {
                 'name': item.product.fullname,
                 'sku': 'prod-' + item.product.fullname,
-                'price': float(item.unit_price / Decimal(rate_exchange)),
+                'price': formatted_price,
                 'currency': 'USD',
                 'quantity': item.quantity
             }
             output.append(transaction)
+        # then try to add extra price there
+        for eo in ExtraPriceOrderField.objects.filter(order=order):
+            formatted_price = moneyfmt(eo.value) / Decimal(rate_exchange))
+            transaction = {
+                'name': eo.label,
+                'sku': 'extra-' + eo.label,
+                'price': formatted_price,
+                'quantity': '1'
+            }
+            output.append(transaction)
+        for eio in ExraPriceOrderItemField.objects.filter(cart__pk__in=item_ids):
+            formatted_price = moneyfmt(eio.value) / Decimal(rate_exchange))
+            transaction_id {
+                'name': eio.label,
+                'sku': 'extra-item-' + eo.label,
+                'price': formatted_price,
+                'quantity': '1'
+            }
         return output

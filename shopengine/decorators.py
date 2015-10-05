@@ -45,7 +45,7 @@ def order_passed_test(testfunc=None, url_name=None, order_factory=None):
 def order_completed_required(func=None, url_name=None, order_factory=None):
     factory = order_factory or Order.objects.get_order_from_request
     actual_decorator = order_passed_test(
-            lambda o: o.status = Order.COMPLETED,
+            lambda o: o is not None and o.status == Order.COMPLETED,
             url_name=url_name,
             order_factory=factory
         )

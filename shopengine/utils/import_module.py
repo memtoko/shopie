@@ -8,7 +8,7 @@ def load_module(specification, context="Load"):
 	delimiter = (":" if ":" in specification else ".")
 	module_name, object_name = specification.rsplit(delimiter, 1)
 	try:
-	    module = importlib.import_module(module_name)
+	    module = import_module(module_name)
 	except ImportError as ie:  # pragma: no cover
 	    raise ImproperlyConfigured(
 	        "%s: Could not import module %r to load %r from. (%r)" %

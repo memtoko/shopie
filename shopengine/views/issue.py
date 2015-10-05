@@ -12,6 +12,10 @@ from shopengine.models import Product, Issue
 from shopengine.forms.issue import IssueCreationForm, ReplyCreationForm
 
 class IssueListView(ShopViewMixins, ListView):
+<<<<<<< HEAD
+=======
+
+>>>>>>> be843565a4085df2cc004c89b39dec489f5acb6d
     model = Issue
     ordering = "updated_at"
     generic_template = "shopengine/issue/issue_list.html"
@@ -41,7 +45,7 @@ class IssueListView(ShopViewMixins, ListView):
                 })
         # try to get the the product
         issues = ctx.get('object_list', None)
-        if issues is not None:
+        if issues:
             issue = issues[0]
             product = getattr(issue, 'product', None)
             if product is not None:
@@ -90,4 +94,11 @@ class IssueDetailView(ShopViewMixins, DetailView):
         return ctx
 
     @method_decorator(login_required)
+<<<<<<< HEAD
     def post(self, *args, **kwargs):
+=======
+    def post(self, *args, **kwargs): pass
+
+
+
+>>>>>>> be843565a4085df2cc004c89b39dec489f5acb6d

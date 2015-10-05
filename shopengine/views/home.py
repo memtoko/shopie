@@ -21,7 +21,7 @@ def home_view(request, logged_view=None):
         if logged_view is not None:
             return logged_view(request)
         else:
-            return render(request, 'homehome.html', ctx)
+            return render(request, 'home.html', ctx)
     else:
         # none logged in user
         return render(request, 'home.html', ctx)
