@@ -11,11 +11,11 @@
 #
 # This bash not start your application on daemon mode, use supervisor for it.
 NAME="shopie"
-VIRTUALENVDIR=/home/vagrant/venv
-DJANGODIR=/home/lab/shopie
-SOCKFILE=/home/vagrant/gunicorn.sock
-USER="vagrant"
-GROUP="vagrant"
+VIRTUALENVDIR=/home/syaiful/code/env
+DJANGODIR=/home/syaiful/code/shopie
+SOCKFILE=/home/syaiful/code/shopie/bin/shopie.sock
+USER="django"
+GROUP="django"
 NUM_WORKERS=3
 DJANGO_SETTINGS_MODULE=shopie.settings.dev_office  # which settings file should Django use
 DJANGO_WSGI_MODULE=shopie.wsgi                     # WSGI module name

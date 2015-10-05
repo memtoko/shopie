@@ -92,4 +92,4 @@ class IssueDetailView(ShopViewMixins, DetailView):
 
     @method_decorator(login_required)
     def post(self, *args, **kwargs):
-
+        pass
