@@ -83,7 +83,7 @@ class IssueDetailView(ShopViewMixins, DetailView):
     model = Issue
 
     def get_context_data(self, **kwargs):
-        ctx = super(IssueDetailView, self). get_context_data(**kwargs)
+        ctx = super(IssueDetailView, self).get_context_data(**kwargs)
         replies = Reply.objects.filter(issue=ctx.get('object'))
         ctx.update({
             'replies': replies

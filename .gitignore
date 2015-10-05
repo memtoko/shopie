@@ -1,5 +1,6 @@
 *.pyc
 *.db
+/bin
 /logs
 /node_modules
 /bower_components
