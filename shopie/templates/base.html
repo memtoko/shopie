@@ -61,17 +61,17 @@
     </nav>
     {% block header_extra %}{% endblock %}
   </header>
-  {% block content %}}{{% endblock %}
+  {% block content %}{% endblock %}
   <footer class="memtoko-footer">
       <script src="{% static "js/build/scripts/app.min.js" %}"></script>
       <script>
         $(document).foundation();
       </script>
       <div class="row">
-          <p class="pull-left">
-            Memtoko 2015. All rights reserved.
-          </p>
-       </div>
+        <p class="pull-left">
+          Memtoko 2015. All rights reserved.
+        </p>
+      </div>
   </footer>
 </body>
 </html>

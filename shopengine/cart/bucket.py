@@ -8,7 +8,7 @@ def get_cart_from_database(request):
     make sure that user is logged in
     """
     database_cart = Cart.objects.filter(user=request.user)
-    if database_cart:
+    if database_cart.exists():
         database_cart = database_cart[0]
     else:
         database_cart = None

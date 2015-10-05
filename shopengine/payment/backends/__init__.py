@@ -1,4 +1,4 @@
-from shopengine.utils.backend_pool import backend_pool
+from shopengine.utils.backend_pool import BaseBackendPool
 
 class PaymentBackendPool(BaseBackendPool):
     CONSTANT_SETTINGS = 'SHOP_PAYMENT_BACKENDS'

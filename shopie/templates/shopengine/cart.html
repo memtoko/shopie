@@ -1,5 +1,4 @@
-{% extends "base.html" %}
-{% load i18n %}
+{% extends "base.html" %}{% load i18n %}{% load markdown %}
 {% block title %}{% trans "Keranjang Belanja" %}{% endblock %}
 {% include "partials/messages.html" %}
 {% block content %}
@@ -54,9 +53,20 @@
               {% endfor %}
               <tr><td colspan="2">&nbsp;</td><td><b>Cart Total</b></td><td><b>{{cart.total_price}}</b></td></tr>
             </tfoot>
-            <p><input type="submit" class="small button round" value="Update Shopping Cart"/></p>
           </table>
+          <p><input type="submit" class="small button round" value="Update Shopping Cart" ></p>
         </form>
+        <div class="row">
+          <div class="large-4 small-4 column">
+            <p>
+              <a class="small button secondary round" href="{%url 'checkout' %}">Proceed to checkout</a>
+            </p>
+          </div>
+        </div>
+      {% else %}
+        {% markdown %}
+Keranjang belanja Anda kosong. Silahkan [memilih produk dahulu]({% url 'shop' %}).
+        {% endmarkdown %}
       {% endif %}
     </article>
   </div>

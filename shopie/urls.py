@@ -20,6 +20,6 @@ from shopengine.views.home import home_view
 from shopengine import urls as shopengine_urls
 urlpatterns = [
     url(r'^$', home_view, name='home'),
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^console/', include(admin.site.urls)),
     url(r'^', include(shopengine_urls))
 ]

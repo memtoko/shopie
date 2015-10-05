@@ -11,14 +11,6 @@ from shopengine.forms.checkout import CheckoutForm
 from shopengine.payment.checkout import CheckoutProcess
 from shopengine.decorators import cart_nonempty_required
 
-def checkout_thankyou(request, order_key):
-	"""View for thank you page."""
-    try:
-        order = Order.objects.get(order_key=order_key)
-    except Order.DoesNotExist:
-        raise Http404()
-    else:
-        return render(request, "shopengine/payment/thank_you.html", {'order': order})
 
 class BaseCheckoutView(View):
     step_specs = []
@@ -40,3 +32,12 @@ class BaseCheckoutView(View):
             params = ("?" + urllib.parse.urlencode(request.GET)) if request.GET else ""
             return redirect(url + params)
         return current_step.dispatch(request, *args, **kwargs)
+
+class CheckoutView(BaseCheckoutView):
+    """This is base default checkout views"""
+    step_specs = [
+        'shopengine.payment.login:CheckoutLoginStep',
+        'shopengine.payment.register:RegisterCheckoutProcess',
+        'shopengine.payment.method:PaymentCheckoutStep'
+    ]
+    empty_phase_spec = None
