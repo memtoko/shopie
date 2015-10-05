@@ -1,5 +1,15 @@
 #!/bin/bash
-
+#
+# WARNING: If you want use this on production server, dont forget to change apropriate user
+# and group. Make sure your application run as system users with limited privileges.
+#
+# First Change the value for:
+#
+# - VIRTUALENVDIR to directory of your virtual environment that you created by running virtualenv
+# - DJANGODIR to your application project root.
+# - NUM_WORKERS to 2 * CPUs + 1
+#
+# This bash not start your application on daemon mode, use supervisor for it.
 NAME="shopie"
 VIRTUALENVDIR=/home/vagrant/venv
 DJANGODIR=/home/lab/shopie
@@ -19,8 +29,7 @@ export PYTHONPATH=$DJANGODIR:$PYTHONPATH
 # Create the run directory if it doesn't exist
 RUNDIR=$(dirname $SOCKFILE)
 test -d $RUNDIR || mkdir -p $RUNDIR
-# Start your Django Unicorn
-# Programs meant to be run under supervisor should not daemonize themselves (do not use --daemon)
+# Start it
 exec $VIRTUALENVDIR/bin/gunicorn ${DJANGO_WSGI_MODULE}:application \
   --name $NAME \
   --workers=$NUM_WORKERS \
