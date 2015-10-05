@@ -8,15 +8,15 @@ from shopengine.utils.import_module import load_module
 
 class CheckoutStepBucket:
 
-	def __init__(self, request, identifier):
-		self._identifier = identifier
-		self._request = request
+    def __init__(self, request, identifier):
+        self._identifier = identifier
+        self._request = request
 
-	def put(self, key, value):
-		self._request.session[self._get_key(key)] = value
+    def put(self, key, value):
+        self._request.session[self._get_key(key)] = value
 
-	def get(self, key):
-		return self._request.session[self._get_key(key)]
+    def get(self, key):
+        return self._request.session[self._get_key(key)]
 
     def reset(self):
         to_pop = filter(
@@ -26,8 +26,8 @@ class CheckoutStepBucket:
         for key in set(to_pop):
             self._request.session.pop(key, None)
 
-	def _get_key(self, key):
-		return "checkout_%s:%s" % (self._identifier, key)
+    def _get_key(self, key):
+        return "checkout_%s:%s" % (self._identifier, key)
 
     def has_all(self, keys):
         return all(self.get(key) for key in keys)
@@ -166,4 +166,3 @@ class CheckoutProcess:
         To be called from a phase (`self.checkout_process.complete()`) when the checkout process is complete.
         """
         self.reset()
-
