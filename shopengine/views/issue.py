@@ -12,7 +12,7 @@ from shopengine.models import Product, Issue
 from shopengine.forms.issue import IssueCreationForm, ReplyCreationForm
 
 class IssueListView(ShopViewMixins, ListView):
-	model = Issue
+    model = Issue
     ordering = "updated_at"
     generic_template = "shopengine/issue/issue_list.html"
     paginate_by = 20
@@ -91,6 +91,3 @@ class IssueDetailView(ShopViewMixins, DetailView):
 
     @method_decorator(login_required)
     def post(self, *args, **kwargs):
-
-
-
