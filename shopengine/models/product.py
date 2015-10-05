@@ -12,7 +12,7 @@ from .fields import CurrencyField
 from shopengine.utils.text import slugify
 from shopengine.utils.users import user_model_string
 
-upload_to = 'image'
+upload_dir = 'image'
 
 class SluggableMixin(object):
 
