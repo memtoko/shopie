@@ -6,37 +6,34 @@ from django.core.urlresolvers import reverse
 
 from shopengine.utils.import_module import load_module
 
-class CheckoutStepBucket:
+class CheckoutStepBucket(object):
 
-	def __init__(self, request, identifier):
-		self._identifier = identifier
-		self._request = request
-
-	def put(self, key, value):
-		self._request.session[self._get_key(key)] = value
-
-	def get(self, key):
-		return self._request.session[self._get_key(key)]
+    def __init__(self, request, step_identifier):
+        self.request = request
+        self.step_identifier = step_identifier
 
     def reset(self):
         to_pop = filter(
-                lambda i: i.startswith("checkout_%s:" % self._identifier),
+                lambda i: i.startswith("checkout_%s:" % self.step_identifier),
                 self._request.session.keys()
             )
         for key in set(to_pop):
             self._request.session.pop(key, None)
 
-	def _get_key(self, key):
-		return "checkout_%s:%s" % (self._identifier, key)
+    def set(self, key, value):
+        self.request.session["checkout_%s:%s" % (self.step_identifier, key)] = value
+
+    def get(self, key, default=None):
+        return self.request.session.get("checkout_%s:%s" % (self.step_identifier, key), default)
 
     def has_all(self, keys):
         return all(self.get(key) for key in keys)
 
+    def __setitem__(self, key, value):
+        self.set(key, value)
+
     def __getitem__(self, key):
         return self.get(key)
-
-    def __setitem__(self, key, value):
-        self.put(key, value)
 
 class CheckoutStepMixin:
     identifier = None
@@ -44,7 +41,7 @@ class CheckoutStepMixin:
     final = False  # Should be set for final steps (those that may be accessed via the previous step's URL)
 
     checkout_process = None  # set as an instance variable
-    steps = ()  # set as an instance variable; likely accessed via template (`view.phases`)
+    steps = ()  # set as an instance variable; likely accessed via template (`view.steps`)
     next_step = None  # set as an instance variable
     previous_step = None  # set as an instance variable
     request = None  # exists via being a view
@@ -68,7 +65,7 @@ class CheckoutStepMixin:
     @property
     def storage(self):
         if not hasattr(self, "_storage"):
-            self._storage = CheckoutStepBucket(request=self.request, identifier=self.identifier)
+            self._storage = CheckoutStepBucket(self.request, self.identifier)
         return self._storage
 
 class CheckoutProcess:
@@ -78,6 +75,7 @@ class CheckoutProcess:
         self.step_kwargs = step_kwargs
         self.current_step = None
 
+    @property
     def steps(self):
         if not getattr(self, '_steps', None):
             self._steps = self._load_steps()
@@ -85,13 +83,13 @@ class CheckoutProcess:
 
     def instantiate_step_class(self, step_class, **extra_kwargs):
         if not step_class.identifier:  # pragma: no cover
-            raise ImproperlyConfigured("Phase %r has no identifier" % phase_class)
+            raise ImproperlyConfigured("step %r has no identifier" % step_class)
         kwargs = {}
         kwargs.update(self.step_kwargs)
         kwargs.update(extra_kwargs)
         step = step_class(**kwargs)
         step.checkout_process = self
-        return phase
+        return step
 
     def _load_steps(self):
         steps = OrderedDict()
@@ -100,18 +98,18 @@ class CheckoutProcess:
             steps[step_class.identifier] = self.instantiate_step_class(step_class)
         return list(steps.values())
 
-    def get_current_step(self, requested_phase_identifier):
+    def get_current_step(self, requested_step_identifier):
         found = False
         for step in self.steps:
             if step.is_valid():
                 step.process()
-            if found or not requested_phase_identifier or requested_phase_identifier == step.identifier:
+            if found or not requested_step_identifier or requested_step_identifier == step.identifier:
                 found = True
                 if not step.should_skip():
                     return step
-            if not step.should_skip and not step.is_valid():
+            if not step.should_skip() and not step.is_valid():
                 return step
-            raise Http404("Phase with identifier %s not found" % requested_phase_identifier)
+        raise Http404("step with identifier %s not found" % requested_step_identifier)
 
     def _get_next_step(self, steps, current_step):
         found = False
@@ -129,32 +127,32 @@ class CheckoutProcess:
         return self._get_next_step(reversed(self.steps), current_step)
 
     def prepare_current_step(self, step_identifier):
-        current_phase = self.get_current_step(step_identifier)
+        current_step = self.get_current_step(step_identifier)
         self.add_step_attributes(current_step)
         self.current_step = current_step
         return current_step
 
-    def add_phase_attributes(self, target_step, current_step=None):
+    def add_step_attributes(self, target_step, current_step=None):
         """
-        Add phase instance attributes (previous, next, etc) to the given target phase,
-        using the optional `current_phase` as the current phase for previous and next.
+        Add step instance attributes (previous, next, etc) to the given target step,
+        using the optional `current_step` as the current step for previous and next.
 
-        This is exposed as a public API for the benefit of phases that need to do sub-phase
-        initialization and dispatching, such as method phases.
+        This is exposed as a public API for the benefit of steps that need to do sub-step
+        initialization and dispatching, such as method steps.
         """
         current_step = (current_step or target_step)
         target_step.previous_step = self.get_previous_step(current_step)
-        target_phase.next_step = self.get_next_step(current_step)
-        target_phase.steps = self.steps
+        target_step.next_step = self.get_next_step(current_step)
+        target_step.steps = self.steps
         if current_step in self.steps:
             current_step_index = self.steps.index(current_step)
-            # Set up attributes that are handy for the phase bar in the templates.
-            for i, phase in enumerate(self.steps):
-                setattr(phase, "is_past", i > current_step_index)
-                setattr(phase, "is_current", phase == current_step)
-                setattr(phase, "is_future", i < current_step_index)
-                setattr(phase, "is_previous", phase == target_step.previous_step)
-                setattr(phase, "is_next", phase == target_phase.next_step)
+            # Set up attributes that are handy for the step bar in the templates.
+            for i, step in enumerate(self.steps):
+                setattr(step, "is_past", i > current_step_index)
+                setattr(step, "is_current", step == current_step)
+                setattr(step, "is_future", i < current_step_index)
+                setattr(step, "is_previous", step == target_step.previous_step)
+                setattr(step, "is_next", step == target_step.next_step)
         return target_step
 
     def reset(self):
@@ -163,7 +161,7 @@ class CheckoutProcess:
 
     def complete(self):
         """
-        To be called from a phase (`self.checkout_process.complete()`) when the checkout process is complete.
+        To be called from a step (`self.checkout_process.complete()`) when the checkout process is complete.
         """
         self.reset()
 
