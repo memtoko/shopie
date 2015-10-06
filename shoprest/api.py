@@ -1,3 +1,3 @@
-from jsonapi.api import API
-"""Instantiate it, so other module can access same object"""
-api = API()
+from tastypie.api import Api
+
+api = Api(api_name='v1')

@@ -1,12 +1,18 @@
 from .api import api
-from jsonapi.resource import Resource
+from tastypie.authorization import Authorization
+from tastypie import fields
+from tastypie.resources import ModelResource, ALL, ALL_WITH_RELATIONS
 
-from shopengine.utils.users import user_model_string
-User = user_model_string()
+from shopengine.utils.users import user_model
+User = user_model()
 
-@api.register
-class UserResource(Resource):
+class UserResource(ModelResource):
     class Meta:
-        model = User
-        allowed_methods = ('GET', 'POST')
-        fieldnames_exclude = ['password', 'is_superuser']
+        queryset = User.objects.all()
+        resource_name = 'user'
+        excludes = ['password', 'is_superuser', 'is_staff']
+        filtering = {
+            'username': ALL
+        }
+
+api.register(UserResource())
