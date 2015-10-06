@@ -7,6 +7,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
 from django.contrib.auth.models import AnonymousUser
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.auth.decorators import login_required
 
 from shopengine.forms.checkout import CheckoutForm
 from shopengine.cart.bucket import get_or_create_cart
@@ -16,8 +17,12 @@ from .checkout import CheckoutStepMixin
 class PaymentCheckoutStep(CheckoutStepMixin, FormView):
     identifier = 'payment'
     title = _('Pembayaran')
-    template_name = "shopengine/checkout/method.html"
+    template_name = "shopengine/checkout/payment.html"
     form_class = CheckoutForm
+
+    @method_decorator(login_required(login_url='checkout'))
+    def dispatch(self, request, *args, **kwargs):
+        return super(PaymentCheckoutStep, self).dispatch(request, *args, **kwargs)
 
     @method_decorator(sensitive_post_parameters())
     @method_decorator(csrf_protect)
@@ -37,7 +42,7 @@ class PaymentCheckoutStep(CheckoutStepMixin, FormView):
                 'name': request.user.first_name or request.user.username,
                 'email': request.user.email
             }
-        return super(PaymentCheckoutStep, self).get_initial(request)
+        return super(PaymentCheckoutStep, self).get_initial()
 
     def form_valid(self, form):
         for key, value in self.cleaned_data.items():

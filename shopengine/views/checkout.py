@@ -36,8 +36,7 @@ class BaseCheckoutView(View):
 class CheckoutView(BaseCheckoutView):
     """This is base default checkout views"""
     step_specs = [
-        'shopengine.payment.login:CheckoutLoginStep',
-        'shopengine.payment.register:RegisterCheckoutProcess',
+        'shopengine.payment.auth:AuthCheckoutStep',
         'shopengine.payment.method:PaymentCheckoutStep'
     ]
     empty_phase_spec = None

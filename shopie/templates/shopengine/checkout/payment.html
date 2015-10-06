@@ -1,0 +1,14 @@
+{% extends "shopengine/checkout/base.html" %}
+{% load i18n %}
+{% block content %}
+<div class="row">
+  <div class="medium-10 large-9 columns medium-centered">
+    {% include "shopengine/checkout/cart_confirm.html" %}
+    <form class="checkout_form" method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+       <input type="submit" class="button secondary round" value="{% trans 'Pay' %}" />
+    </form>
+  </div>
+</div>
+{% endblock %}
