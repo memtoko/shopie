@@ -45,7 +45,7 @@
                   <li class="has-dropdown">
                     <a href="#">{{ user.username }}</a>
                       <ul class="dropdown">
-                        <li><a href="#">Dashboard</a></li>
+                        <li><a href="/account/dashboard">Dashboard</a></li>
                         <li><a href="/account/logout">Logout</a></li>
                       </ul>
                   </li>
@@ -61,7 +61,9 @@
     </nav>
     {% block header_extra %}{% endblock %}
   </header>
+  {% block before_content %}{% endblock %}
   {% block content %}{% endblock %}
+  {% block after_content %}{% endblock %}
   <footer class="memtoko-footer">
       <script src="{% static "js/build/scripts/app.min.js" %}"></script>
       <script>
