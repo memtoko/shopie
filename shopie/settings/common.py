@@ -29,7 +29,8 @@ INSTALLED_APPS = (
 
     'registration',
     'account',
-    'shopengine'
+    'shopengine',
+    'shoprest',
 )
 
 MIDDLEWARE_CLASSES = (
