@@ -26,9 +26,10 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     'registration',
-    'shopengine'
+    'account',
+    'shopengine',
+    'shoprest',
 )
 
 MIDDLEWARE_CLASSES = (
