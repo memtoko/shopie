@@ -1,14 +1,25 @@
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.auth.forms import AuthenticationForm
 
 from registration.backends.simple.views import RegistrationView
+from registration.forms import RegistrationFormUniqueEmail
 
 from .checkout import CheckoutStepMixin
 
-class RegisterCheckoutProcess(CheckoutStepMixin, RegistrationView):
-    identifier = "register"
-    title = _('Daftar')
+class AuthCheckoutStep(CheckoutStepMixin, RegistrationView):
+    identifier = "auth"
+    title = _('Daftar atau Login')
+    form_class = RegistrationFormUniqueEmail
+    template_name = "shopengine/checkout/auth.html"
+
+    def get_context_data(self, **kwargs):
+        ctx = super(AuthCheckoutStep, self).get_context_data(**kwargs)
+        ctx.update({
+            'auth_form': AuthenticationForm()
+        })
+        return ctx
 
     def should_skip(self):
         return self.request.user and not isinstance(self.request.user, AnonymousUser)

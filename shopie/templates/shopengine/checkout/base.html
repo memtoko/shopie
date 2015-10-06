@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}{{ view.title }}{% endblock %}
 {% include "partials/messages.html" %}
-{% block content %}
+{% block before_content %}
 <div class="page-wrapper">
   <div class="row">
     <div class="medium-10 large-9 columns medium-centered">
@@ -9,6 +9,18 @@
         <header class="entry-header">
           <h1 class="entry-title">{{ view.title }}</h1>
         </header>
+        {% if view and view.steps %}
+        <dl class="sub-nav">
+          <dt>Checkout: </dt>
+          {% for step in view.steps %}
+            {% if step.title %}
+            <dd {% if step.is_current %}class="active"{% endif %}>
+              <a href="{% url 'checkout' step.identifier %}">{{ forloop.counter }}. {{ step.title }}</a>
+            </dd>
+            {% endif %}
+          {% endfor %}
+        </dl>
+        {% endif %}
       </article>
     </div>
   </div>
