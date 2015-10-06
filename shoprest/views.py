@@ -11,6 +11,7 @@ class UserResource(ModelResource):
         queryset = User.objects.all()
         resource_name = 'user'
         excludes = ['password', 'is_superuser', 'is_staff']
+        always_return_data: True
         filtering = {
             'username': ALL
         }
