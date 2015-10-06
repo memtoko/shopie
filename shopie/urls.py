@@ -19,10 +19,12 @@ from django.contrib import admin
 from shopengine.views.home import home_view
 from shopengine import urls as shopengine_urls
 from account import urls as account_urls
+from shoprest import urls as api_urls
 
 urlpatterns = [
     url(r'^$', home_view, name='home'),
-    url(r'^console/', include(admin.site.urls)),
     url(r'^', include(shopengine_urls)),
-    url(r'^account/', include(account_urls))
+    url(r'^', include(api_urls)),
+    url(r'^account/', include(account_urls)),
+    url(r'^console/', include(admin.site.urls)),
 ]
