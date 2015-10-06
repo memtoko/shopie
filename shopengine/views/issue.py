@@ -12,7 +12,8 @@ from shopengine.models import Product, Issue
 from shopengine.forms.issue import IssueCreationForm, ReplyCreationForm
 
 class IssueListView(ShopViewMixins, ListView):
-	model = Issue
+
+    model = Issue
     ordering = "updated_at"
     generic_template = "shopengine/issue/issue_list.html"
     paginate_by = 20
@@ -41,7 +42,7 @@ class IssueListView(ShopViewMixins, ListView):
                 })
         # try to get the the product
         issues = ctx.get('object_list', None)
-        if issues is not None:
+        if issues:
             issue = issues[0]
             product = getattr(issue, 'product', None)
             if product is not None:
@@ -82,7 +83,7 @@ class IssueDetailView(ShopViewMixins, DetailView):
     model = Issue
 
     def get_context_data(self, **kwargs):
-        ctx = super(IssueDetailView, self). get_context_data(**kwargs)
+        ctx = super(IssueDetailView, self).get_context_data(**kwargs)
         replies = Reply.objects.filter(issue=ctx.get('object'))
         ctx.update({
             'replies': replies
@@ -91,6 +92,4 @@ class IssueDetailView(ShopViewMixins, DetailView):
 
     @method_decorator(login_required)
     def post(self, *args, **kwargs):
-
-
-
+        pass

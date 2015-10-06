@@ -30,7 +30,7 @@ def moneyfmt(value, places=2, curr='', sep=',', dp='.',
     q = Decimal(10) ** -places      # 2 places --> '0.01'
     sign, digits, exp = value.quantize(q).as_tuple()
     result = []
-    digits = map(str, digits)
+    digits = list(map(str, digits))
     build, next = result.append, digits.pop
     if sign:
         build(trailneg)

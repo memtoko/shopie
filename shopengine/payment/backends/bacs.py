@@ -11,7 +11,7 @@ from shopengine.models import Order
 from shopengine.decorators import order_session_required
 
 class PaymentBacs(PaymentBackendBase):
-	url_namespace = 'bacs_payment'
+    url_namespace = 'bacs_payment'
     backend_name = _('Bank Transfer')
     template = 'shopengine/payment/backend/bacs.html'
 
@@ -43,4 +43,3 @@ class PaymentBacs(PaymentBackendBase):
         }
         context = RequestContext(request, ctx)
         return render_to_response(self.template, context)
-

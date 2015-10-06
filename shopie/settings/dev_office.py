@@ -6,9 +6,9 @@ SITE_ID = 1
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'django',
+        'NAME': 'django.db',
         'USER': 'django',
-        'PASSWORD': 'nindyaeka81',
+        'PASSWORD': 'hahaha',
         'HOST': 'localhost',  # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
         'PORT': '',
     }

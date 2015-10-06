@@ -71,7 +71,7 @@ class Cart(BaseModel):
 
         modifiers = cart_modifier_pool.get_backend_list()
         with ContextModifier(modifiers, self, request):
-            for items in items:
+            for item in items:
                 item.product = prod_dict[item.product_id]
                 self.subtotal_price += item.update(request)
 
@@ -92,7 +92,7 @@ class Cart(BaseModel):
     def empty_cart(self, request=None):
         if self.pk:
             self.items.all().delete()
-            self.delte()
+            self.delete()
 
     @property
     def total_quantity(self):
