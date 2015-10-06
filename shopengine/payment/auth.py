@@ -8,14 +8,14 @@ from registration.forms import RegistrationFormUniqueEmail
 
 from .checkout import CheckoutStepMixin
 
-class RegisterCheckoutProcess(CheckoutStepMixin, RegistrationView):
+class AuthCheckoutStep(CheckoutStepMixin, RegistrationView):
     identifier = "register"
     title = _('Daftar atau Login')
     form_class = RegistrationFormUniqueEmail
     template_name = "shopengine/checkout/register.html"
 
     def get_context_data(self, **kwargs):
-        ctx = super(RegisterCheckoutProcess, self).get_context_data(**kwargs)
+        ctx = super(AuthCheckoutStep, self).get_context_data(**kwargs)
         ctx.update({
             'auth_form': AuthenticationForm()
         })
