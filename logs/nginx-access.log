@@ -1,7 +1,0 @@
-192.168.10.1 - - [05/Oct/2015:07:49:31 +0000] "GET / HTTP/1.1" 200 1719 "-" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36"
-192.168.10.1 - - [05/Oct/2015:07:49:31 +0000] "GET /static/css/app.css HTTP/1.1" 200 452276 "http://shopie.app/" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36"
-192.168.10.1 - - [05/Oct/2015:07:49:31 +0000] "GET /static/js/build/scripts/app.min.js HTTP/1.1" 404 200 "http://shopie.app/" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36"
-192.168.10.1 - - [05/Oct/2015:07:49:31 +0000] "GET /static/js/build/libs/vendor.js HTTP/1.1" 200 498826 "http://shopie.app/" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36"
-192.168.10.1 - - [05/Oct/2015:07:49:33 +0000] "GET /static/images/home13.jpg HTTP/1.1" 404 200 "http://shopie.app/" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36"
-192.168.10.1 - - [05/Oct/2015:07:49:34 +0000] "GET /favicon.ico HTTP/1.1" 404 1157 "http://shopie.app/" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36"
-192.168.10.1 - - [05/Oct/2015:07:49:57 +0000] "GET /static/js/build/scripts/app.min.js HTTP/1.1" 404 200 "http://shopie.app/" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36"
