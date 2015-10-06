@@ -17,7 +17,7 @@ from .checkout import CheckoutStepMixin
 class PaymentCheckoutStep(CheckoutStepMixin, FormView):
     identifier = 'payment'
     title = _('Pembayaran')
-    template_name = "shopengine/checkout/method.html"
+    template_name = "shopengine/checkout/payment.html"
     form_class = CheckoutForm
 
     @method_decorator(login_required(login_url='checkout'))

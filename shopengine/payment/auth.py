@@ -9,10 +9,10 @@ from registration.forms import RegistrationFormUniqueEmail
 from .checkout import CheckoutStepMixin
 
 class AuthCheckoutStep(CheckoutStepMixin, RegistrationView):
-    identifier = "register"
+    identifier = "auth"
     title = _('Daftar atau Login')
     form_class = RegistrationFormUniqueEmail
-    template_name = "shopengine/checkout/register.html"
+    template_name = "shopengine/checkout/auth.html"
 
     def get_context_data(self, **kwargs):
         ctx = super(AuthCheckoutStep, self).get_context_data(**kwargs)
