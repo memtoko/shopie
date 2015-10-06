@@ -8,5 +8,5 @@ User = user_model_string()
 class UserResource(Resource):
     class Meta:
         model = User
-        allowed_methods = ['GET', 'POST']
-        
+        allowed_methods = ('GET', 'POST')
+        fieldnames_exclude = ['password', 'is_superuser']
