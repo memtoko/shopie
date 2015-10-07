@@ -135,7 +135,7 @@ class PaypalBackendPaymentStandard(PaymentBackendBase):
             output.append(transaction)
         # then try to add extra price there
         for eo in ExtraPriceOrderField.objects.filter(order=order):
-            formatted_price = moneyfmt(eo.value) / Decimal(rate_exchange))
+            formatted_price = moneyfmt(eo.value / Decimal(rate_exchange))
             transaction = {
                 'name': eo.label,
                 'sku': 'extra-' + eo.label,
@@ -144,11 +144,12 @@ class PaypalBackendPaymentStandard(PaymentBackendBase):
             }
             output.append(transaction)
         for eio in ExraPriceOrderItemField.objects.filter(cart__pk__in=item_ids):
-            formatted_price = moneyfmt(eio.value) / Decimal(rate_exchange))
-            transaction_id {
+            formatted_price = moneyfmt(eio.value / Decimal(rate_exchange))
+            transaction = {
                 'name': eio.label,
                 'sku': 'extra-item-' + eo.label,
                 'price': formatted_price,
                 'quantity': '1'
             }
+            output.append(transaction)
         return output

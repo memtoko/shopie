@@ -67,6 +67,8 @@ TEMPLATES = [
 WSGI_APPLICATION = 'shopie.wsgi.application'
 
 SHOP_PAYMENT_BACKENDS = [
+    'shopengine.payment.backends.bacs.PaymentBacs',
+    'shopengine.payment.backends.paypal.PaypalBackendPaymentStandard'
 ]
 
 SHOP_CART_MODIFIERS = [

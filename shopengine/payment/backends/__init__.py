@@ -1,5 +1,8 @@
 from shopengine.utils.backend_pool import BaseBackendPool
 
+from .bacs import PaypalBackendPaymentStandard
+from .paypal import PaypalBackendPaymentStandard
+
 class PaymentBackendPool(BaseBackendPool):
     CONSTANT_SETTINGS = 'SHOP_PAYMENT_BACKENDS'
 
