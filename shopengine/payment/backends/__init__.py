@@ -1,6 +1,6 @@
 from shopengine.utils.backend_pool import BaseBackendPool
 
-from .bacs import PaypalBackendPaymentStandard
+from .bacs import PaymentBacs
 from .paypal import PaypalBackendPaymentStandard
 
 class PaymentBackendPool(BaseBackendPool):
