@@ -6,9 +6,10 @@ from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.conf.urls import patterns, url
 from django.utils.decorators import method_decorator
 from django.core.urlresolvers import reverse
+from django.utils.translation import ugettext_lazy as _
 
 from paypalrestsdk import Api as PaypalAPI, Payment as PaypalPayment
-import request
+import requests as requestlib
 
 from .base import PaymentBackendBase
 from shopengine.models import (Order, OrderPayment, ExtraPriceOrderField,
@@ -97,7 +98,7 @@ class PaypalBackendPaymentStandard(PaymentBackendBase):
         except KeyError:
             return HttpResponseBadRequest('Bad request.')
         else:
-            payment = PaypalPayment.find(payment_id)
+            payment = PaypalPayment.find(payment_id, api=shopiepaypal)
             if payment.execute({'payer_id': payer_id}):
                 if order_key is not None:
                     order = Order.objects.get(order_key=order_key)
@@ -135,7 +136,7 @@ class PaypalBackendPaymentStandard(PaymentBackendBase):
             output.append(transaction)
         # then try to add extra price there
         for eo in ExtraPriceOrderField.objects.filter(order=order):
-            formatted_price = moneyfmt(eo.value) / Decimal(rate_exchange))
+            formatted_price = moneyfmt(eo.value / Decimal(rate_exchange))
             transaction = {
                 'name': eo.label,
                 'sku': 'extra-' + eo.label,
@@ -143,12 +144,13 @@ class PaypalBackendPaymentStandard(PaymentBackendBase):
                 'quantity': '1'
             }
             output.append(transaction)
-        for eio in ExraPriceOrderItemField.objects.filter(cart__pk__in=item_ids):
-            formatted_price = moneyfmt(eio.value) / Decimal(rate_exchange))
-            transaction_id {
+        for eio in ExraPriceOrderItemField.objects.filter(order_item__pk__in=item_ids):
+            formatted_price = moneyfmt(eio.value / Decimal(rate_exchange))
+            transaction = {
                 'name': eio.label,
                 'sku': 'extra-item-' + eo.label,
                 'price': formatted_price,
                 'quantity': '1'
             }
+            output.append(transaction)
         return output

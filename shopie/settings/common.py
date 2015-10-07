@@ -67,6 +67,8 @@ TEMPLATES = [
 WSGI_APPLICATION = 'shopie.wsgi.application'
 
 SHOP_PAYMENT_BACKENDS = [
+    'shopengine.payment.backends.bacs.PaymentBacs',
+    'shopengine.payment.backends.paypal.PaypalBackendPaymentStandard'
 ]
 
 SHOP_CART_MODIFIERS = [
@@ -98,4 +100,4 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (os.path.join(PROJECT_DIR, 'static'),)
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT_URL = os.path.join(PROJECT_DIR, 'media')
+MEDIA_ROOT = os.path.join(PROJECT_DIR, 'media')
