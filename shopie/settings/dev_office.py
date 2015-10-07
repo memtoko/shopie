@@ -15,3 +15,8 @@ DATABASES = {
 }
 
 PAYPAL_PAYMENT_SANDBOX = True
+
+# email debugging stuff, use this on conjunction with
+# python -m smtpd -n -c DebuggingServer localhost:1025
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 1025
