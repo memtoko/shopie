@@ -6,9 +6,10 @@ from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.conf.urls import patterns, url
 from django.utils.decorators import method_decorator
 from django.core.urlresolvers import reverse
+from django.utils.translation import ugettext_lazy as _
 
 from paypalrestsdk import Api as PaypalAPI, Payment as PaypalPayment
-import request
+import requests
 
 from .base import PaymentBackendBase
 from shopengine.models import (Order, OrderPayment, ExtraPriceOrderField,
