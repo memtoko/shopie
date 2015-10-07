@@ -61,6 +61,8 @@ class Cart(BaseModel):
         self.save()
 
     def update(self, request):
+        if self._updated_cart_items is not None:
+            return True
         items = CartItem.objects.filter(cart=self).order_by('pk')
         product_ids = [item.product.pk for item in items]
         products = Product.objects.filter(pk__in=product_ids)
@@ -152,6 +154,3 @@ class Disscount(BaseModel):
     end_date = models.DateTimeField(verbose_name=_('end date'))
     max_used = models.IntegerField(verbose_name=_('maximum used'))
     used = models.IntegerField(verbose_name=_('used'), default=0)
-
-
-
