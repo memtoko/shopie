@@ -1,7 +1,7 @@
 from django.views.generic.base import View, TemplateResponseMixin
 from django.http import (HttpResponse, HttpResponseRedirect,
     Http404, HttpResponseBadRequest, JsonResponse)
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 import django.contrib.messages.api as message_api
 from django.core.urlresolvers import reverse
 
@@ -77,9 +77,14 @@ class CartView(TemplateResponseMixin, CartItemDetail):
         ctx = {}
         cart = get_or_create_cart(self.request)
         cart.update(self.request)
+        cart_items = cart.get_updated_cart_items()
+        formset = get_cart_item_formset(cart_items=cart_items)
+        disscount_form = ApplyDisscountForm()
         ctx.update({
-                'cart': cart,
-                'cart_items': cart.get_updated_cart_items()
+            'cart': cart,
+            'cart_items': cart_items,
+            'formset': formset,
+            'disscount_form': disscount_form
             })
         return ctx
 
@@ -89,9 +94,6 @@ class CartView(TemplateResponseMixin, CartItemDetail):
         this only extends the mixin and not templateview.
         """
         context = self.get_context_data(**kwargs)
-        formset = get_cart_item_formset(cart_items=context['cart_items'])
-        disscount_form = ApplyDisscountForm()
-        context.update({'formset': formset, 'disscount_form': disscount_form})
         return self.render_to_response(context)
 
     def post(self, *args, **kwargs):
