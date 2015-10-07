@@ -1,7 +1,7 @@
-from importlib import import_module
-
 from django.core import exceptions
 from django.conf import settings
+
+from .import_module import load_module
 
 class BaseBackendPool(object):
     """This backend pool make it easy to load the specific module. Use same
@@ -30,24 +30,7 @@ class BaseBackendPool(object):
 
         #iterate it
         for mod in self._get_backend_list():
-            try:
-                mod_module, mod_classname = mod.rsplit('.', 1)
-            except ValueError:
-                raise exceptions.ImproperlyConfigured(
-                        'We are sory, i can\'t import module %s' % (mod_module)
-                    )
-            try:
-                module = import_module(mod_module)
-            except ImportError:
-                raise exceptions.ImproperlyConfigured(
-                        'Error importing module %s' % (mod_module)
-                    )
-            try:
-                mod_class = getattr(module, mod_classname)
-            except AttributeError:
-                raise exceptions.ImproperlyConfigured(
-                    'Module "%s" does not define a "%s" class' %
-                        (mod_module, mod_classname))
+            mod_class = load_module(mod)
             mod_instance = mod_class()
             result.append(mod_instance)
 
