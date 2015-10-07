@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import patterns, url, include
 
 from shopengine.views.checkout import CheckoutView
 from shopengine.payment.backends.urls import urlpatterns as payment_backends_urls

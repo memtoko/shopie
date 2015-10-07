@@ -5,22 +5,22 @@ from django.core.exceptions import ImproperlyConfigured
 _LOADED_CACHE = {}
 
 def load_module(specification, context="Load"):
-	delimiter = (":" if ":" in specification else ".")
-	module_name, object_name = specification.rsplit(delimiter, 1)
-	try:
-	    module = import_module(module_name)
-	except ImportError as ie:  # pragma: no cover
-	    raise ImproperlyConfigured(
-	        "%s: Could not import module %r to load %r from. (%r)" %
-	        (context, module_name, object_name, ie)
-	    )
+    delimiter = (":" if ":" in specification else ".")
+    module_name, object_name = specification.rsplit(delimiter, 1)
+    try:
+        module = import_module(module_name)
+    except ImportError as ie:  # pragma: no cover
+        raise ImproperlyConfigured(
+            "%s: Could not import module %r to load %r from. (%r)" %
+            (context, module_name, object_name, ie)
+        )
 
-	obj = getattr(module, object_name, None)
-	if obj is None:  # pragma: no cover
-	    raise ImproperlyConfigured(
-	        "%s: Module %r does not have a name %r, or its value is None." % (
-	            context_explanation, module, object_name))
-	return obj
+    obj = getattr(module, object_name, None)
+    if obj is None:  # pragma: no cover
+        raise ImproperlyConfigured(
+            "%s: Module %r does not have a name %r, or its value is None." % (
+                context_explanation, module, object_name))
+    return obj
 
 def clear_loaded_cache():
     _LOADED_CACHE.clear()

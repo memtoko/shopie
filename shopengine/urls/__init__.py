@@ -6,5 +6,4 @@ from .issue import urlpatterns as issue_urlpatterns
 urlpatterns = cart_urlpatterns
 urlpatterns += product_urlpatterns
 urlpatterns += checkout_urlpatterns
-urlpatterns += payment_backends_urls
 urlpatterns += issue_urlpatterns
