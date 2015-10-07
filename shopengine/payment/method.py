@@ -45,7 +45,7 @@ class PaymentCheckoutStep(CheckoutStepMixin, FormView):
         return super(PaymentCheckoutStep, self).get_initial()
 
     def form_valid(self, form):
-        for key, value in self.cleaned_data.items():
+        for key, value in form.cleaned_data.items():
             self.storage[key] = value
 
         self.process()
@@ -57,7 +57,7 @@ class PaymentCheckoutStep(CheckoutStepMixin, FormView):
             # add warning then redirect
             return HttpResponseRedirect(reverse('cart'))
         finally:
-            self.checkout.process.complete()
+            self.checkout_process.complete()
 
     def create_order_from_cart(self, request=None):
         request = request or self.request
@@ -65,11 +65,8 @@ class PaymentCheckoutStep(CheckoutStepMixin, FormView):
         cart.update(request)
         order = Order.objects.create_from_cart(cart, request)
         # add the details
-        order.full_name = self.cleaned_data['name']
-        order.email = self.cleaned_data['email']
+        order.full_name = self.storage['name']
+        order.email = self.storage['email']
         order.save()
         Order.objects.add_order_to_request(request, order)
         return order
-
-
-

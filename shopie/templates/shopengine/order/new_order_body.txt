@@ -1,0 +1,3 @@
+Hi {{ user.username }}, Terima kasih telah berbelanja di Memtoko.
+Order: #{{ order.order_key }}. Kamu bisa melihat detail order ini,
+di web kami.
