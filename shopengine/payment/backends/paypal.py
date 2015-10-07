@@ -98,7 +98,7 @@ class PaypalBackendPaymentStandard(PaymentBackendBase):
         except KeyError:
             return HttpResponseBadRequest('Bad request.')
         else:
-            payment = PaypalPayment.find(payment_id)
+            payment = PaypalPayment.find(payment_id, api=shopiepaypal)
             if payment.execute({'payer_id': payer_id}):
                 if order_key is not None:
                     order = Order.objects.get(order_key=order_key)
