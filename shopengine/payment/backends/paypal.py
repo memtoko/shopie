@@ -9,7 +9,7 @@ from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from paypalrestsdk import Api as PaypalAPI, Payment as PaypalPayment
-import requests
+import requests as requestlib
 
 from .base import PaymentBackendBase
 from shopengine.models import (Order, OrderPayment, ExtraPriceOrderField,
@@ -144,7 +144,7 @@ class PaypalBackendPaymentStandard(PaymentBackendBase):
                 'quantity': '1'
             }
             output.append(transaction)
-        for eio in ExraPriceOrderItemField.objects.filter(cart__pk__in=item_ids):
+        for eio in ExraPriceOrderItemField.objects.filter(order_item__pk__in=item_ids):
             formatted_price = moneyfmt(eio.value / Decimal(rate_exchange))
             transaction = {
                 'name': eio.label,
