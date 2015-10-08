@@ -1,0 +1,52 @@
+<div ng-repeat="reply in replies" class="reply-js">
+  <article id="reply-{{ reply.id }}" class="issue">
+    <div class="avatar">
+      <a href="#"><img src="//www.gravatar.com/avatar/{{ reply.email_hash }}?s=130" class="img-circle" alt="@{{ reply.name }}"></a>
+      <div class="name">
+        <a href="#">@{{ reply.name }}</a>
+      </div>
+    </div>
+    <div class="body">
+      <div class="meta">
+        <p class="issue-author-name"><a href="#">@{{ reply.name }}</a></p>
+      </div>
+      <section ="markdown-html-body" ng-bind-html="reply.body"></section>
+    </div>
+  </article>
+</div>
+
+<section ng-if="preloadData.user_authenticated" id="js-view-container" class="js-view-container view-container view-editor row">
+    <section class="entry-markdown">
+      <section id="entry-markdown-content" class="entry-markdown-content">
+        <textarea id="markdown-editor" data-ng-model="editor.text" name="body" class="markdown-editor"></textarea>
+      </section>
+    </section>
+    <section class="entry-preview row">
+      <article id="issue-preview" class="issue">
+        <div class="avatar">
+          <a href="#"><img src="//www.gravatar.com/avatar/{{ preloadData.user_email_hash }}?s=130" class="img-circle" alt="@{{ preloadData.username }}"></a>
+          <div class="name">
+            <a href="#">@{{ preloadData.username }}</a>
+          </div>
+        </div>
+        <div class="body large-10 columns">
+          <div class="meta">
+            <p class="issue-author-name"><a href="#">@{{ preloadData.username }}</a></p>
+            <p class="preview">Preview</p>
+          </div>
+          <section class="entry-preview-content">
+            <div markdown-to-html="editor.text"></div>
+            <p class="word-count" word-count="editor.text"></p>
+          </section>
+        </div>
+      </article>
+    </section>
+</section>
+<div ng-if="preloadData.user_authenticated" class="view-editor-footer row" style="margin-top:20px;">
+  <section class="view-actions">
+    <button ng-click="issueButton.submit()" type="buttond" class="issue-submit button small round">Submit</button>
+  </section>
+</div>
+<div ng-if="notAuthenticated" class="js-not-authenticated row">
+<p>To reply this issue, please <a href="#/login">login</a></p>
+</div>

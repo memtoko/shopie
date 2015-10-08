@@ -1,0 +1,13 @@
+<div class="row">
+<div class="large-7 small-12 columns center-column">
+<div class="row login-form">
+<div class="panel">
+<h3 class="title text-center">Login</h3>
+<form method="post" action="{{ loginForm.action }}">
+	<input type="hidden" name="csrfmiddlewaretoken" value="{{ loginForm.csrfToken }}" />
+  <p><label for="id_username">Username:</label> <input id="id_username" maxlength="254" name="username" type="text" /></p>
+	<p><label for="id_password">Password:</label> <input id="id_password" name="password" type="password" /></p>
+    <input type="submit" class="button primary round small" value="Login" />
+    <input type="hidden" name="next" value="{{ loginForm.next }}" />
+</form>
+</div>

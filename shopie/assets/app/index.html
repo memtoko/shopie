@@ -1,25 +1,13 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Assets</title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<html ng-app="myApp" ng-strict-di>
+<head>
+	<title>Angular ES6 Sample</title>
+</head>
+<body ng-controller="HomeController">
 
-    {{content-for 'head'}}
+	Hello {{ person.name | upper }}!
 
-    <link rel="stylesheet" href="assets/vendor.css">
-    <link rel="stylesheet" href="assets/assets.css">
-
-    {{content-for 'head-footer'}}
-  </head>
-  <body>
-    {{content-for 'body'}}
-
-    <script src="assets/vendor.js"></script>
-    <script src="assets/assets.js"></script>
-
-    {{content-for 'body-footer'}}
-  </body>
+	<script src="bower_components/angular/angular.min.js"></script>
+	<script src="scripts/app.min.js"></script>
+</body>
 </html>
