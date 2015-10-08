@@ -1,5 +1,5 @@
 {
-  "name": "assets",
+  "name": "shopie",
   "dependencies": {
     "ember": "1.13.7",
     "ember-cli-shims": "ember-cli/ember-cli-shims#0.0.3",
@@ -11,6 +11,18 @@
     "ember-resolver": "~0.1.18",
     "jquery": "^1.11.3",
     "loader.js": "ember-cli/loader.js#3.2.1",
-    "qunit": "~1.18.0"
+    "qunit": "~1.18.0",
+    "blueimp-md5": "1.1.0",
+    "commonmark": "0.22.*",
+    "codemirror": "5.2.0",
+    "devicejs": "0.2.7",
+    "moment": "2.10.3",
+    "normalize.css": "3.0.3",
+    "password-generator": "git://github.com/bermi/password-generator#49accd7",
+    "rangyinputs": "1.2.0",
+    "selectize": "~0.12.1",
+    "sinonjs": "1.14.1",
+    "validator-js": "3.39.0",
+    "xregexp": "2.0.0"
   }
 }

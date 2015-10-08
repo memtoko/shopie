@@ -1,7 +1,7 @@
 {
-  "name": "assets",
+  "name": "shopie",
   "version": "0.0.0",
-  "description": "Small description for assets goes here",
+  "description": "Small description for shopie-ember goes here",
   "private": true,
   "directories": {
     "doc": "doc",
