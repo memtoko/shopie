@@ -11,7 +11,7 @@ urlpatterns = [
         RegistrationView.as_view(form_class=RegistrationFormUniqueEmail),
         name='registration_register',
     ),
-    url(r'^@(?P<username>.+)/$', user_dashboard, name='account_dashboard'),
+    url(r'^(?P<username>.+)/$', user_dashboard, name='account_dashboard'),
     url(r'', include('django.contrib.auth.urls')),
     url(r'', include('registration.backends.default.urls')),
 ]

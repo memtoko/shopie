@@ -170,7 +170,7 @@ class Order(BaseModel):
         return _('Order ID: %(id)s') % {'id': self.pk}
 
     def get_status_name(self):
-        return dict(ORDER_STATES)[self.status]
+        return dict(self.ORDER_STATES)[self.status]
 
     def update_status(self, new_status):
         if not self.pk:

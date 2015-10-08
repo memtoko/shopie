@@ -1,10 +1,11 @@
 import urllib
 
-from django.shortcuts import render, redirect
-from django.http import Http404
+from django.shortcuts import get_object_or_404, render, redirect
+from django.http import Http404, HttpResponseBadRequest
 from django.core.urlresolvers import reverse
 from django.views.generic import View
 from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 
 from shopengine.models import Order
 from shopengine.forms.checkout import CheckoutForm
@@ -40,3 +41,12 @@ class CheckoutView(BaseCheckoutView):
         'shopengine.payment.method:PaymentCheckoutStep'
     ]
     empty_phase_spec = None
+
+@login_required
+def checkout_thank_you(request, order_key):
+    order = get_object_or_404(Order, order_key=order_key)
+    if order.user != request.user:
+        raise HttpResponseBadRequest('You dont have permission to view this page.')
+    return render(request, "shopengine/checkout/thank_you.html", {
+            'order': order
+        })

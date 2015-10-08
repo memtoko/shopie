@@ -109,6 +109,7 @@ class PaypalBackendPaymentStandard(PaymentBackendBase):
                         pass
                     else:
                         payment_order.amount = Decimal(order.order_total)
+                        payment_order.save()
                 return HttpResponseRedirect(reverse('checkout_thankyou', kwargs={
                         'order_key': order.order_key
                     }))

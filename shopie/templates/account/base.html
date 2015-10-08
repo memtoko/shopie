@@ -6,7 +6,9 @@
 			<div class="banner-user-card">
 				<img src="//www.gravatar.com/avatar/{{ email_hash }}?size=200" class="avatar profile" alt="{{ user_obj.username }}">
 				<h1 class="banner-user-name">{{ user_obj.username }}</h1>
+        {% if user_obj.is_authenticated %}
 				<a href="#">Ubah profile</a>
+        {% endif %}
 			</div>
 		</div>
 	</div>
