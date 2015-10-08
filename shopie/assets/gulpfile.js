@@ -9,8 +9,9 @@ var concat = require('gulp-concat');
 var plugins = require('gulp-load-plugins')();
 
 var src = {
-	html: 'app/templates/**/*.html',
+	html: 'app/tpl/**/*.html',
 	libs: 'libs/**',
+	sass: 'app/scss/**/*.scss'
 	bower: 'bower_components/**',
 	scripts: {
 		all: 'app/**/*.js',
@@ -18,13 +19,14 @@ var src = {
 	}
 };
 
-var build = 'build/';
+var build = 'dist/';
 var out = {
 	libs: build + 'libs/',
+	css: build + 'css/',
 	scripts: {
 		file: 'app.min.js',
 		folder: build + 'scripts/',
-		templates: build + 'templates/partials'
+		templates: build + 'tpl/'
 	}
 }
 
@@ -47,7 +49,8 @@ gulp.task('collect-vendor', function() {
 		'bower_components/angular/angular.js',
 		'bower_components/angular-sanitize/angular-sanitize.js',
 		'bower_components/angular-animate/angular-animate.js',
-		'bower_components/angular-ui-router/release/angular-ui-router.js',
+		'bower_components/angular-route/angular-route.js',
+		'bower_components/angular-resource/angular-resource.js'
 		//'lib/showdown.js'
 		]).
 		pipe(concat('vendor.js')).
@@ -100,6 +103,20 @@ gulp.task('scripts', ['jshint'], function() {
 
 });
 
+gulp.task('sass', function() {
+	return gulp.src('app/scss/app.scss')
+		.pipe(plugins.sass({
+			includePaths: [
+				'client/assets/scss',
+    			'bower_components/foundation-apps/scss',
+    			'bower_components/octicons/octicons'
+  			],
+      		outputStyle: 'nested',
+      		errLogToConsole: true
+		}))
+		pipe(gulp.dest(out.css))
+});
+
 gulp.task('serve', ['build', 'watch'], function() {
 	plugins.connect.server({
 		root: build,
@@ -113,7 +130,8 @@ gulp.task('watch', function() {
 	gulp.watch(src.libs, ['libs']);
 	gulp.watch(src.html, ['html']);
 	gulp.watch(src.scripts.all, ['scripts']);
+	gulp.watch(src.sass, ['sass'])
 })
 
-gulp.task('build', ['collect-vendor', 'scripts', 'html']);
+gulp.task('build', ['sass', 'collect-vendor', 'scripts', 'html']);
 gulp.task('default', ['serve']);
