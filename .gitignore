@@ -2,8 +2,15 @@
 *.db
 /bin
 /logs
-/image
+
 /node_modules
 /bower_components
 /client/node_modules
 /client/bower_components
+
+# built asset related
+/shopie/static/admin
+/shopie/static/css
+/shopie/static/js
+/shopie/static/images
+/shopie/static/fonts
