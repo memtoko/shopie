@@ -1,7 +1,7 @@
 from django.conf.urls import url, include
 
 from .api import api
-from .views import *
+import shoprest.resources
 
 urlpatterns = [
     url(r'^api/', include(api.urls)),
