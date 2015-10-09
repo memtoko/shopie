@@ -3,6 +3,7 @@ from tastypie.exceptions import Unauthorized
 
 
 class UserObjectsOnlyAuthorization(Authorization):
+
     def read_list(self, object_list, bundle):
         # This assumes a ``QuerySet`` from ``ModelResource``.
         return object_list.filter(user=bundle.request.user)
