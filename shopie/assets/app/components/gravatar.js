@@ -20,3 +20,5 @@ let gravatarDirective = function() {
         link: linker
     };
 };
+
+export default gravatarDirective;
