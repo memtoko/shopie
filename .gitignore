@@ -10,6 +10,7 @@
 /client/bower_components
 
 # built asset related
+/tmp
 /shopie/static/admin
 /shopie/static/css
 /shopie/static/js

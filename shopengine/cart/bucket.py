@@ -7,12 +7,8 @@ def get_cart_from_database(request):
     """Get cart from database by its user in request. If you use this function,
     make sure that user is logged in
     """
-    database_cart = Cart.objects.filter(user=request.user)
-    if database_cart.exists():
-        database_cart = database_cart[0]
-    else:
-        database_cart = None
-    return database_cart
+    database_cart = Cart.objects.filter(user=request.user).select_related('user')
+    return database_cart[0] if database_cart.exists() else None
 
 def get_cart_from_session(request):
     """Take a cart from session value we stored before."""
@@ -22,7 +18,7 @@ def get_cart_from_session(request):
         cart_id = session.get('cart_id')
         if cart_id:
             try:
-                session_cart = Cart.objects.get(pk=cart_id)
+                session_cart = Cart.objects.select_related('user').get(pk=cart_id)
             except Cart.DoesNotExist:
                 # no session cart by that id, so set to None
                 session_cart = None

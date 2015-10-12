@@ -15,7 +15,9 @@ DATABASES = {
 }
 
 PAYPAL_PAYMENT_SANDBOX = True
-
+INTERNAL_IPS = '127.0.0.1'
+INSTALLED_APPS.append('debug_toolbar')
+MIDDLEWARE_CLASSES.insert(0, 'debug_toolbar.middleware.DebugToolbarMiddleware')
 # email debugging stuff, use this on conjunction with
 # python -m smtpd -n -c DebuggingServer localhost:1025
 EMAIL_HOST = 'localhost'

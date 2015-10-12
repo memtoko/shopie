@@ -24,7 +24,7 @@ from shoprest import urls as api_urls
 urlpatterns = [
     url(r'^$', home_view, name='home'),
     url(r'^', include(shopengine_urls)),
-    url(r'^', include(api_urls)),
+    url(r'^api/v1/', include(api_urls)),
     url(r'^account/', include(account_urls)),
     url(r'^console/', include(admin.site.urls)),
 ]

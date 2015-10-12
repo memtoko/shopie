@@ -1,8 +1,12 @@
-from django.conf.urls import url, include
+from django.conf.urls import patterns, url, include
 
-from .api import api
-import shoprest.resources
+from .router import router
 
-urlpatterns = [
-    url(r'^api/', include(api.urls)),
-]
+from .views.user import UserViewSet
+
+router.register(r'users', UserViewSet)
+
+urlpatterns = patterns('',
+    url(r'^', include(router.urls))
+)
+

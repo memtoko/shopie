@@ -9,7 +9,7 @@
     "ember-qunit": "0.4.9",
     "ember-qunit-notifications": "0.0.7",
     "ember-resolver": "~0.1.18",
-    "jquery": "^1.11.3",
+    "jquery": "^2.1.4",
     "loader.js": "ember-cli/loader.js#3.2.1",
     "qunit": "~1.18.0",
     "blueimp-md5": "1.1.0",
@@ -23,6 +23,9 @@
     "selectize": "~0.12.1",
     "sinonjs": "1.14.1",
     "validator-js": "3.39.0",
-    "xregexp": "2.0.0"
+    "xregexp": "2.0.0",
+    "foundation": "~5.4.7",
+    "octicons": "*",
+    "ember-simple-auth": "0.8.0"
   }
 }

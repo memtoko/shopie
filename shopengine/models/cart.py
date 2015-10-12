@@ -63,10 +63,12 @@ class Cart(BaseModel):
     def update(self, request):
         if self._updated_cart_items is not None:
             return True
-        items = CartItem.objects.filter(cart=self).order_by('pk')
-        product_ids = [item.product.pk for item in items]
-        products = Product.objects.filter(pk__in=product_ids)
-        prod_dict = dict([(p.pk, p) for p in products])
+        query = CartItem.objects.filter(cart=self).order_by('pk')
+        items = query.select_related('product').defer('product__description', 'product__short_description')
+
+        #product_ids = [item.product.pk for item in items]
+        #products = Product.objects.filter(pk__in=product_ids)
+        #prod_dict = dict([(p.pk, p) for p in products])
 
         if not hasattr(request, 'cart_modifier_state'):
             setattr(request, 'cart_modifier_state', {})
@@ -74,7 +76,7 @@ class Cart(BaseModel):
         modifiers = cart_modifier_pool.get_backend_list()
         with ContextModifier(modifiers, self, request):
             for item in items:
-                item.product = prod_dict[item.product_id]
+                #item.product = prod_dict[item.product_id]
                 self.subtotal_price += item.update(request)
 
             self.current_total = self.subtotal_price

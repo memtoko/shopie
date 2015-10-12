@@ -1,0 +1,5 @@
+-r common.txt
+
+pep8==1.6.2
+autopep8==1.2.1
+django-debug-toolbar==1.4

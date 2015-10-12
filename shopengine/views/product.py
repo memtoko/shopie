@@ -10,9 +10,10 @@ class ShopView(ShopViewMixins, ListView):
     def get_queryset(self):
         queryset = Product.objects.exclude(product_type=Product.VARIANT_PRODUCT)
         if self.request.user.is_staff:
-            return queryset.all()
+            queryset = queryset.all()
         else:
-            return queryset.published().active()
+            queryset = queryset.published().active().select_related()
+        return queryset.select_related('parent')
 
 class ShopDetailView(ShopViewMixins, DetailView):
     generic_template = "shopengine/product/product_detail.html"
