@@ -19,7 +19,14 @@ module.exports = function(environment) {
       API_HOST: null,
       API_NAMESPACE: 'api/v1'
     },
-    
+
+    'simple-auth': {
+      authenticationRoute: 'login',
+      routeAfterAuthentication: 'user_dashboard',
+      authorizer: 'simple-auth-authorizer:shopie-token-auth',
+      localStorageKey: '<overriden this>'
+    },
+
     contentSecurityPolicy: {
       'default-src': "'none'",
       'script-src': "'self' 'unsafe-inline' 'unsafe-eval'",
