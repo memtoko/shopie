@@ -1,0 +1,368 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/nodejs', '/usr/bin/npm', 'install', '-g', 'ember-cli' ]
+2 info using npm@2.14.4
+3 info using node@v4.1.1
+4 verbose install initial load of /usr/lib/package.json
+5 verbose readDependencies loading dependencies from /usr/lib/package.json
+6 silly cache add args [ 'ember-cli', null ]
+7 verbose cache add spec ember-cli
+8 silly cache add parsed spec Result {
+8 silly cache add   raw: 'ember-cli',
+8 silly cache add   scope: null,
+8 silly cache add   name: 'ember-cli',
+8 silly cache add   rawSpec: '',
+8 silly cache add   spec: '*',
+8 silly cache add   type: 'range' }
+9 silly addNamed ember-cli@*
+10 verbose addNamed "*" is a valid semver range for ember-cli
+11 silly addNameRange { name: 'ember-cli', range: '*', hasData: false }
+12 silly mapToRegistry name ember-cli
+13 silly mapToRegistry using default registry
+14 silly mapToRegistry registry https://registry.npmjs.org/
+15 silly mapToRegistry uri https://registry.npmjs.org/ember-cli
+16 verbose addNameRange registry:https://registry.npmjs.org/ember-cli not in flight; fetching
+17 verbose request uri https://registry.npmjs.org/ember-cli
+18 verbose request no auth needed
+19 info attempt registry request try #1 at 06:43:40
+20 verbose request id 841d83ed902f2245
+21 http request GET https://registry.npmjs.org/ember-cli
+22 http 200 https://registry.npmjs.org/ember-cli
+23 silly get cb [ 200,
+23 silly get   { server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+23 silly get     etag: '"C1XM8F6JCG4JOGQN6GUHD8H83"',
+23 silly get     'content-type': 'application/json',
+23 silly get     'cache-control': 'max-age=60',
+23 silly get     'content-length': '236744',
+23 silly get     'accept-ranges': 'bytes',
+23 silly get     date: 'Tue, 13 Oct 2015 06:43:42 GMT',
+23 silly get     via: '1.1 varnish',
+23 silly get     age: '1',
+23 silly get     connection: 'keep-alive',
+23 silly get     'x-served-by': 'cache-sin6926-SIN',
+23 silly get     'x-cache': 'MISS',
+23 silly get     'x-cache-hits': '0',
+23 silly get     'x-timer': 'S1444718620.857270,VS0,VE1762',
+23 silly get     vary: 'Accept' } ]
+24 verbose get saving ember-cli to /home/vagrant/.npm/registry.npmjs.org/ember-cli/.cache.json
+25 silly addNameRange number 2 { name: 'ember-cli', range: '*', hasData: true }
+26 silly addNameRange versions [ 'ember-cli',
+26 silly addNameRange   [ '0.0.0',
+26 silly addNameRange     '0.0.1',
+26 silly addNameRange     '0.0.2',
+26 silly addNameRange     '0.0.3',
+26 silly addNameRange     '0.0.4',
+26 silly addNameRange     '0.0.5',
+26 silly addNameRange     '0.0.6',
+26 silly addNameRange     '0.0.7',
+26 silly addNameRange     '0.0.8',
+26 silly addNameRange     '0.0.9',
+26 silly addNameRange     '0.0.10',
+26 silly addNameRange     '0.0.11',
+26 silly addNameRange     '0.0.12',
+26 silly addNameRange     '0.0.13',
+26 silly addNameRange     '0.0.14',
+26 silly addNameRange     '0.0.15',
+26 silly addNameRange     '0.0.16',
+26 silly addNameRange     '0.0.18',
+26 silly addNameRange     '0.0.19',
+26 silly addNameRange     '0.0.20',
+26 silly addNameRange     '0.0.21',
+26 silly addNameRange     '0.0.22',
+26 silly addNameRange     '0.0.23',
+26 silly addNameRange     '0.0.24',
+26 silly addNameRange     '0.0.25',
+26 silly addNameRange     '0.0.27',
+26 silly addNameRange     '0.0.28',
+26 silly addNameRange     '0.0.29',
+26 silly addNameRange     '0.0.32',
+26 silly addNameRange     '0.0.33',
+26 silly addNameRange     '0.0.34',
+26 silly addNameRange     '0.0.35',
+26 silly addNameRange     '0.0.36',
+26 silly addNameRange     '0.0.37',
+26 silly addNameRange     '0.0.38',
+26 silly addNameRange     '0.0.39',
+26 silly addNameRange     '0.0.40',
+26 silly addNameRange     '0.0.41',
+26 silly addNameRange     '0.0.42',
+26 silly addNameRange     '0.0.43',
+26 silly addNameRange     '0.0.44',
+26 silly addNameRange     '0.0.45',
+26 silly addNameRange     '0.0.46',
+26 silly addNameRange     '0.0.47',
+26 silly addNameRange     '0.1.0',
+26 silly addNameRange     '0.1.1',
+26 silly addNameRange     '0.1.2',
+26 silly addNameRange     '0.1.3',
+26 silly addNameRange     '0.1.4',
+26 silly addNameRange     '0.1.5',
+26 silly addNameRange     '0.1.6',
+26 silly addNameRange     '0.1.7',
+26 silly addNameRange     '0.1.8',
+26 silly addNameRange     '0.1.9',
+26 silly addNameRange     '0.1.10',
+26 silly addNameRange     '0.1.11',
+26 silly addNameRange     '0.1.12',
+26 silly addNameRange     '0.1.13',
+26 silly addNameRange     '0.1.14',
+26 silly addNameRange     '0.1.15',
+26 silly addNameRange     '0.2.0-beta.1',
+26 silly addNameRange     '0.2.0',
+26 silly addNameRange     '0.2.1',
+26 silly addNameRange     '0.2.2',
+26 silly addNameRange     '0.2.3',
+26 silly addNameRange     '0.2.4',
+26 silly addNameRange     '0.2.5',
+26 silly addNameRange     '0.2.6',
+26 silly addNameRange     '0.2.7',
+26 silly addNameRange     '1.13.0',
+26 silly addNameRange     '1.13.1',
+26 silly addNameRange     '1.13.5',
+26 silly addNameRange     '1.13.6',
+26 silly addNameRange     '1.13.7',
+26 silly addNameRange     '1.13.8' ] ]
+27 silly addNamed ember-cli@1.13.8
+28 verbose addNamed "1.13.8" is a plain semver version for ember-cli
+29 silly mapToRegistry name ember-cli
+30 silly mapToRegistry using default registry
+31 silly mapToRegistry registry https://registry.npmjs.org/
+32 silly mapToRegistry uri https://registry.npmjs.org/ember-cli
+33 verbose addRemoteTarball https://registry.npmjs.org/ember-cli/-/ember-cli-1.13.8.tgz not in flight; adding
+34 verbose addRemoteTarball [ 'https://registry.npmjs.org/ember-cli/-/ember-cli-1.13.8.tgz',
+34 verbose addRemoteTarball   '9a116a0be1c73f9d6fdeb50042f207ab33f6e5c6' ]
+35 info retry fetch attempt 1 at 06:43:43
+36 info attempt registry request try #1 at 06:43:43
+37 http fetch GET https://registry.npmjs.org/ember-cli/-/ember-cli-1.13.8.tgz
+38 http fetch 200 https://registry.npmjs.org/ember-cli/-/ember-cli-1.13.8.tgz
+39 silly fetchAndShaCheck shasum 9a116a0be1c73f9d6fdeb50042f207ab33f6e5c6
+40 verbose addTmpTarball /tmp/npm-2178-2cd1abb7/registry.npmjs.org/ember-cli/-/ember-cli-1.13.8.tgz not in flight; adding
+41 verbose addTmpTarball already have metadata; skipping unpack for ember-cli@1.13.8
+42 silly cache afterAdd ember-cli@1.13.8
+43 verbose afterAdd /home/vagrant/.npm/ember-cli/1.13.8/package/package.json not in flight; writing
+44 verbose afterAdd /home/vagrant/.npm/ember-cli/1.13.8/package/package.json written
+45 silly install resolved [ { name: 'ember-cli',
+45 silly install resolved     version: '1.13.8',
+45 silly install resolved     main: 'lib/cli/index.js',
+45 silly install resolved     description: 'Command line tool for developing ambitious ember.js apps',
+45 silly install resolved     trackingCode: 'UA-49225444-1',
+45 silly install resolved     bin: { ember: './bin/ember' },
+45 silly install resolved     scripts:
+45 silly install resolved      { docs: 'node bin/generate-docs.js',
+45 silly install resolved        test: 'node tests/runner',
+45 silly install resolved        'test:debug': 'node debug tests/runner',
+45 silly install resolved        'test-all': 'node tests/runner all',
+45 silly install resolved        'test-all:debug': 'node debug tests/runner all',
+45 silly install resolved        'test-all:cover': 'istanbul cover tests/runner.js all' },
+45 silly install resolved     repository:
+45 silly install resolved      { type: 'git',
+45 silly install resolved        url: 'git+https://github.com/ember-cli/ember-cli.git' },
+45 silly install resolved     engines: { node: '>= 0.10.0' },
+45 silly install resolved     keywords:
+45 silly install resolved      [ 'ember.js',
+45 silly install resolved        'ember',
+45 silly install resolved        'cli',
+45 silly install resolved        'app',
+45 silly install resolved        'kit',
+45 silly install resolved        'app-kit',
+45 silly install resolved        'ember-app-kit' ],
+45 silly install resolved     author: { name: 'Stefan Penner, Robert Jackson and ember-cli contributors' },
+45 silly install resolved     license: 'MIT',
+45 silly install resolved     bugs: { url: 'https://github.com/ember-cli/ember-cli/issues' },
+45 silly install resolved     dependencies:
+45 silly install resolved      { abbrev: '^1.0.5',
+45 silly install resolved        bower: '^1.3.12',
+45 silly install resolved        'bower-config': '0.6.1',
+45 silly install resolved        'bower-endpoint-parser': '0.2.2',
+45 silly install resolved        broccoli: '0.16.5',
+45 silly install resolved        'broccoli-caching-writer': '^1.1.0',
+45 silly install resolved        'broccoli-clean-css': '0.2.0',
+45 silly install resolved        'broccoli-es3-safe-recast': '^2.0.0',
+45 silly install resolved        'broccoli-es6modules': '^1.0.1',
+45 silly install resolved        'broccoli-filter': '0.1.14',
+45 silly install resolved        'broccoli-funnel': '0.2.7',
+45 silly install resolved        'broccoli-kitchen-sink-helpers': '0.2.7',
+45 silly install resolved        'broccoli-merge-trees': '0.2.2',
+45 silly install resolved        'broccoli-sane-watcher': '^1.1.1',
+45 silly install resolved        'broccoli-sourcemap-concat': '^1.0.0',
+45 silly install resolved        'broccoli-unwatched-tree': '0.1.1',
+45 silly install resolved        'broccoli-writer': '0.1.1',
+45 silly install resolved        chalk: '1.1.0',
+45 silly install resolved        'clean-base-url': '^1.0.0',
+45 silly install resolved        compression: '^1.4.4',
+45 silly install resolved        'concat-stream': '^1.4.7',
+45 silly install resolved        configstore: '0.3.2',
+45 silly install resolved        'core-object': '0.0.2',
+45 silly install resolved        cpr: '^0.4.1',
+45 silly install resolved        debug: '^2.1.3',
+45 silly install resolved        diff: '^1.3.1',
+45 silly install resolved        'ember-cli-copy-dereference': '^1.0.0',
+45 silly install resolved        'ember-cli-preprocess-registry': '^1.0.3',
+45 silly install resolved        'ember-router-generator': '^1.0.0',
+45 silly install resolved        'escape-string-regexp': '^1.0.3',
+45 silly install resolved        'exists-sync': '0.0.3',
+45 silly install resolved        exit: '^0.1.2',
+45 silly install resolved        express: '^4.12.3',
+45 silly install resolved        findup: '0.1.5',
+45 silly install resolved        'findup-sync': '^0.2.1',
+45 silly install resolved        'fs-extra': '0.22.1',
+45 silly install resolved        'git-repo-info': '^1.0.4',
+45 silly install resolved        github: '^0.2.3',
+45 silly install resolved        glob: '5.0.13',
+45 silly install resolved        'http-proxy': '^1.9.0',
+45 silly install resolved        inflection: '^1.7.0',
+45 silly install resolved        inquirer: '0.5.1',
+45 silly install resolved        'is-git-url': '^0.2.0',
+45 silly install resolved        isbinaryfile: '^2.0.3',
+45 silly install resolved        'js-string-escape': '^1.0.0',
+45 silly install resolved        leek: '0.0.18',
+45 silly install resolved        lodash: '^3.6.0',
+45 silly install resolved        'markdown-it': '4.3.0',
+45 silly install resolved        'markdown-it-terminal': '0.0.2',
+45 silly install resolved        'merge-defaults': '^0.2.1',
+45 silly install resolved        minimatch: '^2.0.4',
+45 silly install resolved        morgan: '^1.5.2',
+45 silly install resolved        'node-modules-path': '^1.0.0',
+45 silly install resolved        'node-uuid': '^1.4.3',
+45 silly install resolved        nopt: '^3.0.1',
+45 silly install resolved        npm: '^2.7.6',
+45 silly install resolved        'pleasant-progress': '^1.0.2',
+45 silly install resolved        portfinder: '^0.4.0',
+45 silly install resolved        'process-relative-require': '^1.0.0',
+45 silly install resolved        'promise-map-series': '^0.2.1',
+45 silly install resolved        'proxy-middleware': '0.13.0',
+45 silly install resolved        'quick-temp': '0.1.2',
+45 silly install resolved        readline2: '0.1.1',
+45 silly install resolved        resolve: '^1.1.6',
+45 silly install resolved        rimraf: '2.3.2',
+45 silly install resolved        rsvp: '^3.0.17',
+45 silly install resolved        sane: '^1.1.1',
+45 silly install resolved        semver: '^4.3.3',
+45 silly install resolved        'silent-error': '^1.0.0',
+45 silly install resolved        'strip-ansi': '^2.0.1',
+45 silly install resolved        'symlink-or-copy': '^1.0.1',
+45 silly install resolved        temp: '0.8.1',
+45 silly install resolved        testem: '0.9.1',
+45 silly install resolved        through: '^2.3.6',
+45 silly install resolved        'tiny-lr': '0.1.5',
+45 silly install resolved        'walk-sync': '0.1.3',
+45 silly install resolved        yam: '0.0.18' },
+45 silly install resolved     devDependencies:
+45 silly install resolved      { chai: '^2.1.2',
+45 silly install resolved        'chai-as-promised': '^4.3.0',
+45 silly install resolved        'codeclimate-test-reporter': '0.0.4',
+45 silly install resolved        coveralls: '^2.11.2',
+45 silly install resolved        istanbul: '^0.3.13',
+45 silly install resolved        mocha: '^2.2.1',
+45 silly install resolved        'mocha-jshint': '^2.0.0',
+45 silly install resolved        'mocha-only-detector': '0.0.2',
+45 silly install resolved        multiline: '^1.0.2',
+45 silly install resolved        nock: '^1.2.1',
+45 silly install resolved        'node-require-timings': '1.0.0',
+45 silly install resolved        supertest: '0.15.0',
+45 silly install resolved        'tmp-sync': '^1.0.1',
+45 silly install resolved        yuidocjs: '0.6.0' },
+45 silly install resolved     homepage: 'https://github.com/ember-cli/ember-cli#readme',
+45 silly install resolved     bundleDependencies:
+45 silly install resolved      [ 'bower',
+45 silly install resolved        'bower-config',
+45 silly install resolved        'broccoli',
+45 silly install resolved        'broccoli-clean-css',
+45 silly install resolved        'chalk',
+45 silly install resolved        'concat-stream',
+45 silly install resolved        'configstore',
+45 silly install resolved        'diff',
+45 silly install resolved        'exists-sync',
+45 silly install resolved        'express',
+45 silly install resolved        'findup',
+45 silly install resolved        'fs-extra',
+45 silly install resolved        'git-repo-info',
+45 silly install resolved        'glob',
+45 silly install resolved        'inflection',
+45 silly install resolved        'inquirer',
+45 silly install resolved        'leek',
+45 silly install resolved        'lodash',
+45 silly install resolved        'minimatch',
+45 silly install resolved        'morgan',
+45 silly install resolved        'node-uuid',
+45 silly install resolved        'nopt',
+45 silly install resolved        'npm',
+45 silly install resolved        'proxy-middleware',
+45 silly install resolved        'quick-temp',
+45 silly install resolved        'readline2',
+45 silly install resolved        'resolve',
+45 silly install resolved        'testem',
+45 silly install resolved        'through',
+45 silly install resolved        'tiny-lr' ],
+45 silly install resolved     _id: 'ember-cli@1.13.8',
+45 silly install resolved     _shasum: '9a116a0be1c73f9d6fdeb50042f207ab33f6e5c6',
+45 silly install resolved     _resolved: 'https://registry.npmjs.org/ember-cli/-/ember-cli-1.13.8.tgz',
+45 silly install resolved     _from: 'ember-cli@*',
+45 silly install resolved     _npmVersion: '2.13.4',
+45 silly install resolved     _nodeVersion: '2.2.1',
+45 silly install resolved     _npmUser: { name: 'stefanpenner', email: 'stefan.penner@gmail.com' },
+45 silly install resolved     maintainers:
+45 silly install resolved      [ [Object],
+45 silly install resolved        [Object],
+45 silly install resolved        [Object],
+45 silly install resolved        [Object],
+45 silly install resolved        [Object],
+45 silly install resolved        [Object],
+45 silly install resolved        [Object],
+45 silly install resolved        [Object],
+45 silly install resolved        [Object],
+45 silly install resolved        [Object] ],
+45 silly install resolved     dist:
+45 silly install resolved      { shasum: '9a116a0be1c73f9d6fdeb50042f207ab33f6e5c6',
+45 silly install resolved        tarball: 'http://registry.npmjs.org/ember-cli/-/ember-cli-1.13.8.tgz' },
+45 silly install resolved     directories: {} } ]
+46 info install ember-cli@1.13.8 into /usr/lib
+47 info installOne ember-cli@1.13.8
+48 verbose installOne of ember-cli to /usr/lib not in flight; installing
+49 verbose lock using /home/vagrant/.npm/_locks/ember-cli-fb77fe672b380792.lock for /usr/lib/node_modules/ember-cli
+50 silly install write writing ember-cli 1.13.8 to /usr/lib/node_modules/ember-cli
+51 verbose unbuild lib/node_modules/ember-cli
+52 silly gentlyRm /usr/lib/node_modules/ember-cli is being purged from base /usr
+53 verbose gentlyRm don't care about contents; nuking /usr/lib/node_modules/ember-cli
+54 verbose tar unpack /home/vagrant/.npm/ember-cli/1.13.8/package.tgz
+55 verbose tar unpacking to /usr/lib/node_modules/ember-cli
+56 silly gentlyRm /usr/lib/node_modules/ember-cli is being purged
+57 verbose gentlyRm don't care about contents; nuking /usr/lib/node_modules/ember-cli
+58 silly gunzTarPerm modes [ '775', '664' ]
+59 error tar.unpack untar error /home/vagrant/.npm/ember-cli/1.13.8/package.tgz
+60 verbose unlock done using /home/vagrant/.npm/_locks/ember-cli-fb77fe672b380792.lock for /usr/lib/node_modules/ember-cli
+61 verbose fstream_path /usr/lib/node_modules/ember-cli
+62 verbose fstream_type Directory
+63 verbose fstream_class DirWriter
+64 verbose stack Error: EACCES: permission denied, mkdir '/usr/lib/node_modules/ember-cli'
+64 verbose stack     at Error (native)
+65 verbose fstream_stack /usr/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:35:25
+65 verbose fstream_stack /usr/lib/node_modules/npm/node_modules/mkdirp/index.js:47:53
+65 verbose fstream_stack FSReqWrap.oncomplete (fs.js:82:15)
+66 verbose cwd /home/lab/shopie
+67 error Linux 3.19.0-25-generic
+68 error argv "/usr/bin/nodejs" "/usr/bin/npm" "install" "-g" "ember-cli"
+69 error node v4.1.1
+70 error npm  v2.14.4
+71 error path /usr/lib/node_modules/ember-cli
+72 error code EACCES
+73 error errno -13
+74 error syscall mkdir
+75 error Error: EACCES: permission denied, mkdir '/usr/lib/node_modules/ember-cli'
+75 error     at Error (native)
+75 error  { [Error: EACCES: permission denied, mkdir '/usr/lib/node_modules/ember-cli']
+75 error   errno: -13,
+75 error   code: 'EACCES',
+75 error   syscall: 'mkdir',
+75 error   path: '/usr/lib/node_modules/ember-cli',
+75 error   fstream_type: 'Directory',
+75 error   fstream_path: '/usr/lib/node_modules/ember-cli',
+75 error   fstream_class: 'DirWriter',
+75 error   fstream_stack:
+75 error    [ '/usr/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:35:25',
+75 error      '/usr/lib/node_modules/npm/node_modules/mkdirp/index.js:47:53',
+75 error      'FSReqWrap.oncomplete (fs.js:82:15)' ] }
+76 error Please try running this command again as root/Administrator.
+77 verbose exit [ -13, true ]
+78 verbose unbuild lib/node_modules/ember-cli
+79 silly gentlyRm /usr/lib/node_modules/ember-cli is being purged from base /usr
+80 verbose gentlyRm don't care about contents; nuking /usr/lib/node_modules/ember-cli
