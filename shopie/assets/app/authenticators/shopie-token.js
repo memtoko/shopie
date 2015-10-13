@@ -19,7 +19,7 @@ export default Base.extend({
         };
         return new Ember.RSVP.Promise(function(resolve, reject) {
             this.makeRequest(this.serverTokenEndpoint, data).then(function(response) {
-                Ember.run(() => resolve())
+                Ember.run(() => resolve());
             }, function(xhr, status, error) {
                 Ember.run(() => reject(xhr.responseJSON || xhr.responseText));
             })
