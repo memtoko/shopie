@@ -1,5 +1,10 @@
-<div class="row">
-  <h2 id="title">Welcome to Ember</h2>
+<div class="sh-viewport">
+    {{#unless isAdmin}}
+        {{sh-nav-menu-front}}
+    {{/unless}}
+    {{#sh-main onMouseEnter="closeAutoNav"}}
+        {{outlet}}
+    {{#sh-main}}
 
-  {{outlet}}
+    {{outlet "modal"}}
 </div>

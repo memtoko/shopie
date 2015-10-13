@@ -1,7 +1,7 @@
-var path           = require('path'),
+var path            = require('path'),
     escapeChar      = process.platform.match(/^win/) ? '^' : '\\',
-    cwd        		= process.cwd().replace(/( |\(|\))/g, escapeChar + '$1'),
-    tmp		   		= path.resolve(cwd, 'tmp'),
+    cwd             = process.cwd().replace(/( |\(|\))/g, escapeChar + '$1'),
+    tmp             = path.resolve(cwd, 'tmp'),
     buildDirectory  = path.resolve(tmp, 'build'),
     distDirectory   = path.resolve(tmp, 'dist'),
     lintFiles = {

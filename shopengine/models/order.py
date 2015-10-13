@@ -2,6 +2,7 @@ import hashlib
 import random
 from decimal import Decimal
 
+from django.db.models.signals import post_save
 from django.db import models
 from django.contrib.auth.models import AnonymousUser
 from django.utils.translation import ugettext_lazy as _
@@ -78,8 +79,6 @@ class OrderQuerySet(models.QuerySet):
                 eoi.label = str(it[0])
                 eoi.value = it[1]
                 eoi.save()
-        # send the signals
-        order_added.send(sender=self, user=request.user, order=order)
         return order
 
     def _make_order_key(self, based):
@@ -229,3 +228,7 @@ class OrderPayment(models.Model):
     def __str__(self):
         return 'Payment: %(id)s for order %(order_id)s' % {'id': self.transaction_id, 'order_id': self.order.pk}
 
+def _order_added_listener(sender, instance=None, created=False, **kwargs):
+    if created:
+        order_added.send(sender=sender, user=instance.user, order=instance)
+post_save.connect(_order_added_listener, dispatch_uid='shopengine.models.order')
