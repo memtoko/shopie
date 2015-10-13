@@ -22,7 +22,7 @@ export default Base.extend({
                 Ember.run(() => resolve());
             }, function(xhr, status, error) {
                 Ember.run(() => reject(xhr.responseJSON || xhr.responseText));
-            })
+            });
         }.bind(this));
     },
 
