@@ -22,23 +22,27 @@ let shopiePaths = function () {
         apiRoot = '/api/v1';
 
     return {
-        admin: () => makeRoute(adminRoot, arguments),
-        api: () => makeRoute(apiRoot, arguments),
+        adminRoot: adminRoot,
+        apiRoot: apiRoot,
+        url: {
+            admin: () => makeRoute(adminRoot, arguments),
+            api: () => makeRoute(apiRoot, arguments),
 
-        isSecure: function(url) {
-            var link = document.createElement('a');
-            link.href = url;
-            return link.protocol === 'https:';
-        },
+            isSecure: function(url) {
+                var link = document.createElement('a');
+                link.href = url;
+                return link.protocol === 'https:';
+            },
 
-        join: function() {
-            if (arguments.length > 1) {
-                return makeRoute(arguments[0], Array.prototype.slice.call(arguments, 1));
-            } else if (arguments.length === 1) {
-                var arg = arguments[0];
-                return arg.slice(-1) === '/' ? arg : arg + '/';
+            join: function() {
+                if (arguments.length > 1) {
+                    return makeRoute(arguments[0], Array.prototype.slice.call(arguments, 1));
+                } else if (arguments.length === 1) {
+                    var arg = arguments[0];
+                    return arg.slice(-1) === '/' ? arg : arg + '/';
+                }
+                return '/';
             }
-            return '/';
         }
     };
 };

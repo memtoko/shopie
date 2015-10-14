@@ -99,6 +99,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = PROJECT_DIR
 STATICFILES_DIRS = (os.path.join(PROJECT_DIR, 'static'),)
 
 MEDIA_URL = '/media/'
@@ -124,3 +125,7 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.BrowsableAPIRenderer',
     ),
 }
+
+JSON_API_FORMAT_KEYS = 'dasherize'
+JSON_API_FORMAT_RELATION_KEYS = 'dasherize'
+JSON_API_PLURALIZE_RELATION_TYPE = True

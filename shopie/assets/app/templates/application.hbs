@@ -1,10 +1,14 @@
+{{#sh-app showCart=showCart}}
 <div class="sh-viewport">
     {{#unless isAdmin}}
-        {{sh-nav-menu-front}}
+        {{#sh-nav-menu-front open=autoNavOpen toggleMaximise="toggleAutoNav" openAutoNav="openAutoNav" openModal="openModal" closeMobileMenu="closeMobileMenu"}}
+          {{outlet "header-cover"}}
+        {{/sh-nav-menu-front}}
     {{/unless}}
     {{#sh-main onMouseEnter="closeAutoNav"}}
         {{outlet}}
-    {{#sh-main}}
+    {{/sh-main}}
 
     {{outlet "modal"}}
 </div>
+{{/sh-app}}

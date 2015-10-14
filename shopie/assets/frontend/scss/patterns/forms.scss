@@ -3,6 +3,7 @@
 form {
     user-select: text;
     color: $darkgrey;
+
     label {
         display: block;
         font-weight: bold;
@@ -46,10 +47,6 @@ input {
     margin-bottom: 1.6em;
     max-width: 500px;
     width: 100%;
-
-    @media $small-only {
-        max-width: 100%;
-    }
 
     p {
         margin: 4px 0 0 0;
@@ -110,7 +107,7 @@ select {
     padding: 8px 10px;
     width: 100%;
     border: 1px solid #dfe1e3;
-    border-radius: var(--border-radius);
+    border-radius: 4px;
     color: #666;
     font-size: 1.4rem;
     font-weight: normal;
@@ -124,7 +121,7 @@ select {
 .error .sh-input,
 .sh-select.error,
 select.error {
-    border-color: $red;
+    border-color: scale-color($red, $lightness: 10%);
 }
 
 .sh-input:focus,
@@ -220,7 +217,6 @@ textarea {
 }
 
 .for-checkbox input:checked + .input-toggle-component {
-    border-color: scale-color($green, lightness: 10%);
     background: $green;
 }
 
@@ -250,7 +246,6 @@ textarea {
 }
 
 .for-radio input:checked + .input-toggle-component {
-    border-color: scale-color($green, lightness: 10%);
     background: $green;
 }
 
@@ -302,20 +297,5 @@ textarea {
         appearance: none;
         -webkit-appearance: none;
         -moz-appearance: window;
-    }
-}
-
-/* FFF: Fucking Firefox Fixes
-/* ---------------------------------------------------------- */
-
-@-moz-document url-prefix() {
-    .gh-select {
-        border-width: 1px;
-    }
-    .gh-select select {
-        padding: 7px 10px 7px 8px;
-    }
-    .gh-select:focus {
-        border-color: #b1b1b1;
     }
 }

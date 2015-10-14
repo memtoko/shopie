@@ -4,6 +4,8 @@ import Configuration from 'simple-auth/configuration';
 import ShortcutsRoute from 'shopie/mixins/shortcuts-route';
 import ctrlOrCmd from 'shopie/utils/ctrl-or-cmd';
 
+/* global key */
+
 var shortcuts = {};
 
 shortcuts.esc = {action: 'closeMenus', scope: 'all'};
@@ -30,6 +32,47 @@ export default Ember.Route.extend(ApplicationRouteMixin, ShortcutsRoute, {
                     err.message = err.message.htmlSafe();
                 });
             }
+        },
+
+        openModal: function (modalName, model, type) {
+            key.setScope('modal');
+            modalName = 'modals/' + modalName;
+            this.set('modalName', modalName);
+
+            // We don't always require a modal to have a controller
+            // so we're skipping asserting if one exists
+            if (this.controllerFor(modalName, true)) {
+                this.controllerFor(modalName).set('model', model);
+
+                if (type) {
+                    this.controllerFor(modalName).set('imageType', type);
+                    this.controllerFor(modalName).set('src', model.get(type));
+                }
+            }
+
+            return this.render(modalName, {
+                into: 'application',
+                outlet: 'modal'
+            });
+        },
+
+        confirmModal: function () {
+            var modalName = this.get('modalName');
+
+            this.send('closeModal');
+
+            if (this.controllerFor(modalName, true)) {
+                this.controllerFor(modalName).send('confirmAccept');
+            }
+        },
+
+        closeModal: function () {
+            this.disconnectOutlet({
+                outlet: 'modal',
+                parentView: 'application'
+            });
+
+            key.setScope('default');
         },
 
         // noop default for unhandled save (used from shortcuts)

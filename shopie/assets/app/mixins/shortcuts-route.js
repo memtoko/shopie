@@ -8,7 +8,7 @@ let ShortcutsRoute = Ember.Mixin.create({
     registerShortcuts: function() {
         let shortcuts = this.get('shortcuts');
 
-        Ember.keys(shortcuts).forEach((shortcut) => this.addShortcut(shortcut));
+        Object.keys(shortcuts).forEach((shortcut) => this.addShortcut(shortcut));
     },
 
     addShortcut: function(shortcut) {
@@ -31,7 +31,7 @@ let ShortcutsRoute = Ember.Mixin.create({
     removeShortcuts: function() {
         let shortcuts = this.get('shortcuts');
 
-        Ember.keys(shortcuts).forEach((shortcut) => key.unbind(shortcut));
+        Object.keys(shortcuts).forEach((shortcut) => key.unbind(shortcut));
     },
 
     activate: function () {

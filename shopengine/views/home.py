@@ -6,7 +6,7 @@ def home_view(request, logged_view=None):
     is_logged_in = request.user and not isinstance(request.user, AnonymousUser)
 
     ctx = {
-        'body_id': 'home',
+        #'body_id': 'home',
         'navbar_class': 'navbar-default',
         'navbar_collapse': 'home-nav',
         'header_class': 'home services',

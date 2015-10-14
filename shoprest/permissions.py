@@ -38,3 +38,18 @@ class AdminOrOwnerPermission(BasePermission):
             return True
         else:
             return request.user == obj.user
+
+class ReadOnlyOrOwner(BasePermission):
+
+    def has_permission(self, request, view):
+        return True
+
+    def has_object_permission(self, request, view, obj):
+        if request.user.is_anonymous():
+            raise PermissionDenied(
+                    _("Sory this action not available for guests")
+                )
+        if request.user.is_staff:
+            return True
+        else:
+            return request.user == obj.user
