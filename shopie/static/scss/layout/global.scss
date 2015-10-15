@@ -50,7 +50,7 @@ kbd {
     border-radius: 4px;
     box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2),
     0 1px 0 0 #fff inset;
-    color: var(--darkgrey);
+    color: $darkgrey;
     text-shadow: #fff 0 1px 0;
     font-size: 0.9em;
     font-weight: bold;

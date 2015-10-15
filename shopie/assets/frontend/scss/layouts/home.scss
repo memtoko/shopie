@@ -1,0 +1,94 @@
+.home .top-bar,
+.top-bar.transparent {
+    position: absolute;
+    background: transparent !important;
+    width: 100%;
+    z-index: 99;
+
+    ul {
+
+        &.right {
+            background: transparent;
+        }
+    }
+}
+
+.global-nav ul.right li a {
+    font-size: 13px;
+    line-height: 45px;
+    display: block;
+    padding: 0 15px;
+}
+
+.main-header {
+    
+    &.services {
+        margin-bottom: 4rem;
+    }
+
+    p {
+        font-size: 1.1rem;
+        font-color: #424140;
+
+        &.lead {
+            font-size: 1.2em;
+            line-height: 1.5;
+            margin-bottom: 35px;
+
+            &.scroll {
+                font-size: 1.125em;
+                color: white;
+                position: relative;
+                top: -50px;
+                text-align: center;
+
+                @media only screen and (max-width: 768px) {
+                    display: none !important;
+                }
+            }
+        }
+    }
+}
+
+.hide-extras {
+    [role="main"] {
+        width: 100%;
+        overflow: hidden;
+    }
+}
+
+.text-overlay {
+    background: rgba(0,0,0,0.2);
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 50;
+    -moz-transition: all 1.5s;
+    -webkit-transition: all 1.5s;
+    -o-transition: all 1.5s;
+    opacity: 1;
+}
+
+.header-image-color {
+    background: #f5f7f8;
+}
+
+.header-cover {
+    background: #f5f7f8;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, scale-color(#f5f7f8, $lightness: 10%)), color-stop(100%, scale-color(#f5f7f8, $lightness: -10%)));
+    background: -webkit-linear-gradient(top, scale-color(#f5f7f8, $lightness: 10%) 0%, scale-color(#f5f7f8, $lightness: -10%) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, from(scale-color(#f5f7f8, $lightness: 10%)), to(scale-color(#f5f7f8, $lightness: -10%)));
+    background: linear-gradient(to bottom, scale-color(#f5f7f8, $lightness: 10%) 0%, scale-color(#f5f7f8, $lightness: -10%) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='scale-color(#f5f7f8, $lightness: 10%)', endColorstr='scale-color(#f5f7f8, $lightness: -10%)',GradientType=0 );
+    padding: 0;
+}
+
+.white-text {
+    color: #fff;
+}
+
+.home .main-header {
+    position: relative;
+}

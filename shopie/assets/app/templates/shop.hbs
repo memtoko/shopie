@@ -1,0 +1,19 @@
+<div class="page-wrapper">
+  <div class="row">
+    <div class="content-list js-content-list large-12 columns">
+      <header class="view-header">
+        <h2 class="view-title">Shop</h2>
+        <section class="view-actions">
+          {{#link-to "cart" class="btn btn-green" title="Cart"}}Keranjang belanja{{/link-to}}
+        </section>
+      </header>
+      {{#sh-infinite-scroll-box tagName="section" classNames="content-list-content js-content-scrollbox" fetch="loadNextPage"}}
+        <ul class="products js-products">
+          {{#each model as |product|}}
+            {{sh-product-item product=product view="openQuickView"}}
+          {{/each}}
+        </ul>
+      {{/sh-infinite-scroll-box}}
+    </div>
+  </div>
+</div>

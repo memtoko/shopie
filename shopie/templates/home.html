@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 {% load staticfiles%}
 {% block title %}Memtoko{% endblock %}
-{% block bodyclass %}home hide-extras{% endblock %}
+{% block bodyclass %} home{% endblock %}
 {% block header_extra %}
+
 <div class="header-cover" style="min-height:400px;overflow:hidden;">
     <div class="text-overlay text-center" style="background: url({{ header_images|random }}) no-repeat center fixed; -webkit-background-size: cover;-moz-background-size: cover;-o-background-size: cover;background-size: cover;background-attachment: scroll;">
         <div class="text-overlay header-image-color" style="height:400px;overflow:hidden;">
