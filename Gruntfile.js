@@ -58,13 +58,13 @@ var configureGrunt  = function(grunt) {
                 sourceMap: true,
                 includePaths: [
                     'shopie/assets/bower_components/foundation/scss',
-                	'shopie/assets/bower_components/octicons/octicons'
-              	]
+                    'shopie/assets/bower_components/octicons/octicons'
+                  ]
             },
             dist: {
-               	files: {
-               		'shopie/static/css/shopie.css': 'shopie/assets/frontend/scss/app.scss'
-               	}
+                   files: {
+                       'shopie/static/css/shopie.css': 'shopie/assets/frontend/scss/app.scss'
+                   }
             }
         },
         // ### grunt-bg-shell
@@ -148,7 +148,7 @@ var configureGrunt  = function(grunt) {
                    sourceMap: true
                 },
                 files: {
-                	'shopie/static/js/vendor.min.js': 'shopie/static/js/vendor.js'
+                    'shopie/static/js/vendor.min.js': 'shopie/static/js/vendor.js'
                 }
             }
         },

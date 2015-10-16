@@ -14,7 +14,7 @@ Router.map(function() {
   this.route('cart');
   //product
   this.route('shop');
-  this.route('product', {path: '/product/:product_id'});
+  this.route('product', {path: '/product/:product_slug'});
   this.route('users', { path: '/user'});
   this.route('login', {});
 });
