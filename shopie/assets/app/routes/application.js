@@ -15,6 +15,7 @@ shortcuts[ctrlOrCmd + '+s'] = {action: 'save', scope: 'all'};
 export default Ember.Route.extend(ApplicationRouteMixin, ShortcutsRoute, {
     shortcuts: shortcuts,
     config: Ember.inject.service(),
+    notifications: Ember.inject.service(),
 
     title: function (tokens) {
         return tokens.join(' - Shopie');

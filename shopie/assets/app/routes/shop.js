@@ -3,27 +3,20 @@ import ShortcutsRoute from 'shopie/mixins/shortcuts-route';
 import PaginationRoute from 'shopie/mixins/pagination-route';
 import styleBody from 'shopie/mixins/style-body';
 
-let paginationSettings = {
-    page: 1,
-    limit: 20
-};
-
 export default Ember.Route.extend(styleBody, ShortcutsRoute, PaginationRoute, {
     titleToken: 'Shop',
+    paginationModel: 'product',
     classNames: ['shop', 'js-shop'],
 
-    model: function () {
-        return this.store.query('product', paginationSettings).then((result) => {
-            let meta = result.get('meta');
-            if (meta) {
-                this.setCurentMeta(meta);
-            }
-        });
+    paginationSettings: {
+        page: 1,
+        limit: 20
     },
 
-    setupController: function (controller, model) {
-        this._super(controller, model);
-        this.setupPagination(paginationSettings);
+    model: function () {
+        return this.loadFirstPage().then(() => {
+            return this.store.filter('product', (product) => product.get('isActive'));
+        });
     },
 
     setupCurrentMeta: function(meta) {
@@ -31,7 +24,7 @@ export default Ember.Route.extend(styleBody, ShortcutsRoute, PaginationRoute, {
     },
 
     scrollContent: function (amount) {
-        var content = Ember.$('.js-products'),
+        let content = Ember.$('.js-products'),
             scrolled = content.scrollTop();
 
         content.scrollTop(scrolled + 50 * amount);
