@@ -5,7 +5,7 @@ import cajaSanitizers from 'shopie/utils/caja-sanitizers';
 let writer = commonmark.HtmlRenderer({ sourcepos: true, smart: true });
 let reader = commonmark.Parser();
 
-export default Ember.Helper.helper(params) {
+export default Ember.Helper.helper(function(params) {
     if (!params || !params.length) {
         return;
     }
@@ -26,4 +26,4 @@ export default Ember.Helper.helper(params) {
     // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
 
     return Ember.String.htmlSafe(escapedhtml);
-};
+});

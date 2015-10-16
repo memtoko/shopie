@@ -1,6 +1,8 @@
 import Ember from 'ember';
 import config from './config/environment';
 import documentTitle from 'shopie/utils/document-title';
+/* global $ */
+$('noscript').remove();
 
 var Router = Ember.Router.extend({
   location: config.locationType
