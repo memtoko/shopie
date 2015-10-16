@@ -229,6 +229,6 @@ class OrderPayment(models.Model):
         return 'Payment: %(id)s for order %(order_id)s' % {'id': self.transaction_id, 'order_id': self.order.pk}
 
 def _order_added_listener(sender, instance=None, created=False, **kwargs):
-    if created:
+    if created and isinstance(instance, Order):
         order_added.send(sender=sender, user=instance.user, order=instance)
 post_save.connect(_order_added_listener, dispatch_uid='shopengine.models.order')

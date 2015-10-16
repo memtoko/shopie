@@ -8,6 +8,8 @@ export default Ember.Mixin.create({
     // indicates whether we're currently loading the next page
     isLoading: null,
 
+    currentMeta: null,
+
     /**
      * Takes an ajax response, concatenates any error messages, then generates an error notification.
      * @param {jqXHR} response The jQuery ajax reponse object.
@@ -23,21 +25,22 @@ export default Ember.Mixin.create({
          * @return
          */
         loadNextPage: function () {
-            var self = this,
-                store = this.get('store'),
-                recordType = this.get('model').get('type'),
-                metadata = this.store.metadataFor(recordType),
-                nextPage = metadata.pagination && metadata.pagination.next,
-                paginationSettings = this.get('paginationSettings');
+            let metadata   = this.get('currentMeta'),
+                page  = metadata.pagination.page || 1,
+                pages = metadata.pagination.pages || 1,
+                type = this.get('model').get('type'),
+                nextPage = page + 1;
 
-            if (nextPage) {
+            if (pages > page) {
                 this.set('isLoading', true);
+                let settings = Ember.$.extend({}, this.get('paginationSettings'), {page: nextPage});
                 this.set('paginationSettings.page', nextPage);
-
-                store.find(recordType, paginationSettings).then(function () {
-                    self.set('isLoading', false);
-                }, function (response) {
-                    self.reportLoadError(response);
+                this.store.query(type, settings).then((result) => {
+                    let metadata = result.get('meta');
+                    this.set('currentMeta', metadata);
+                    this.set('isLoading', false);
+                }, (response) => {
+                    this.reportLoadError(response);
                 });
             }
         },

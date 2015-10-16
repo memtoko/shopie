@@ -13,12 +13,21 @@ export default Ember.Route.extend(styleBody, ShortcutsRoute, PaginationRoute, {
     classNames: ['shop', 'js-shop'],
 
     model: function () {
-        return this.store.query('product', paginationSettings);
+        return this.store.query('product', paginationSettings).then((result) => {
+            let meta = result.get('meta');
+            if (meta) {
+                this.setCurentMeta(meta);
+            }
+        });
     },
 
     setupController: function (controller, model) {
         this._super(controller, model);
         this.setupPagination(paginationSettings);
+    },
+
+    setupCurrentMeta: function(meta) {
+        this.controller.set('currentMeta', meta);
     },
 
     scrollContent: function (amount) {

@@ -1,5 +1,7 @@
+# a file type we don't need to store
 *.pyc
 *.db
+*.log
 /bin
 /logs
 /image
