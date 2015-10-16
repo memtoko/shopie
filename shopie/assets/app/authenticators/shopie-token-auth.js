@@ -17,13 +17,13 @@ export default Base.extend({
             username: credentials.identification,
             password: credentials.password
         };
-        return new Ember.RSVP.Promise(function(resolve, reject) {
-            this.makeRequest(this.serverTokenEndpoint, data).then(function(response) {
+        return new Ember.RSVP.Promise((resolve, reject) => {
+            this.makeRequest(this.serverTokenEndpoint, data).then((response) => {
                 Ember.run(() => resolve());
-            }, function(xhr, status, error) {
+            },(xhr, status, error) => {
                 Ember.run(() => reject(xhr.responseJSON || xhr.responseText));
             });
-        }.bind(this));
+        });
     },
 
     invalidate: function(data) {

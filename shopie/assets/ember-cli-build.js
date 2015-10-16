@@ -31,6 +31,7 @@ module.exports = function(defaults) {
   app.import('bower_components/jquery-file-upload/js/jquery.fileupload-process.js');
   app.import('bower_components/jquery-file-upload/js/jquery.fileupload-image.js');
   app.import('bower_components/jqueryui-touch-punch/jquery.ui.touch-punch.js');
+  app.import('bower_components/google-caja/html-css-sanitizer-bundle.js');
   app.import('bower_components/codemirror/lib/codemirror.js');
   app.import('bower_components/codemirror/mode/htmlmixed/htmlmixed.js');
   app.import('bower_components/codemirror/mode/xml/xml.js');
