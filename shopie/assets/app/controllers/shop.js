@@ -1,7 +1,6 @@
 import Ember from 'ember';
-import PaginationControllerMixin from 'shopie/mixins/pagination-controller';
 
-export default Ember.Controller.extend(PaginationControllerMixin, {
+export default Ember.Controller.extend({
     showCart: false,
 	actions: {
         openQuickView: function (product) {

@@ -1,6 +1,6 @@
 /* Modals
 /* ---------------------------------------------------------- */
-
+$row-width: rem-calc(1000) !default;
 
 /* Full screen container
 /* ---------------------------------------------------------- */
@@ -45,7 +45,7 @@
     margin-left: auto;
     padding-top: 30px;
     padding-bottom: 30px;
-    max-width: 550px;
+    max-width: $row-width;
     width: 100%;
     pointer-events: auto;
 

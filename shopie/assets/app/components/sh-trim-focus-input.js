@@ -2,7 +2,7 @@ import Ember from 'ember';
 /*global device*/
 var TrimFocusInput = Ember.TextField.extend({
     focus: true,
-    classNames: 'gh-input',
+    classNames: ['sh-input'],
     attributeBindings: ['autofocus'],
 
     autofocus: Ember.computed(function () {

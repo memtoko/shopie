@@ -1,14 +1,19 @@
 {{#sh-app showCart=showCart}}
+
 <div class="sh-viewport">
     {{#unless isAdmin}}
         {{#sh-nav-menu-front open=autoNavOpen toggleMaximise="toggleAutoNav" openAutoNav="openAutoNav" openModal="openModal" closeMobileMenu="closeMobileMenu"}}
           {{outlet "header-cover"}}
         {{/sh-nav-menu-front}}
     {{/unless}}
+
     {{#sh-main onMouseEnter="closeAutoNav"}}
         {{outlet}}
     {{/sh-main}}
 
+    {{sh-notifications}}
+
     {{outlet "modal"}}
 </div>
+
 {{/sh-app}}

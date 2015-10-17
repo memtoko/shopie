@@ -10,6 +10,7 @@ from rest_framework_json_api.mixins import MultipleIDMixin
 from rest_framework.response import Response
 
 from shopengine.models import Cart, CartItem
+from shopengine.cart.bucket import get_or_create_cart, get_cart_from_database
 
 from shoprest.serializers.cart import CartSerializer, CartItemSerializer
 from shoprest.permissions import ReadOnlyOrOwner
@@ -42,8 +43,22 @@ class CartViewSet(MultipleIDMixin, CartViewMixin, viewsets.ModelViewSet):
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
 
+    def get_queryset(self):
+        request = self.request
+        if request.user.is_anonymous():
+            return Cart.objects.none()
+        else:
+            if request.user.is_staff:
+                return Cart.objects.all()
+            return Cart.objects.filter(user=request.user).select_related('user')
+
+    def retrieve(self, request, pk=None):
+        if pk == 'current':
+            pk = get_or_create_cart(request, save=True).pk
+        return super(CartItemViewSet, self).retrieve(request, pk)
+
 class CartItemViewSet(MultipleIDMixin, CartViewMixin, viewsets.ModelViewSet):
-    resource_name = 'cart_items'
+    resource_name = 'cart-items'
     permission_classes = (ReadOnlyOrOwner,)
     queryset = CartItem.objects.all()
     serializer_class = CartItemSerializer

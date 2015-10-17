@@ -1,3 +1,7 @@
+/**
+ * Let grunt do our task :)
+ *
+ */
 var path            = require('path'),
     escapeChar      = process.platform.match(/^win/) ? '^' : '\\',
     cwd             = process.cwd().replace(/( |\(|\))/g, escapeChar + '$1'),
@@ -30,13 +34,21 @@ var path            = require('path'),
     };
 
 var configureGrunt  = function(grunt) {
+    /**
+     *
+     */
     require('matchdep').filterDev(['grunt-*', '!grunt-cli']).forEach(grunt.loadNpmTasks);
 
     var cfg = {
         paths: {
             buildDirectory: buildDirectory,
-            distDirectory: distDirectory
+            releaseBuild: path.join(buildDirectory, 'release'),
+            distDirectory: distDirectory,
+            releaseDist: path.join(distDirectory, 'release')
         },
+        buildType: 'Build',
+
+        pkg: grunt.file.readJSON('package.json'),
 
         jshint: lintFiles,
 
@@ -46,13 +58,30 @@ var configureGrunt  = function(grunt) {
                 sourceMap: true,
                 includePaths: [
                     'shopie/assets/bower_components/foundation/scss',
-                	'shopie/assets/bower_components/octicons/octicons'
-              	]
+                    'shopie/assets/bower_components/octicons/octicons'
+                  ]
             },
             dist: {
-               	files: {
-               		'shopie/static/css/shopie.css': 'shopie/assets/frontend/scss/app.scss'
-               	}
+                   files: {
+                       'shopie/static/css/shopie.css': 'shopie/assets/frontend/scss/app.scss'
+                   }
+            }
+        },
+        // ### grunt-bg-shell
+        // Used to run ember-cli watch in the background
+        bgShell: {
+            ember: {
+                cmd: emberPath + ' build --watch',
+                execOpts: {
+                    cwd: path.resolve(cwd + '/shopie/assets/')
+                },
+                bg: true,
+                stdout: function (out) {
+                    grunt.log.writeln(chalk.cyan('Ember-cli::') + out);
+                },
+                stderror: function (error) {
+                    grunt.log.error(chalk.red('Ember-cli::' + error));
+                }
             }
         },
         // ### grunt-shell
@@ -85,35 +114,10 @@ var configureGrunt  = function(grunt) {
             // Used as part of `grunt init`. See the section on [Building Assets](#building%20assets) for more
             // information.
             bower: {
-                command: path.resolve('bower --allow-root install'),
+                command: path.resolve(cwd + '/node_modules/.bin/bower --allow-root install'),
                 options: {
                     stdout: true,
                     stdin: false
-                }
-            }
-        },
-        transpile: {
-            client: {
-                type: 'amd',
-                moduleName: function(path) {
-                    return 'shopie/' + path;
-                },
-                files: [{
-                    expand: true,
-                    cwd: 'shopie/assets/frontend',
-                    src: ['**/*.js', '!loader.js', '!config-*.js'],
-                    dest: '.tmp/ember-transpiled/'
-                }]
-            }
-        },
-        // ### grunt-concat-sourcemap
-        // Concatenates transpiled ember app
-        concat_sourcemap: {
-            frontend: {
-                src: ['.tmp/ember-transpiled/**/*.js', 'shopie/assets/frontend/loader.js'],
-                dest: 'shopie/static/js/shopie.js',
-                options: {
-                    sourcesContent: true
                 }
             }
         },
@@ -144,7 +148,7 @@ var configureGrunt  = function(grunt) {
                    sourceMap: true
                 },
                 files: {
-                	'shopie/static/js/vendor.min.js': 'shopie/static/js/vendor.js'
+                    'shopie/static/js/vendor.min.js': 'shopie/static/js/vendor.js'
                 }
             }
         },
@@ -171,12 +175,20 @@ var configureGrunt  = function(grunt) {
     };
 
     grunt.initConfig(cfg);
+
+    //
+    grunt.registerTask('init', 'Prepare the project for development',
+        ['shell:ember:init', 'shell:bower', 'assets', 'default']);
+
     grunt.registerTask('default', 'Build JS & templates for development',
-            ['shell:ember:dev', 'copy:dev']);
+            ['shell:ember:dev', 'copy:dev', 'assets']);
+
+    grunt.registerTask('prod', 'Build JS & templates for production',
+        ['shell:ember:prod', 'copy:dev', 'assets']); //todo uglify it
+
     grunt.registerTask('lint', 'Run the code style checks and linter', ['jscs']);
-    grunt.registerTask('css', 'Compile sass file', ['sass:dist']);
-    grunt.registerTask('jsfront', 'Compile js for frontend', ['clean:tmp', 'transpile', 'concat_sourcemap:frontend', 'concat:vendor'])
-    grunt.registerTask('prod', 'Build for production', ['jsfront', 'css', 'uglify:prod']);
+    grunt.registerTask('assets', 'Compile sass file', ['sass:dist']);
+    grunt.registerTask('prod', 'Build for production', ['jsfront', 'assets', 'uglify:prod']);
 };
 
 module.exports = configureGrunt;

@@ -1,5 +1,11 @@
+<<<<<<< HEAD
+=======
 .sh-app {
+    display: -webkit-flex;
+    display: -ms-flexbox;
 	display: flex;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
     flex-direction: column;
     overflow: hidden;
     height: 100vh;
@@ -7,21 +13,40 @@
 
 .sh-main {
     position: relative;
+    -webkit-flex-grow: 1;
+    -ms-flex-grow: 1;
     flex-grow: 1;
+    display: -webkit-flex;
+    display: -ms-flexbox;
     display: flex;
     background: #fff;
 }
 
 .sh-view {
+    -webkit-flex-grow: 1;
+    -ms-flex-grow: 1;
     flex-grow: 1;
+    display: -webkit-flex;
+    display: -ms-flexbox;
     display: flex;
     flex-direction: column;
 }
 
+>>>>>>> e9b3e94b743fc6d70cb72f3c50f5384a277cc294
 .view-header {
+    -webkit-flex-shrink: 0;
+    -ms-flex-negative: 0;
     flex-shrink: 0;
+    display: -webkit-flex;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-justify-content: space-between;
+    -ms-flex-pack: justify;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
     justify-content: space-between;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
     align-items: center;
     padding: 0 20px;
     height: 65px;
@@ -29,7 +54,11 @@
 }
 
 .view-title {
+    display: -webkit-flex;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
     align-items: center;
     overflow: hidden;
     margin: 0;
@@ -69,6 +98,8 @@
 .view-container,
 .view-content {
     position: relative;
+    -webkit-flex-grow: 1;
+    -ms-flex-positive: 1;
     flex-grow: 1;
     overflow-x: hidden;
     overflow-y: auto;
@@ -81,6 +112,9 @@
 
 .view-content p,
 .view-content p * {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
     user-select: text;
 }
 
@@ -108,7 +142,7 @@
 }
 
 /**
- * 
+ *
  */
 .entry_content .intro p, h5 {
     font-size: 1.2rem;
@@ -121,7 +155,6 @@
 
 .page-wrapper {
     padding: 30px 0;
-    flex: 1 100%;
 }
 
 .center-column {
@@ -165,7 +198,7 @@ $memtoko-footer-bg: #f9fafa;
         margin: 2.5rem 10px 0;
     }
     p, a {
-        font-weight: 300; 
+        font-weight: 300;
         font-size: .8em;
         color: $memtoko-footer-color;
   }
@@ -193,47 +226,47 @@ $memtoko-footer-bg: #f9fafa;
   border: none;
   border-left: 6px solid #008CBA;
   box-shadow: 0 5px 8px -6px rgba(0,0,0,.2);
-  
+
   &.success {
     background: #f7f7f7;
     color: #333;
   }
-  
+
   &.alert {
     background: #f7f7f7;
     color: #333;
   }
-  
+
   &.warning {
     background: #f7f7f7;
     color: #333;
   }
-  
+
   &.info {
     background: #f7f7f7;
     color: #333;
   }
-  
+
   &.small {
     padding-top: 0.25rem;
     padding-bottom: 0.25rem;
     font-size: 0.75rem;
-    
+
     .close {
       font-size: 1.5rem;
     }
   }
-  
+
   &.large {
     padding-top: 1.5rem;
     padding-bottom: 1.5rem;
     font-size: 2rem;
-    
+
     .close {
       font-size: 3rem;
     }
   }
-  
+
   .close {
     font-size: 2rem;
     line-height: 1.25rem;

@@ -11,15 +11,15 @@ class CartSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cart
         fields = (
-			'id',
-			'user',
+            'id',
+            'user',
             'items',
             'subtotal_price',
             'total_price',
             'extra_price',
-			'created_at',
-			'updated_at',
-		)
+            'created_at',
+            'updated_at',
+        )
 
     def get_subtotal_price(self, obj):
         return moneyfmt(obj.subtotal_price)
