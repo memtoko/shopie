@@ -10,6 +10,37 @@
         &.right {
             background: transparent;
         }
+
+        li {
+            background: transparent;
+
+            &:not(.has-form) a:not(.button) {
+                color: $lightgrey;
+                padding: 0 20px;
+                line-height: 60px;
+                background: transparent;
+            }
+
+            li a {
+                padding: 0 16px;
+                border-left: 1px solid rgba(0, 0, 0, 0);
+                background: transparent !important;
+
+                &:hover {
+                    color: scale-color($lightgrey, $lightness: -14%);
+                    background: rgba(255, 255, 255, 0.1);
+                }
+
+                &.current {
+                    background: rgba(255, 255, 255, 0.1);
+
+                    &:hover {
+                        color: scale-color($lightgrey, $lightness: -14%);
+                        background: rgba(255, 255, 255, 0.1);
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -72,16 +103,17 @@
 }
 
 .header-image-color {
-    background: #f5f7f8;
+    background: #4d515c;
+    background: rgba(66,70,80,0.9);
 }
 
 .header-cover {
-    background: #f5f7f8;
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, scale-color(#f5f7f8, $lightness: 10%)), color-stop(100%, scale-color(#f5f7f8, $lightness: -10%)));
-    background: -webkit-linear-gradient(top, scale-color(#f5f7f8, $lightness: 10%) 0%, scale-color(#f5f7f8, $lightness: -10%) 100%);
-    background: -webkit-gradient(linear, left top, left bottom, from(scale-color(#f5f7f8, $lightness: 10%)), to(scale-color(#f5f7f8, $lightness: -10%)));
-    background: linear-gradient(to bottom, scale-color(#f5f7f8, $lightness: 10%) 0%, scale-color(#f5f7f8, $lightness: -10%) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='scale-color(#f5f7f8, $lightness: 10%)', endColorstr='scale-color(#f5f7f8, $lightness: -10%)',GradientType=0 );
+    background: #6d717a;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #6d717a), color-stop(100%, #4e5059));
+    background: -webkit-linear-gradient(top, #6d717a 0%, #4e5059 100%);
+    background: -webkit-gradient(linear, left top, left bottom, from(#6d717a), to(#4e5059));
+    background: linear-gradient(to bottom, #6d717a 0%, #4e5059 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#6d717a', endColorstr='#4e5059',GradientType=0 );
     padding: 0;
 }
 

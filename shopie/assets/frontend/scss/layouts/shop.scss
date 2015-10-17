@@ -186,7 +186,19 @@ $highlight: #94cd4b;
 		}
 	}
 }
+.product-wrap {
+    @include flexbox();
+    -webkit-flex-flow: row wrap;
+    -ms-flex-flow: row wrap;
+    flex-flow: row wrap;
 
+    .product-purchase-box,
+    .product-intro,
+    .product-cta,
+    .product-about {
+        @include flex(1 100%);
+    }
+}
 .product-purchase-box,
 .product-intro {
 	background: #3a3f4e;

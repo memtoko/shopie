@@ -46,7 +46,8 @@ class CartViewSet(MultipleIDMixin, CartViewMixin, viewsets.ModelViewSet):
     def get_queryset(self):
         request = self.request
         if request.user.is_anonymous():
-            return Cart.objects.none()
+            cart = get_or_create_cart(request)
+            return Cart.objects.filter(pk=cart.pk)
         else:
             if request.user.is_staff:
                 return Cart.objects.all()
@@ -55,7 +56,7 @@ class CartViewSet(MultipleIDMixin, CartViewMixin, viewsets.ModelViewSet):
     def retrieve(self, request, pk=None):
         if pk == 'current':
             pk = get_or_create_cart(request, save=True).pk
-        return super(CartItemViewSet, self).retrieve(request, pk)
+        return super(CartViewSet, self).retrieve(request, pk)
 
 class CartItemViewSet(MultipleIDMixin, CartViewMixin, viewsets.ModelViewSet):
     resource_name = 'cart-items'

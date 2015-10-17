@@ -18,5 +18,5 @@ class ProductSerializer(serializers.ModelSerializer):
             'unit_price',
             'is_active',
             'product_type',
-            #'parent',
+            'parent',
         )

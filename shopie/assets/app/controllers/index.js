@@ -7,5 +7,7 @@ let headerImages = [
 ];
 
 export default Ember.Controller.extend({
-	imageCover: headerImages[Math.floor(Math.random()*headerImages.length)],
+	imageCover: Ember.computed(function() {
+        return headerImages[Math.floor(Math.random()*headerImages.length)]
+    })
 });

@@ -21,11 +21,11 @@ let ShortcutsRoute = Ember.Mixin.create({
             action = action.action;
         }
 
-        key(shortcut, scope, function (event) {
+        key(shortcut, scope, (event) => {
             // stop things like ctrl+s from actually opening a save dialogue
             event.preventDefault();
             this.send(action, options);
-        }.bind(this));
+        });
     },
 
     removeShortcuts: function() {

@@ -6,7 +6,8 @@ from django.utils.translation import ugettext as _
 __all__ = [
     'BasePermission',
     'IsAuthenticatedOrReadOnly',
-    'AdminOrOwnerPermission'
+    'AdminOrOwnerPermission',
+    'ReadOnlyOrOwner'
 ]
 
 class IsAuthenticatedOrReadOnly(BasePermission):
@@ -41,15 +42,8 @@ class AdminOrOwnerPermission(BasePermission):
 
 class ReadOnlyOrOwner(BasePermission):
 
-    def has_permission(self, request, view):
-        return True
 
     def has_object_permission(self, request, view, obj):
-        if request.user.is_anonymous():
-            raise PermissionDenied(
-                    _("Sory this action not available for guests")
-                )
-        if request.user.is_staff:
+        if request.method in SAFE_METHODS:
             return True
-        else:
-            return request.user == obj.user
+        return request.user.is_staff or request.user == obj.user

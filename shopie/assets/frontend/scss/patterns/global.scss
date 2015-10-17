@@ -105,6 +105,19 @@ kbd {
     }
 }
 
+.show {
+    display: block !important;
+}
+
+.hidden {
+    visibility: hidden !important;
+    display: none !important;
+}
+
+.invisible {
+    visibility: hidden;
+}
+
 /* Animations
 /* ---------------------------------------------------------- */
 
