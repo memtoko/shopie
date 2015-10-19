@@ -2,7 +2,7 @@ from shopengine.cart.bucket import get_or_create_cart
 """List of context processors for shop engine"""
 
 def cart(request):
-    bucket = get_or_create_cart(request)
+    bucket = get_or_create_cart(request, save=True)
     bucket.update(request)
     return {
         'cart': bucket,

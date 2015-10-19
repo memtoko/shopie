@@ -7,6 +7,6 @@ CartModel.eachAttribute(function (name) {
 });
 export default Ember.Controller.extend({
     items: function() {
-        return this.get('model').get('items');
+        return this.get('model.items');
     }.property('model.items')
 });

@@ -9,10 +9,14 @@ export default DS.Model.extend({
     cart: DS.belongsTo('cart'),
 
     productName: function() {
-        return this.get('product').get('name');
+        return this.get('product.name');
     }.property('product.name'),
 
     productPrice: function() {
         return this.get('product').get('unitPrice');
-    }.property('product.name')
+    }.property('product.name'),
+
+    productId: function() {
+        return this.get('product.id');
+    }.property('product.id')
 });

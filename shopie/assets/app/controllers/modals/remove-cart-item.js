@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import getCookie from 'shopie/utils/get-cookie';
+import {request as ajax} from 'ic-ajax';
 
 export default Ember.Controller.extend({
     notifications: Ember.inject.service(),
@@ -7,36 +8,37 @@ export default Ember.Controller.extend({
     actions: {
         confirmAccept: function () {
             let item = this.get('model'),
+                itemId = this.get('id'),
                 itemName = item.get('productName'),
-                cart = item.get('cart');
-            return new Ember.RSVP.Promise((resolve, reject) => {
-                let request = Ember.$.ajax({
-                    url: '/cart/item/',
-                    method: 'POST',
-                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-                    headers: {
-                        'X-CSRFToken': getCookie('csrftoken')
-                    },
-                    data: {
-                        add_item_id: item.product.id,
-                        add_item_quantity: 0
-                    }
-                });
-                request.then((json) => {
-                    let message = `${itemName} telah dihapus dari keranjang anda`;
-                    this.get('notifications').showNotification(message, {
-                        delayed: false,
-                        key: 'cart.items.remove'
-                    });
-                    this.get('model').deleteRecord();
-                    this.send('refreshCart');
-                    Ember.run(null, resolve, json);
-                });
-                request.fail((jqXHR, textStatus) => {
-                    Ember.run(null, reject, `error removing ${itemName} from the cart`);
-                    this.get('notifications').showAPIError(textStatus, {key: 'cart.items.remove'});
-                });
+                cart = item.get('cart'),
+                request;
+
+            request = ajax({
+                url: `/cart/item/${itemId}/delete/`,
+                method: 'POST',
+                dataType: 'json',
+                contentType: 'application/x-www-form-urlencoded',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                data: {
+                    product_id: item.productId,
+                    add_item_quantity: 0
+                }
             });
+            request.then((json) => {
+                let message = `${itemName} telah dihapus dari keranjang anda`;
+                this.get('notifications').showNotification(message, {
+                    delayed: false,
+                    key: 'cart.items.remove'
+                });
+                this.get('model').deleteRecord();
+                this.send('refreshCart');
+            }, (error) => {
+                this.get('notifications').showAPIError(error, {key: 'cart.items.remove'});
+            });
+
+            return request;
         },
 
         confirmReject: function() {
