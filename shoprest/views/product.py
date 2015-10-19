@@ -10,14 +10,20 @@ from rest_framework_json_api.mixins import MultipleIDMixin
 from rest_framework.response import Response
 from rest_framework import permissions as restpermission
 from shopengine.models import Product
+from rest_framework.permissions import BasePermission, AllowAny, SAFE_METHODS
 
 from shoprest.serializers.product import ProductSerializer
-from shoprest.permissions import ReadOnlyOrOwner
+
+class ReadOnlyOrAuthor(BasePermission):
+    def has_object_permission(self, request, view, obj):
+        if request.method in SAFE_METHODS:
+            return True
+        return request.user.is_staff or request.user == obj.author
 
 class ProductViewSet(MultipleIDMixin, viewsets.ModelViewSet):
     resource_name = 'products'
-    permission_classes = (ReadOnlyOrOwner,)
-    queryset = Product.objects.exclude(product_type=Product.VARIANT_PRODUCT)
+    permission_classes = (ReadOnlyOrAuthor,)
+    queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
     def get_queryset(self):

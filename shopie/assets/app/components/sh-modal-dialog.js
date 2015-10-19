@@ -1,6 +1,9 @@
 import Ember from 'ember';
 
 export default Ember.Component.extend({
+
+    notifications: Ember.inject.service(),
+
     didInsertElement: function () {
         this.$('.js-modal-container, .js-modal-background').addClass('fade-in open');
         this.$('.js-modal').addClass('open');
@@ -21,16 +24,24 @@ export default Ember.Component.extend({
         this.sendAction();
     },
 
-    confirmaccept: 'confirmAccept',
-    confirmreject: 'confirmReject',
+    handleAction: function(promise) {
+        promise.then((resolved) => {
+            this.close();
+            return resolved;
+        }).catch((error) => {
+            this.get('notifications').showErrors(error, {});
+        });
+    },
 
     actions: {
         closeModal: function () {
             this.close();
         },
-        confirm: function (type) {
-            this.sendAction('confirm' + type);
-            this.close();
+        confirmAccept: function () {
+            this.handleAction(this.attrs.confirmAccept());
+        },
+        confirmReject: function() {
+            this.handleAction(this.attrs.confirmReject());
         },
         noBubble: Ember.K
     },

@@ -40,9 +40,16 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    'oauth2_provider.middleware.OAuth2TokenMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'shopengine.middleware.ember.EmberPreload',
+]
+
+AUTHENTICATION_BACKENDS = [
+    'oauth2_provider.backends.OAuth2Backend',
+    'django.contrib.auth.backends.ModelBackend'
 ]
 
 ROOT_URLCONF = 'shopie.urls'
@@ -60,7 +67,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'shopengine.context_processors.cart'
+                'shopengine.context_processors.cart',
+                'shoprest.context_processors.application',
             ],
         },
     },
@@ -100,7 +108,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = PROJECT_DIR
-STATICFILES_DIRS = (os.path.join(PROJECT_DIR, 'static'),)
+STATICFILES_DIRS = [os.path.join(PROJECT_DIR, 'static'),]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(PROJECT_DIR, 'media')
@@ -132,3 +140,8 @@ REST_FRAMEWORK = {
 JSON_API_FORMAT_KEYS = 'dasherize'
 JSON_API_FORMAT_RELATION_KEYS = 'dasherize'
 JSON_API_PLURALIZE_RELATION_TYPE = True
+
+OAUTH2_PROVIDER = {
+    # this is the list of available scopes
+    'SCOPES': {'read': 'Read scope', 'write': 'Write scope'}
+}

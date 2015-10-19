@@ -20,13 +20,13 @@ from shopengine.views.home import home_view
 from shopengine import urls as shopengine_urls
 from account import urls as account_urls
 from shoprest import urls as api_urls
-from rest_framework.authtoken import views as auth_view
+
 
 urlpatterns = [
     url(r'^$', home_view, name='home'),
     url(r'^', include(shopengine_urls)),
+    url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
     url(r'^api/v1/', include(api_urls)),
     url(r'^account/', include(account_urls)),
     url(r'^console/', include(admin.site.urls)),
-    url(r'^api-token-auth/', auth_view.obtain_auth_token)
 ]
