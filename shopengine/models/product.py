@@ -1,6 +1,6 @@
 """Product and related product models."""
 import os
-
+from datetime import datetime, timezone
 from decimal import Decimal
 from django.conf import settings
 from django.db import models
@@ -89,6 +89,10 @@ class Product(BaseModel, SluggableMixin):
     #
     earnings = models.DecimalField(max_digits=30, decimal_places=2,
         default=Decimal('0.0'), verbose_name=_('Earnings'))
+    created_at = models.DateTimeField(auto_now_add=True, null=True,
+        verbose_name=_('Date added'))
+    updated_at = models.DateTimeField(auto_now=True, null=True,
+        verbose_name=_('Last modified'))
     objects = ProductQuerySet.as_manager()
 
     class Meta(object):
@@ -123,7 +127,7 @@ class Product(BaseModel, SluggableMixin):
         return self.product_type == self.VARIABLE_PRODUCT and self.has_variant
 
     @property
-    def has_varint(self):
+    def has_variant(self):
         return Product.objects.filter(parent=self).exists()
 
     @property
@@ -140,8 +144,10 @@ class Product(BaseModel, SluggableMixin):
     def fullname(self):
         if not self.is_parent:
             return self.name
+        elif self.parent:
+            return self.parent + '-' + self.name
         else:
-            return self.parent.name + '-' + self.name
+            return self.name
 
 class ProductTag(BaseModel, SluggableMixin):
 

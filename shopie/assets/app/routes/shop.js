@@ -15,7 +15,9 @@ export default Ember.Route.extend(styleBody, ShortcutsRoute, PaginationRoute, {
 
     model: function () {
         return this.loadFirstPage().then(() => {
-            return this.store.filter('product', (product) => product.get('isActive'));
+            return this.store.filter('product', (product) => {
+                return product.get('isActive') && product.get('productType') !== 30;
+            });
         });
     },
 
