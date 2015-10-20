@@ -1,1 +1,0 @@
-/home/syaiful/code/shopie/shopie/assets/tmp/broccoli_merge_trees-input_base_path-TkYS61mg.tmp/2/reexports/ember-cli-app-version.js

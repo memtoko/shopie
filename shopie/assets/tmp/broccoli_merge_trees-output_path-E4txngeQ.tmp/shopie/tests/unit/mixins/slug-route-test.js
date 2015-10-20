@@ -1,1 +1,0 @@
-/home/syaiful/code/shopie/shopie/assets/tmp/broccoli_merge_trees-input_base_path-O0hMRcnf.tmp/4/shopie/tests/unit/mixins/slug-route-test.js

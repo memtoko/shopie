@@ -1,1 +1,0 @@
-/home/syaiful/code/shopie/shopie/assets/app/initializers/shopie-token-auth.js

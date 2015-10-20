@@ -1,1 +1,0 @@
-/home/syaiful/code/shopie/shopie/assets/tmp/jshinter-output_path-27rMWlTw.tmp/helpers/sh-format-markdown.jshint.js

@@ -1,1 +1,0 @@
-/home/syaiful/code/shopie/shopie/assets/tmp/jshinter-output_path-o7teRll3.tmp/unit/transforms/moment-date-test.jshint.js

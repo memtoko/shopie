@@ -1,1 +1,0 @@
-/home/syaiful/code/shopie/shopie/assets/tmp/funnel-input_base_path-OVFcqm2z.tmp/0/bower_components/ember-cli-test-loader/test-loader.js

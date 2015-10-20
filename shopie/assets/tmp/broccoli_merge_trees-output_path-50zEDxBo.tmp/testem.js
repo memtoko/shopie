@@ -1,1 +1,0 @@
-/home/syaiful/code/shopie/shopie/assets/node_modules/ember-cli/lib/broccoli/testem.js

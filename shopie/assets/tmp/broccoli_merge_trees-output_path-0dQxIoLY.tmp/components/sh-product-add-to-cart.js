@@ -1,1 +1,0 @@
-/home/syaiful/code/shopie/shopie/assets/app/components/sh-product-add-to-cart.js
