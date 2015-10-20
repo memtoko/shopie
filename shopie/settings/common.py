@@ -49,7 +49,8 @@ MIDDLEWARE_CLASSES = [
 
 AUTHENTICATION_BACKENDS = [
     'oauth2_provider.backends.OAuth2Backend',
-    'django.contrib.auth.backends.ModelBackend'
+    'django.contrib.auth.backends.ModelBackend',
+    'account.authbackends.EmailFieldBackend',
 ]
 
 ROOT_URLCONF = 'shopie.urls'
