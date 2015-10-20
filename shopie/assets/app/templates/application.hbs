@@ -1,7 +1,7 @@
 {{#sh-app showCart=showCart}}
 
 <div class="sh-viewport">
-    {{#unless isAdmin}}
+    {{#unless signedOut}}
         {{#sh-nav-menu-front open=autoNavOpen toggleMaximise="toggleAutoNav" openAutoNav="openAutoNav" openModal="openModal" closeMobileMenu="closeMobileMenu"}}
           {{outlet "header-cover"}}
         {{/sh-nav-menu-front}}

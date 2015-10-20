@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-let BaseValidator = Ember.objects.extend({
+let BaseValidator = Ember.Object.extend({
     properties: [],
     passed: false,
 

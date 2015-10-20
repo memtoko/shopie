@@ -1,20 +1,37 @@
 # a file type we don't need to store
-*.pyc
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
 *.db
 *.log
-/bin
-/logs
-/image
+*.db-journal
 
-/node_modules
-/bower_components
-/client/node_modules
-/client/bower_components
+# C extensions
+*.so
 
-# built asset related
-/tmp
-/shopie/static/admin
-/shopie/static/css
+# OS stuff
+.DS_Store
+thumbs.db
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# task runner
+bin
+npm-debug.log
+node_modules
+bower_components
+
+#logs info
+logs
+
+# generated files
 /shopie/static/js
-/shopie/static/images
-/shopie/static/fonts
+/shopie/static/css
+
+# Local development stuff
+dev
+manage.py
+media

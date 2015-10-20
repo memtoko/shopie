@@ -1,0 +1,1 @@
+/home/syaiful/code/shopie/shopie/assets/tmp/funnel-input_base_path-m1gTcAU8.tmp/0/vendor-prefix.js

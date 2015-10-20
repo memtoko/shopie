@@ -1,0 +1,1 @@
+/home/syaiful/code/shopie/shopie/assets/bower_components/ember-cli-test-loader/test-loader.js

@@ -1,1 +1,0 @@
-[Memtoko] Order Receipt, {{ order.order_date|date:"d M Y"}}

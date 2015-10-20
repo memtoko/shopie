@@ -1,0 +1,59 @@
+<div class="page-wrapper">
+  <div class="row">
+    <div class="content-list js-content-list large-12 columns">
+      <header class="view-header">
+        <h2 class="view-title">Cart</h2>
+        <section class="view-actions">
+
+        </section>
+      </header>
+      <div class="view-container">
+        <form>
+          <table class="cart-table large-12" role="grid">
+            <thead>
+              <tr>
+                <th class="product-remove">&nbsp;</th>
+                <th class="product-thumbnail">&nbsp;</th>
+                <th class="product-name">Product name</th>
+                <th class="product-unit-price">Unit price</th>
+                <th class="product-quantity">Quantity</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each items as |item|}}
+                <tr>
+                  <td class="product-remove">
+                    <button type="button" class="btn btn-link btn-sm tag-delete-button" {{action "openModal" "remove-cart-item" item}}><i class="icon-trash"></i></button>
+                  </td>
+                  <td class="product-thumbnail">
+                    {{#if item.product.thumbnail}}
+                      <img src="{{item.product.thumbnail}}" width="200" height="200">
+                    {{else}}
+                      <img src="/static/images/placeholder.png" width="200" height="200">
+                    {{/if}}
+                  </td>
+                  <td>{{item.productName}}</td>
+                  <td>{{item.productPrice}}</td>
+                  <td>{{item.quantity}}</td>
+                  <td>{{item.lineSubtotal}}</td>
+                </tr>
+                <tr>
+                  <td colspan="4">&nbsp;</td>
+                  <td>Line Total:</td>
+                  <td>{{item.lineTotal}}</td>
+                </tr>
+              {{/each}}
+            </tbody>
+            <tfoot>
+              <td colspan="4">&nbsp;</td>
+              <td>Cart Subtotal</td>
+              <td>{{model.totalPrice}}</td>
+            </tfoot>
+          </table>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
