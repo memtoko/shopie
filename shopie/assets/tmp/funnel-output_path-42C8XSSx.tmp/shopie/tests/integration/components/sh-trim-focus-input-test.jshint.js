@@ -1,0 +1,1 @@
+/home/syaiful/code/shopie/shopie/assets/tmp/jshinter-output_path-o7teRll3.tmp/integration/components/sh-trim-focus-input-test.jshint.js

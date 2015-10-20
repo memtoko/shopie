@@ -1,0 +1,1 @@
+/home/syaiful/code/shopie/shopie/assets/app/components/sh-input.js

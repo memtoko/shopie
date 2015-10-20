@@ -1,0 +1,1 @@
+/home/syaiful/code/shopie/shopie/assets/tmp/broccoli_merge_trees-input_base_path-O0hMRcnf.tmp/5/shopie/tests/helpers/sh-format-markdown.jshint.js

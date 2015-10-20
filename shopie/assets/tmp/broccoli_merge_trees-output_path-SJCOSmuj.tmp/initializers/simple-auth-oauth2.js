@@ -1,0 +1,1 @@
+/home/syaiful/code/shopie/shopie/assets/node_modules/ember-cli-simple-auth-oauth2/app/initializers/simple-auth-oauth2.js

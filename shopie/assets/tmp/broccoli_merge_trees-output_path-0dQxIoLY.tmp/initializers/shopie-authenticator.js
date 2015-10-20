@@ -1,0 +1,1 @@
+/home/syaiful/code/shopie/shopie/assets/app/initializers/shopie-authenticator.js
