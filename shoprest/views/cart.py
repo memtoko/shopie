@@ -43,16 +43,6 @@ class CartViewSet(MultipleIDMixin, CartViewMixin, viewsets.ModelViewSet):
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
 
-    def get_queryset(self):
-        request = self.request
-        if request.user.is_anonymous():
-            cart = get_or_create_cart(request)
-            return Cart.objects.filter(pk=cart.pk)
-        else:
-            if request.user.is_staff:
-                return Cart.objects.all()
-            return Cart.objects.filter(user=request.user).select_related('user')
-
     def retrieve(self, request, pk=None):
         if pk == 'current':
             pk = get_or_create_cart(request, save=True).pk
