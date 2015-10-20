@@ -6,7 +6,7 @@ export default {
 
     initialize: function () {
         ENV['simple-auth-oauth2'].serverTokenEndpoint = '/o/token/';
-        ENV['simple-auth-oauth2'].serverTokenRevocationEndpoint = '/authentication/revoke_token/';
+        ENV['simple-auth-oauth2'].serverTokenRevocationEndpoint = '/o/revoke_token/';
 
         ENV['simple-auth'].localStorageKey = 'shopie:session';
     }

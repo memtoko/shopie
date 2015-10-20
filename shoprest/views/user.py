@@ -3,12 +3,18 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext as _
+from django.contrib.sites.models import RequestSite
+from django.contrib.sites.models import Site
 
+from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework import status as httpstatus
 from rest_framework.decorators import detail_route, list_route
 from rest_framework_json_api.mixins import MultipleIDMixin
 from rest_framework.permissions import BasePermission, AllowAny, SAFE_METHODS
+
+from registration import signals
+from registration.models import RegistrationProfile
 
 from shoprest.serializers.user import UserSerializer, SetPasswordSerializer
 from shoprest.permissions import IsAuthenticatedOrReadOnly, AdminOrOwnerPermission
@@ -30,12 +36,40 @@ class UserViewSet(MultipleIDMixin, viewsets.ModelViewSet):
     queryset = get_user_model().objects.all()
     serializer_class = UserSerializer
 
+    SEND_ACTIVATION_EMAIL = getattr(settings, 'SEND_ACTIVATION_EMAIL', True)
+
     def retrieve(self, request, pk=None):
         if pk == 'me':
             pk = request.user.pk
         return super(UserViewSet, self).retrieve(request, pk)
 
-    @detail_route(methods='post')
+    def perform_create(self, serializer):
+        request = self.request
+
+        if Site._meta.installed:
+            site = Site.objects.get_current()
+        else:
+            site = RequestSite(request)
+
+        new_user_instance = serializer.save()
+
+        new_user = RegistrationProfile.objects.create_inactive_user(
+            new_user=new_user_instance,
+            site=site,
+            send_email=self.SEND_ACTIVATION_EMAIL,
+            request=request,
+        )
+        signals.user_registered.send(sender=self.__class__,
+                                     user=new_user,
+                                     request=request)
+
+    @list_route(methods=['get','post'])
+    def me(self, request, *args, **kwargs):
+        user = request.user
+        serializer = UserSerializer(user, many=False)
+        return Response(serializer.data)
+
+    @detail_route(methods=['post'])
     def changepassword(self, request, *args, **kwargs):
         user = self.get_object()
         serializer = SetPasswordSerializer(data=request.data)

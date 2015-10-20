@@ -60,6 +60,5 @@ class CartViewSet(MultipleIDMixin, CartViewMixin, viewsets.ModelViewSet):
 
 class CartItemViewSet(MultipleIDMixin, CartViewMixin, viewsets.ModelViewSet):
     resource_name = 'cart-items'
-    permission_classes = (ReadOnlyOrOwner,)
     queryset = CartItem.objects.all()
     serializer_class = CartItemSerializer

@@ -10,12 +10,11 @@ export default Ember.Controller.extend({
             let item = this.get('model'),
                 itemId = this.get('id'),
                 itemName = item.get('productName'),
-                cart = item.get('cart'),
-                request;
+                cart = item.get('cart');
 
-            request = ajax({
+            return ajax({
                 url: `/cart/item/${itemId}/delete/`,
-                method: 'POST',
+                type: 'POST',
                 dataType: 'json',
                 contentType: 'application/x-www-form-urlencoded',
                 headers: {
@@ -25,8 +24,7 @@ export default Ember.Controller.extend({
                     product_id: item.productId,
                     add_item_quantity: 0
                 }
-            });
-            request.then((json) => {
+            }).then((json) => {
                 let message = `${itemName} telah dihapus dari keranjang anda`;
                 this.get('notifications').showNotification(message, {
                     delayed: false,
@@ -34,11 +32,10 @@ export default Ember.Controller.extend({
                 });
                 this.get('model').deleteRecord();
                 this.send('refreshCart');
+                return json;
             }, (error) => {
                 this.get('notifications').showAPIError(error, {key: 'cart.items.remove'});
             });
-
-            return request;
         },
 
         confirmReject: function() {
@@ -49,11 +46,11 @@ export default Ember.Controller.extend({
     confirm: {
         accept: {
             text: 'Remove',
-            buttonClass: 'button tiny alert radius'
+            buttonClass: 'btn btn-red'
         },
         reject: {
             text: 'Cancel',
-            buttonClass: 'button tiny radius'
+            buttonClass: 'btn btn-default btn-minor'
         }
     }
 });

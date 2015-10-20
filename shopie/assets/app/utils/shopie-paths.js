@@ -18,16 +18,18 @@ let makeRoute = function(root, args) {
 };
 
 let shopiePaths = function () {
-    var adminRoot = '/console',
+    let adminRoot = '/console',
+        oauth2Root = '/o',
         apiRoot = '/api/v1';
 
     return {
         adminRoot: adminRoot,
         apiRoot: apiRoot,
+        oauth2Root: oauth2Root,
         url: {
             admin: () => makeRoute(adminRoot, arguments),
             api: () => makeRoute(apiRoot, arguments),
-
+            oauth2: () => makeRoute(oauth2Root, arguments),
             isSecure: function(url) {
                 var link = document.createElement('a');
                 link.href = url;

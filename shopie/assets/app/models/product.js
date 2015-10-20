@@ -13,7 +13,7 @@ export default DS.Model.extend({
     productType: DS.attr(),
     parent: DS.belongsTo('product', {inverse: 'variants'}),
     variants: DS.hasMany('product', {inverse: 'parent'}),
-    author: DS.belongsTo('user'),
+    author: DS.belongsTo('user', {async: true}),
 
     formatSlug: function() {
         return this.get('slug') + '-' + this.get('id');

@@ -16,7 +16,7 @@ export default Ember.Route.extend({
 
     actions: {
         refreshCart: function() {
-            this.mode();
+            this.model();
         }
     }
 });

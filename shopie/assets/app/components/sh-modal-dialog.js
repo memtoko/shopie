@@ -28,7 +28,7 @@ export default Ember.Component.extend({
         promise.then((resolved) => {
             this.close();
             return resolved;
-        }).catch((error) => {
+        }, (error) => {
             this.get('notifications').showErrors(error, {});
         });
     },

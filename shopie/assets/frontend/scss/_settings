@@ -135,10 +135,10 @@ $black       : #000000;
 // We use these as default colors throughout
 $primary-color: #5ba4e5;
 // $secondary-color: #9fbb58;
-// $alert-color: #f04124;
-// $success-color: #43AC6A;
-// $warning-color: #f08a24;
-// $info-color: #a0d3e8;
+$alert-color: $red;
+$success-color: $green;
+$warning-color: $orange;
+$info-color: #a0d3e8;
 
 // We use these to control various global styles
 // $body-bg: $white;

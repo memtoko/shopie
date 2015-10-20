@@ -17,7 +17,7 @@ Router.map(function() {
   this.route('product', {path: '/product/:product_slug'});
   this.route('issues', {path: '/product/:product_slug/issues'});
   this.route('users', { path: '/user'});
-  this.route('login', {});
+  this.route('login', { path: '/login'});
 });
 
 export default Router;

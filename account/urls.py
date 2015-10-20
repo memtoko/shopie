@@ -13,5 +13,5 @@ urlpatterns = [
     ),
     url(r'', include('django.contrib.auth.urls')),
     url(r'', include('registration.backends.default.urls')),
-    url(r'^(?P<username>.+)/$', user_dashboard, name='account_dashboard'),
+    url(r'^/profile/(?P<username>.+)/$', user_dashboard, name='account_dashboard'),
 ]

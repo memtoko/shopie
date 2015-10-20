@@ -3,7 +3,7 @@ import Ember from 'ember';
 export default Ember.Controller.extend({
 
     // jscs: disable
-    signedOut: Ember.computed.match('currentPath', /(signin|signup|setup|reset)/),
+    signedOut: Ember.computed.match('currentPath', /(login|signup|setup|reset)/),
     // jscs: enable
     showCart: false,
 

@@ -6,7 +6,7 @@ export default Authenticator.extend({
     makeRequest: function (url, data) {
         data.client_id = this.get('config.clientId');
         data.client_secret = this.get('config.clientSecret');
-        data.scopes = 'read write';
+        data.scopes = ['read', 'write'];
         return this._super(url, data);
     }
 });

@@ -6,7 +6,7 @@ export default DS.Model.extend({
     lineSubtotal: DS.attr(),
     extraPrice: DS.attr(),
     product: DS.belongsTo('product', {async: true}),
-    cart: DS.belongsTo('cart'),
+    cart: DS.belongsTo('cart', {async: true}),
 
     productName: function() {
         return this.get('product.name');
