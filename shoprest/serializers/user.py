@@ -46,5 +46,8 @@ class UserRegistrationSerializer(SetPasswordSerializer):
         # all username is lower
         value = value.lower()
         if User.objects.filter(username__iexact=value):
-            raise serializers.ValidationError("This email address is already in use. Please supply a different email address.")
+            raise serializers.ValidationError("This username is not available")
         return value
+
+class PasswordReset(serializers.Serializer):
+    email = serializer.EmailField(required=True)

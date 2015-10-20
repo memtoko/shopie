@@ -22,7 +22,7 @@ module.exports = function(environment) {
 
     'simple-auth': {
       authenticationRoute: 'login',
-      routeAfterAuthentication: 'dashboard',
+      routeAfterAuthentication: 'shop',
       authorizer: 'simple-auth-authorizer:oauth2-bearer',
       localStorageKey: '<overriden this>'
     },

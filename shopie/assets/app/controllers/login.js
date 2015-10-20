@@ -17,10 +17,11 @@ export default Ember.Controller.extend(ValidationEngine, {
         authenticate: function() {
             let model = this.get('model'),
                 data = model.getProperties(this.authProperties);
+
             const authStrategy = 'shopie-authenticator:oauth2-password-grant';
+
             this.get('session').authenticate(authStrategy, data).catch((err) => {
                 this.toggleProperty('loggingIn');
-                console.log(err);
                 if (err.error) {
                     this.set('flowErrors', `${err.error}: ${err.error_description}`);
                 }

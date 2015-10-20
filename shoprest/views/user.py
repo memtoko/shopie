@@ -69,6 +69,10 @@ class UserViewSet(MultipleIDMixin, viewsets.ModelViewSet):
         serializer = UserSerializer(user, many=False)
         return Response(serializer.data)
 
+    @list_route(methods=['post'])
+    def passwordreset(self, request, *args, **kwargs):
+        """Call django password reset system here"""
+
     @detail_route(methods=['post'])
     def changepassword(self, request, *args, **kwargs):
         user = self.get_object()
