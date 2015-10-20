@@ -50,4 +50,4 @@ class UserRegistrationSerializer(SetPasswordSerializer):
         return value
 
 class PasswordReset(serializers.Serializer):
-    email = serializer.EmailField(required=True)
+    email = serializers.EmailField(required=True)
