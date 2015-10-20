@@ -1,1 +1,0 @@
-/home/syaiful/code/shopie/shopie/assets/tmp/funnel-input_base_path-6aSGMsCN.tmp/0/libs/stale-result.js

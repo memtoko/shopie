@@ -1,1 +1,0 @@
-/home/syaiful/code/shopie/shopie/assets/tmp/funnel-input_base_path-jzUUVyW6.tmp/0/

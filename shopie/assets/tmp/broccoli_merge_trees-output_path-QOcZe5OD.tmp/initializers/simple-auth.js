@@ -1,1 +1,0 @@
-/home/syaiful/code/shopie/shopie/assets/tmp/broccoli_merge_trees-input_base_path-FWemGH5H.tmp/0/initializers/simple-auth.js

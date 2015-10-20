@@ -1,1 +1,0 @@
-/home/syaiful/code/shopie/shopie/assets/tmp/template_compiler-tmp_dest_dir-2eQOVOCb.tmp/shopie/templates/cart.js

@@ -1,1 +1,0 @@
-/home/syaiful/code/shopie/shopie/assets/tmp/babel-output_path-EXtZy8wx.tmp/shopie/tests/unit/routes/application-test.js

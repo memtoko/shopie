@@ -1,1 +1,0 @@
-/home/syaiful/code/shopie/shopie/assets/tmp/jshinter-output_path-Cj7UhiRo.tmp/test-helper.jshint.js
