@@ -1,11 +1,10 @@
-"""Product and related product models.
+"""Product and related product models."""
 
-for simple implementation of product variant, i am consider to treat all product
-have variation. If it only have one variant, then it will be simple product.
-"""
 import os
 from datetime import datetime, timezone
 from decimal import Decimal
+import urlparse
+
 from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -15,6 +14,20 @@ from .base import BaseModel, SluggableMixin, TimeStampsMixin
 from .fields import CurrencyField
 from shopengine.utils.text import slugify
 from shopengine.utils.users import user_model_string
+
+def _normalize_dir(dir_name):
+    """include dot on the front, redundant but it usefull"""
+    if not dir_name.startswith('./'):
+        dir_name = os.path.join('.', dir_name)
+    if dir_name.endswith("/"):
+        dir_name = dir_name[:-1]
+    return dir_name
+
+def product_file_upload(instance, filename):
+    """We use this to customize upload file for our product"""
+    updir = getattr(settings, 'PRODUCT_UPLOAD_DIR')
+    updir = os.path.normpath(_normalize_dir(updir))
+    return os.path.join(updir, instance.file.field.get_filename(filename))
 
 class ProductQuerySet(models.QuerySet):
 
@@ -27,8 +40,21 @@ class ProductQuerySet(models.QuerySet):
     def where_author(self, author):
         return self.filter(author=author)
 
+    def root(self):
+        """All products which are not variant"""
+        return self.filter(parent=None)
+
 class AbstractProduct(BaseModel, SluggableMixin, TimeStampsMixin):
-    """An abstract product that can be used to create specifix product spec.
+    """An abstract product that can be used to create product spec on an ecommerce
+    site.
+
+    This implementation of parent-variant product is recursive, that is the model
+    have relation to itself.
+
+    - A variant product can be determined by the field parent is not None.
+    - A parent product can be determined by the field parent is None (:stored as
+    null on database.) and it should atleast have 1 variant. If not, we treat the
+    product as-is.
     """
     STATUS_DRAFT = 10
     STATUS_PENDING_REVIEW = 20
@@ -45,7 +71,8 @@ class AbstractProduct(BaseModel, SluggableMixin, TimeStampsMixin):
     description = models.TextField(verbose_name=_('Descriptions'))
     author = models.ForeignKey(user_model_string(), blank=True, null=True,
         verbose_name=_('Author'))
-    unit_price = CurrencyField(verbose_name=_('Unit Price'), default=Decimal(0))
+    unit_price = CurrencyField(verbose_name=_('Unit Price'), blank=True,
+        default=Decimal('0.00'))
     # Control available
     is_active = models.BooleanField(default=False, verbose_name=_('Active'))
     status = models.IntegerField(choices=PRODUCT_STATUSES, default=STATUS_DRAFT,
@@ -58,6 +85,9 @@ class AbstractProduct(BaseModel, SluggableMixin, TimeStampsMixin):
     def get_variants(self):
         return self.objects.filter(parent=self)
 
+    def get_price(self):
+        return self.price
+
     @property
     def price(self):
         return self.price if self.is_variant else min([v.unit_price for v in self.get_variants()])
@@ -68,7 +98,7 @@ class AbstractProduct(BaseModel, SluggableMixin, TimeStampsMixin):
 
     @property
     def is_variant(self):
-        return not sel.has_variant
+        return not self.has_variant
 
     @property
     def is_parent(self):
@@ -96,9 +126,14 @@ class AbstractProduct(BaseModel, SluggableMixin, TimeStampsMixin):
         return "%s (%s)" % (self.product.name, self.name) if self.parent else self.name
 
 class Product(AbstractProduct):
-    # License related info
-    activation_limit = models.IntegerField(blank=True, null=True)
-    license_expiry = models.IntegerField(blank=True, null=True)
+    """This is the actual product we use on our website.
+    """
+    # if you pass None to this field, they will interpreted as unlimited
+    activation_limit = models.IntegerField(blank=True, null=True,
+        help_text=_("Activation limit for this product"), default=1)
+    license_expiry = models.IntegerField(blank=True, null=True, default=1)
+
+    file = FileField(_("File"), upload_to=product_file_upload)
     image = models.FileField(upload_to="images", verbose_name='Product image')
 
     class Meta(object):
@@ -111,8 +146,8 @@ class Product(AbstractProduct):
 class ProductTag(BaseModel, SluggableMixin, TimeStampsMixin):
 
     name = models.CharField(max_length=255, verbose_name=_('Name'))
-    description = models.TextField(verbose_name=_('Description'),
-        null=True, blank=True)
+    description = models.TextField(verbose_name=_('Description'), blank=True,
+        default='')
     image = models.FileField(upload_to="images", verbose_name='Product image')
     products = models.ManyToManyField(Product, verbose_name='products')
 

@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse as _urlreverse
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericForeignKey
 
 from shopengine.utils.users import user_model_string
 from .base import BaseModel, SluggableMixin, TimeStampsMixin
@@ -48,11 +49,9 @@ class Issue(BaseModel, SluggableMixin, TimeStampsMixin):
     name = models.CharField(max_length=255, verbose_name=_('Name'))
     body = models.TextField(max_length=10000, verbose_name=_("The body"))
     user = models.ForeignKey(user_model_string(), verbose_name=_("user"))
-    target_content_type = models.ForeignKey(ContentType, related_name='issue_target',
-        blank=True, null=True)
+    target_content_type = models.ForeignKey(ContentType, blank=True, null=True)
     target_object_id = models.CharField(max_length=255, blank=True, null=True)
-    target = GenericForeignKey('target_content_type',
-        'target_object_id')
+    target = GenericForeignKey('target_content_type', 'target_object_id')
     is_closed = models.BooleanField(default=False, verbose_name=_("Is close?"))
 
     def __str__(self):

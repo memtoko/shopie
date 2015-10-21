@@ -1,3 +1,9 @@
+"""Order concept is an order is a collection of products along with other
+information about how they should be delivered and billed to a customer.
+
+Then basket or cart, is simply order an order which has not yet been "checked out".
+"""
+
 import hashlib
 import random
 from decimal import Decimal
