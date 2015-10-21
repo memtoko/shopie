@@ -10,7 +10,7 @@ class CurrencyField(DecimalField):
         defaults = {
             'max_digits': 30,
             'decimal_places': 2,
-            'default': Decimal('0.0')
+            'default': Decimal('0.00')
         }
         defaults.update(kwargs)
         super(CurrencyField, self).__init__(**defaults)

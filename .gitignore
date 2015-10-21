@@ -30,6 +30,8 @@ logs
 # generated files
 /shopie/static/js
 /shopie/static/css
+/shopie/static/fonts
+/shopie/static/images
 
 # Local development stuff
 dev
