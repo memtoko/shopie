@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse as _urlreverse
 from .base import BaseModel
 from .product import Product
 from .order import Order
-from shopengine.utils.users import user_model_string
+from shopie.utils.users import user_model_string
 # Product License
 class License(BaseModel):
     # Create your models here.

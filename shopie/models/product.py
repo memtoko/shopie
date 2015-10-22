@@ -12,8 +12,8 @@ from django.core.urlresolvers import reverse as _urlreverse
 
 from .base import BaseModel, SluggableMixin, TimeStampsMixin
 from .fields import CurrencyField
-from shopengine.utils.text import slugify
-from shopengine.utils.users import user_model_string
+from shopie.utils.text import slugify
+from shopie.utils.users import user_model_string
 
 def _normalize_dir(dir_name):
     """include dot on the front, redundant but it usefull"""
@@ -45,11 +45,11 @@ class ProductQuerySet(models.QuerySet):
         return self.filter(parent=None)
 
 class AbstractProduct(BaseModel, SluggableMixin, TimeStampsMixin):
-    """An abstract product that can be used to create product spec on an ecommerce
-    site.
+    """An abstract product that can be used to create product spec on an
+    ecommerce site.
 
-    This implementation of parent-variant product is recursive, that is the model
-    have relation to itself.
+    This implementation of parent-variant product is recursive, that is the
+    model have relation to itself.
 
     - A variant product can be determined by the field parent is not None.
     - A parent product can be determined by the field parent is None (:stored as

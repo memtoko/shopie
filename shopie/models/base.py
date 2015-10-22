@@ -1,7 +1,7 @@
 import uuid
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from shopengine.utils.text import slugify
+from shopie.utils.text import slugify
 
 class BaseModel(models.Model):
     uuid = models.UUIDField(verbose_name=_('UUID'))
@@ -14,13 +14,22 @@ class BaseModel(models.Model):
     class Meta:
         abstract= True
 
-class SluggableMixin:
+class SluggableMixin(models.Model):
     slug = models.CharField(max_length=250, verbose_name=_("Slug"))
 
     def set_slug(self, base):
         if not self.slug:
             self.slug = slugify(base)
 
-class TimeStampsMixin:
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    class Meta:
+        abstract = True
+
+class TimeStampsMixin(models.Model):
+    """Timestamps for the model. I added database index to bot created_at
+    and updated_at, as i always found to orderby them.
+    """
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    updated_at = models.DateTimeField(auto_now=True, db_index=True)
+
+    class Meta:
+        abstract = True
