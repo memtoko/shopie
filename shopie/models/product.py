@@ -123,7 +123,7 @@ class AbstractProduct(BaseModel, SluggableMixin, TimeStampsMixin):
 
     @property
     def fullname(self):
-        return "%s (%s)" % (self.product.name, self.name) if self.parent else self.name
+        return "%s (%s)" % (self.parent.name, self.name) if self.parent else self.name
 
 class Product(AbstractProduct):
     """This is the actual product we use on our website.
