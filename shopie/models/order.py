@@ -1,7 +1,7 @@
 """Our concept for an order is, a collection of products along with other
 information about how they should be delivered and billed to a customer.
 
-Then basket or cart, is simply order an order which has not yet been "checked out".
+Then basket or cart, is simply an order which has not yet been "checked out".
 because of that a cart is simply an order in backends.
 """
 
@@ -21,10 +21,11 @@ from .fields import CurrencyField
 from .base import BaseModel, TimeStampsMixin
 from shopie.signals import order_added, order_status_changed
 from shopie.utils.users import user_model_string
+from shopie.utils.text import create_sha1_key
 
 class OrderState(BaseModel):
 
-    STATE_BUILDING = 10
+    STATE_BUILDING = 10 # this state indicate the order in "cart" state
     STATE_CONFIRMING = 20
     STATE_RECEIVED = 30
     STATE_ACCEPTED = 40
@@ -41,10 +42,6 @@ class OrderState(BaseModel):
     status = models.IntegerField(choices=ORDER_STATES, default=STATE_BUILDING,
         verbose_name=_('Status'))
 
-    def __init__(self, *args, **kwargs):
-        super(OrderState, self).__init__(*args, **kwargs)
-        self.status = self.STATE_BUILDING
-
     @property
     def is_building(self):
         return self.status == self.STATE_BUILDING
@@ -57,6 +54,9 @@ class OrderState(BaseModel):
         return dict(self.ORDER_STATES)[self.status]
 
     def update_status(self, new_status, save=False):
+        """If you want to update order status, then do it through this method,
+        so we can notify callback which listen to order_status_changed signals
+        """
         if not self.pk:
             return
         old_status = self.status
@@ -134,6 +134,18 @@ class Order(OrderState, TimeStampsMixin):
         self.save()
         return order_item
 
+    def proceed_to_confirm(self, save=True):
+        """This method should be executed when the user has completed their
+        first round of entering details. This will mark the order as "confirming".
+        Now the customer only need to confirm.
+        """
+        self.update_status(self.STATE_CONFIRMING, save)
+
+    def confirm(self):
+        """This method should be executed when the order should be completed
+        by the customer."""
+        pass
+
     @property
     def total_items(self):
         return sum([ci.quantity for ci in self.items.all()])
@@ -156,6 +168,8 @@ class Order(OrderState, TimeStampsMixin):
 
     def save(self, *args, **kwargs):
         self.calculate()
+        if not self.order_key:
+            self.order_key = create_sha1_key(random.random())
         super(Order, self).save(*args, **kwargs)
 
     def calculate(self):
@@ -219,23 +233,6 @@ class ExraPriceOrderItemField(BaseModel):
         verbose_name=_('Order item'))
     label = models.CharField(max_length=255, verbose_name=_('Label'))
     value = CurrencyField(verbose_name=_('Amount'))
-
-class OrderPayment(models.Model):
-    order = models.ForeignKey(Order, verbose_name=_('order'))
-    amount = CurrencyField(verbose_name=_('amount'))
-    transaction_id = models.CharField(max_length=255,
-            verbose_name=_('Transaction ID'),
-            help_text=_("The transaction processor's reference"))
-    payment_method = models.CharField(max_length=255,
-            verbose_name=_('Payment method'),
-            help_text=_("The payment backend used to process the purchase"))
-    created_at = models.DateTimeField(auto_now_add=True,
-        verbose_name=_('Date added'), blank=True, null=True)
-    updated_at = models.DateTimeField(auto_now=True,
-        verbose_name=_('Last modified'), blank=True, null=True)
-
-    def __str__(self):
-        return 'Payment: %(id)s for order %(order_id)s' % {'id': self.transaction_id, 'order_id': self.order.pk}
 
 def _order_added_listener(sender, instance=None, created=False, **kwargs):
     if created and isinstance(instance, Order):
