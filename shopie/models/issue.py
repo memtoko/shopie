@@ -4,32 +4,8 @@ from django.core.urlresolvers import reverse as _urlreverse
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 
-from shopengine.utils.users import user_model_string
+from shopie.utils.users import user_model_string
 from .base import BaseModel, SluggableMixin, TimeStampsMixin
-
-class LabelQuerySet(models.QuerySet):
-
-    def get_by_natural(self, name):
-        return self.get(name=name)
-
-class Label(BaseModel, SluggableMixin, TimeStampsMixin):
-    """label are a way of categorizing issue"""
-    name = models.CharField(max_length=100, verbose_name=_("The label name"),
-        unique=True,)
-    description = models.CharField(max_length=250,
-        verbose_name=_("The label description"), blank=True,)
-    issues = models.ManyToManyField(Issue, verbose_name=_("issues"), blank=True)
-    objects = LabelManager.as_manager()
-
-    class Meta:
-        verbose_name = _("label")
-        verbose_name_plural = _("labels")
-
-    def __str__(self):
-        return self.name
-
-    def natural_key(self):
-        return (self.name,)
 
 class IssueQuerySet(models.QuerySet):
 
@@ -83,3 +59,27 @@ class Reply(BaseModel, TimeStampsMixin):
 
     def __str__(self):
         "reply for issue %d by %s" % (self.issue.pk, self.user.username)
+
+class LabelQuerySet(models.QuerySet):
+
+    def get_by_natural(self, name):
+        return self.get(name=name)
+
+class Label(BaseModel, SluggableMixin, TimeStampsMixin):
+    """label are a way of categorizing issue"""
+    name = models.CharField(max_length=100, verbose_name=_("The label name"),
+        unique=True,)
+    description = models.CharField(max_length=250,
+        verbose_name=_("The label description"), blank=True,)
+    issues = models.ManyToManyField(Issue, verbose_name=_("issues"), blank=True)
+    objects = LabelQuerySet.as_manager()
+
+    class Meta:
+        verbose_name = _("label")
+        verbose_name_plural = _("labels")
+
+    def __str__(self):
+        return self.name
+
+    def natural_key(self):
+        return (self.name,)

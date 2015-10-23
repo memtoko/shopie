@@ -3,7 +3,6 @@
 import os
 from datetime import datetime, timezone
 from decimal import Decimal
-import urlparse
 
 from django.conf import settings
 from django.db import models
@@ -44,7 +43,7 @@ class ProductQuerySet(models.QuerySet):
         """All products which are not variant"""
         return self.filter(parent=None)
 
-class AbstractProduct(BaseModel, SluggableMixin, TimeStampsMixin):
+class AbstractProduct(TimeStampsMixin, SluggableMixin, BaseModel):
     """An abstract product that can be used to create product spec on an
     ecommerce site.
 
@@ -83,7 +82,10 @@ class AbstractProduct(BaseModel, SluggableMixin, TimeStampsMixin):
     objects = ProductQuerySet.as_manager()
 
     def get_variants(self):
-        return self.objects.filter(parent=self)
+        """we can't access the manager on object level, so self.objects not work,
+        but clsname.objects will work"""
+        cls = self.__class__
+        return cls.objects.filter(parent=self)
 
     def get_price(self):
         return self.price
@@ -98,7 +100,7 @@ class AbstractProduct(BaseModel, SluggableMixin, TimeStampsMixin):
 
     @property
     def is_variant(self):
-        return not self.has_variant
+        return not self.has_variant and self.parent is not None
 
     @property
     def is_parent(self):
@@ -107,19 +109,27 @@ class AbstractProduct(BaseModel, SluggableMixin, TimeStampsMixin):
 
     @property
     def orderable(self):
-        return self.is_active and self.status == self.STATUS_PUBLISHED
+        return all([
+            self.is_active,
+            self.status == self.STATUS_PUBLISHED,
+            not self.is_parent
+        ])
 
     class Meta:
-        abstract: True
+        abstract = True
 
     def save(self, **kwargs):
-        super(AbstractProduct, self).save(**kwargs)
         # then check it if it variant
         if self.parent:
             # this product has parent so it should variant, in that case change
             # the unit price of parent to 0
             self.parent.unit_price = Decimal('0.00')
             self.parent.save()
+
+        if not self.slug:
+            self.set_slug(self.name)
+
+        super(AbstractProduct, self).save(**kwargs)
 
     @property
     def fullname(self):
@@ -133,7 +143,7 @@ class Product(AbstractProduct):
         help_text=_("Activation limit for this product"), default=1)
     license_expiry = models.IntegerField(blank=True, null=True, default=1)
 
-    file = FileField(_("File"), upload_to=product_file_upload)
+    file = models.FileField(_("File"), upload_to=product_file_upload)
     image = models.FileField(upload_to="images", verbose_name='Product image')
 
     class Meta(object):

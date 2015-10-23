@@ -169,7 +169,7 @@ class Order(OrderState, TimeStampsMixin):
     def save(self, *args, **kwargs):
         self.calculate()
         if not self.order_key:
-            self.order_key = create_sha1_key(random.random())
+            self.order_key = create_sha1_key(str(random.random()))
         super(Order, self).save(*args, **kwargs)
 
     def calculate(self):
@@ -223,13 +223,13 @@ class OrderItem(BaseModel):
         return self.line_total
 
 class ExtraPriceOrderField(BaseModel):
-    order = models.ForeignKey(Order, related_name="extra_price_fields"
+    order = models.ForeignKey(Order, related_name="extra_price_fields",
         verbose_name=_('Order'))
     label = models.CharField(max_length=255, verbose_name=_('Label'))
     value = CurrencyField(verbose_name=_('Amount'))
 
 class ExraPriceOrderItemField(BaseModel):
-    order_item = models.ForeignKey(OrderItem, related_name="extra_price_fields"
+    order_item = models.ForeignKey(OrderItem, related_name="extra_price_fields",
         verbose_name=_('Order item'))
     label = models.CharField(max_length=255, verbose_name=_('Label'))
     value = CurrencyField(verbose_name=_('Amount'))
