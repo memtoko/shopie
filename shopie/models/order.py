@@ -1,7 +1,7 @@
 """Our concept for an order is, a collection of products along with other
 information about how they should be delivered and billed to a customer.
 
-Then basket or cart, is simply order an order which has not yet been "checked out".
+Then basket or cart, is simply an order which has not yet been "checked out".
 because of that a cart is simply an order in backends.
 """
 
@@ -25,7 +25,7 @@ from shopie.utils.text import create_sha1_key
 
 class OrderState(BaseModel):
 
-    STATE_BUILDING = 10
+    STATE_BUILDING = 10 # this state indicate the order in "cart" state
     STATE_CONFIRMING = 20
     STATE_RECEIVED = 30
     STATE_ACCEPTED = 40
@@ -54,6 +54,9 @@ class OrderState(BaseModel):
         return dict(self.ORDER_STATES)[self.status]
 
     def update_status(self, new_status, save=False):
+        """If you want to update order status, then do it through this method,
+        so we can notify callback which listen to order_status_changed signals
+        """
         if not self.pk:
             return
         old_status = self.status
@@ -130,6 +133,18 @@ class Order(OrderState, TimeStampsMixin):
             order_item.save()
         self.save()
         return order_item
+
+    def proceed_to_confirm(self, save=True):
+        """This method should be executed when the user has completed their
+        first round of entering details. This will mark the order as "confirming".
+        Now the customer only need to confirm.
+        """
+        self.update_status(self.STATE_CONFIRMING, save)
+
+    def confirm(self):
+        """This method should be executed when the order should be completed
+        by the customer."""
+        pass
 
     @property
     def total_items(self):
