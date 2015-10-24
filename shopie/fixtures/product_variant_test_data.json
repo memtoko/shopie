@@ -1,0 +1,44 @@
+[
+    {
+        "fields": {
+            "name": "Foo Product",
+            "slug": "foo-product",
+            "short_description": "Foo description",
+            "description": "foo description",
+            "unit_price": "22.05",
+            "is_active": true,
+            "status": 30,
+            "parent": null
+        },
+        "model": "shopie.product",
+        "pk": 1
+    },
+    {
+        "fields": {
+            "name": "Variant Foo Product",
+            "slug": "variant-foo-product",
+            "short_description": "Variant Foo Product short description",
+            "description": "Variant Foo Product long description",
+            "unit_price": "25.22",
+            "is_active": true,
+            "status": 30,
+            "parent": 1
+        },
+        "model": "shopie.product",
+        "pk": 2
+    },
+    {
+        "fields": {
+            "name": "Variant Foo Product 2",
+            "slug": "variant-foo-product-2",
+            "short_description": "Variant Foo Product short description 2",
+            "description": "Variant Foo Product long description 2",
+            "unit_price": "27.22",
+            "is_active": true,
+            "status": 30,
+            "parent": 1
+        },
+        "model": "shopie.product",
+        "pk": 3
+    }
+]

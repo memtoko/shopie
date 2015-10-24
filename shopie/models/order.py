@@ -97,8 +97,6 @@ class Order(OrderState, TimeStampsMixin):
             raise ValueError(
                 _('Trying to add product to order item which not orderable')
             )
-        # save current state
-        self.save()
 
         if queryset is None:
             queryset = OrderItem.objects.filter(order=self, product=product)
@@ -114,6 +112,10 @@ class Order(OrderState, TimeStampsMixin):
                 product=product
             )
             order_item.save()
+
+        # save current state
+        self.save()
+
         return order_item
 
     def update_quantity(self, quantity, order_item_id=None, order_item=None):
@@ -131,8 +133,8 @@ class Order(OrderState, TimeStampsMixin):
             # force to int
             order_item.quantity = int(quantity)
             order_item.save()
+
         self.save()
-        return order_item
 
     def proceed_to_confirm(self, save=True):
         """This method should be executed when the user has completed their
@@ -178,15 +180,16 @@ class Order(OrderState, TimeStampsMixin):
         """
         current_subtotal = Decimal('0.00') # holder
 
-        for item in self.items:
-            current_subtotal += item.calculate()
+        for item in self.items.all():
+            item.calculate()
+            current_subtotal += item.line_total
 
-        current_total = self.line_subtotal = current_subtotal
+        current_total = self.order_subtotal = current_subtotal
 
-        for extra_price in self.extra_price_fields:
+        for extra_price in self.extra_price_fields.all():
             current_total += extra_price.value
 
-        self.line_total = current_total
+        self.order_total = current_total
 
     class Meta:
         verbose_name = _('Order')
@@ -216,11 +219,10 @@ class OrderItem(BaseModel):
         self.line_subtotal = self.product.get_price() * self.quantity
         current_total = self.line_subtotal
 
-        for extra_price in self.extra_price_fields:
+        for extra_price in self.extra_price_fields.all():
             current_total += extra_price.value
 
         self.line_total = current_total
-        return self.line_total
 
 class ExtraPriceOrderField(BaseModel):
     order = models.ForeignKey(Order, related_name="extra_price_fields",
@@ -233,8 +235,3 @@ class ExraPriceOrderItemField(BaseModel):
         verbose_name=_('Order item'))
     label = models.CharField(max_length=255, verbose_name=_('Label'))
     value = CurrencyField(verbose_name=_('Amount'))
-
-def _order_added_listener(sender, instance=None, created=False, **kwargs):
-    if created and isinstance(instance, Order):
-        order_added.send(sender=sender, user=instance.user, order=instance)
-post_save.connect(_order_added_listener, dispatch_uid='shopie.models.order')

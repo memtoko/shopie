@@ -92,7 +92,7 @@ class AbstractProduct(TimeStampsMixin, SluggableMixin, BaseModel):
 
     @property
     def price(self):
-        return self.price if self.is_variant else min([v.unit_price for v in self.get_variants()])
+        return min([v.unit_price for v in self.get_variants()]) if self.is_parent else self.unit_price
 
     @property
     def has_variant(self):
@@ -100,12 +100,12 @@ class AbstractProduct(TimeStampsMixin, SluggableMixin, BaseModel):
 
     @property
     def is_variant(self):
-        return not self.has_variant and self.parent is not None
+        return self.parent is not None
 
     @property
     def is_parent(self):
         """Alias for has variant"""
-        return self.has_variant
+        return self.parent is None and self.has_variant
 
     @property
     def orderable(self):
@@ -123,8 +123,9 @@ class AbstractProduct(TimeStampsMixin, SluggableMixin, BaseModel):
         if self.parent:
             # this product has parent so it should variant, in that case change
             # the unit price of parent to 0
-            self.parent.unit_price = Decimal('0.00')
-            self.parent.save()
+            if self.parent.unit_price != Decimal('0.00'):
+                self.parent.unit_price = Decimal('0.00')
+                self.parent.save()
 
         if not self.slug:
             self.set_slug(self.name)

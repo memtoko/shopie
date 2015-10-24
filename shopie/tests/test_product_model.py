@@ -4,16 +4,7 @@ from django.test import TestCase
 from shopie.models import Product
 
 class SimpleProductModelTests(TestCase):
-
-    def setUp(self):
-        Product.objects.create(
-            name="Foo Product", #the slug should be foo-product
-            short_description="foo short description",
-            description="foo description",
-            unit_price=Decimal('22.05'),
-            is_active=True,
-            status=Product.STATUS_PUBLISHED
-        )
+    fixtures = ['product_simple_test_data']
 
     def test_get_product_from_slug(self):
         self.assertIsNotNone(Product.objects.get(slug='foo-product'))
@@ -22,7 +13,6 @@ class SimpleProductModelTests(TestCase):
 
     def test_it_orderable(self):
         product = Product.objects.all()[0]
-        print(product.status)
         self.assertTrue(product.orderable)
 
     def test_it_not_orderable_if_not_active(self):
@@ -36,35 +26,7 @@ class SimpleProductModelTests(TestCase):
         self.assertFalse(product.orderable)
 
 class VariableProduct(TestCase):
-
-    def setUp(self):
-        Product.objects.create(
-            name="Foo Product", #the slug should be foo-product
-            short_description="foo short description",
-            description="foo description",
-            unit_price=Decimal('22.05'),
-            is_active=True,
-            status=Product.STATUS_PUBLISHED
-        )
-        parent = Product.objects.get(slug='foo-product')
-        Product.objects.create(
-            name="Variant Foo Product", #the slug should be foo-product
-            short_description="variant foo short description",
-            description="variant foo description",
-            unit_price=Decimal('25.22'),
-            is_active=True,
-            status=Product.STATUS_PUBLISHED,
-            parent=parent
-        )
-        Product.objects.create(
-            name="Variant Foo Product 2", #the slug should be foo-product
-            short_description="variant foo short description 2",
-            description="variant foo description 2",
-            unit_price=Decimal('27.22'),
-            is_active=True,
-            status=Product.STATUS_PUBLISHED,
-            parent=parent
-        )
+    fixtures = ['product_variant_test_data']
 
     def test_parent_has_variant(self):
         parent = Product.objects.get(slug='foo-product')
@@ -82,4 +44,13 @@ class VariableProduct(TestCase):
         it just for display."""
         parent = Product.objects.get(slug='foo-product')
         self.assertEqual(parent.price, Decimal('25.22'))
+
+    def test_variant_is_orderable(self):
+        product = Product.objects.get(slug='variant-foo-product')
+        self.assertTrue(product.orderable)
+
+    def test_variant_price(self):
+        #variant price
+        product = Product.objects.get(slug='variant-foo-product')
+        self.assertEqual(product.price, Decimal('25.22'))
 

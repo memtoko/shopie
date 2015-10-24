@@ -2,10 +2,12 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
-from decimal import Decimal
-import shopie.models.fields
-from django.conf import settings
 import shopie.models.product
+import uuid
+import shopie.models.fields
+from decimal import Decimal
+from django.conf import settings
+import django.utils.timezone
 
 
 class Migration(migrations.Migration):
@@ -19,10 +21,10 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='ExraPriceOrderItemField',
             fields=[
-                ('id', models.AutoField(auto_created=True, verbose_name='ID', primary_key=True, serialize=False)),
-                ('uuid', models.UUIDField(verbose_name='UUID')),
-                ('label', models.CharField(verbose_name='Label', max_length=255)),
-                ('value', shopie.models.fields.CurrencyField(max_digits=30, verbose_name='Amount', default=Decimal('0.00'), decimal_places=2)),
+                ('id', models.AutoField(auto_created=True, primary_key=True, verbose_name='ID', serialize=False)),
+                ('uuid', models.UUIDField(verbose_name='UUID', default=uuid.uuid4)),
+                ('label', models.CharField(max_length=255, verbose_name='Label')),
+                ('value', shopie.models.fields.CurrencyField(verbose_name='Amount', decimal_places=2, default=Decimal('0.00'), max_digits=30)),
             ],
             options={
                 'abstract': False,
@@ -31,10 +33,10 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='ExtraPriceOrderField',
             fields=[
-                ('id', models.AutoField(auto_created=True, verbose_name='ID', primary_key=True, serialize=False)),
-                ('uuid', models.UUIDField(verbose_name='UUID')),
-                ('label', models.CharField(verbose_name='Label', max_length=255)),
-                ('value', shopie.models.fields.CurrencyField(max_digits=30, verbose_name='Amount', default=Decimal('0.00'), decimal_places=2)),
+                ('id', models.AutoField(auto_created=True, primary_key=True, verbose_name='ID', serialize=False)),
+                ('uuid', models.UUIDField(verbose_name='UUID', default=uuid.uuid4)),
+                ('label', models.CharField(max_length=255, verbose_name='Label')),
+                ('value', shopie.models.fields.CurrencyField(verbose_name='Amount', decimal_places=2, default=Decimal('0.00'), max_digits=30)),
             ],
             options={
                 'abstract': False,
@@ -43,14 +45,14 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Issue',
             fields=[
-                ('id', models.AutoField(auto_created=True, verbose_name='ID', primary_key=True, serialize=False)),
-                ('uuid', models.UUIDField(verbose_name='UUID')),
-                ('slug', models.CharField(verbose_name='Slug', max_length=250)),
-                ('created_at', models.DateTimeField(auto_now_add=True, db_index=True)),
-                ('updated_at', models.DateTimeField(auto_now=True, db_index=True)),
-                ('name', models.CharField(verbose_name='Name', max_length=255)),
-                ('body', models.TextField(verbose_name='The body', max_length=10000)),
-                ('target_object_id', models.CharField(blank=True, null=True, max_length=255)),
+                ('id', models.AutoField(auto_created=True, primary_key=True, verbose_name='ID', serialize=False)),
+                ('uuid', models.UUIDField(verbose_name='UUID', default=uuid.uuid4)),
+                ('slug', models.CharField(max_length=250, verbose_name='Slug')),
+                ('created_at', models.DateTimeField(db_index=True, default=django.utils.timezone.now)),
+                ('updated_at', models.DateTimeField(db_index=True, default=django.utils.timezone.now)),
+                ('name', models.CharField(max_length=255, verbose_name='Name')),
+                ('body', models.TextField(max_length=10000, verbose_name='The body')),
+                ('target_object_id', models.CharField(max_length=255, null=True, blank=True)),
                 ('is_closed', models.BooleanField(verbose_name='Is close?', default=False)),
                 ('target_content_type', models.ForeignKey(to='contenttypes.ContentType', null=True, blank=True)),
                 ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, verbose_name='user')),
@@ -62,14 +64,14 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Label',
             fields=[
-                ('id', models.AutoField(auto_created=True, verbose_name='ID', primary_key=True, serialize=False)),
-                ('uuid', models.UUIDField(verbose_name='UUID')),
-                ('slug', models.CharField(verbose_name='Slug', max_length=250)),
-                ('created_at', models.DateTimeField(auto_now_add=True, db_index=True)),
-                ('updated_at', models.DateTimeField(auto_now=True, db_index=True)),
-                ('name', models.CharField(max_length=100, verbose_name='The label name', unique=True)),
-                ('description', models.CharField(blank=True, verbose_name='The label description', max_length=250)),
-                ('issues', models.ManyToManyField(blank=True, to='shopie.Issue', verbose_name='issues')),
+                ('id', models.AutoField(auto_created=True, primary_key=True, verbose_name='ID', serialize=False)),
+                ('uuid', models.UUIDField(verbose_name='UUID', default=uuid.uuid4)),
+                ('slug', models.CharField(max_length=250, verbose_name='Slug')),
+                ('created_at', models.DateTimeField(db_index=True, default=django.utils.timezone.now)),
+                ('updated_at', models.DateTimeField(db_index=True, default=django.utils.timezone.now)),
+                ('name', models.CharField(max_length=100, unique=True, verbose_name='The label name')),
+                ('description', models.CharField(max_length=250, verbose_name='The label description', blank=True)),
+                ('issues', models.ManyToManyField(verbose_name='issues', to='shopie.Issue', blank=True)),
             ],
             options={
                 'verbose_name_plural': 'labels',
@@ -79,15 +81,15 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='License',
             fields=[
-                ('id', models.AutoField(auto_created=True, verbose_name='ID', primary_key=True, serialize=False)),
-                ('uuid', models.UUIDField(verbose_name='UUID')),
-                ('license_key', models.CharField(max_length=255, verbose_name='license key', unique=True)),
+                ('id', models.AutoField(auto_created=True, primary_key=True, verbose_name='ID', serialize=False)),
+                ('uuid', models.UUIDField(verbose_name='UUID', default=uuid.uuid4)),
+                ('license_key', models.CharField(max_length=255, unique=True, verbose_name='license key')),
                 ('status', models.IntegerField(default=10, choices=[(10, 'inactive'), (20, 'active')])),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('active_remaining', models.IntegerField(blank=True, verbose_name='activate remaining', null=True)),
+                ('active_remaining', models.IntegerField(verbose_name='activate remaining', null=True, blank=True)),
                 ('activate_count', models.IntegerField(verbose_name='Count activation', default=0)),
-                ('expired_at', models.DateTimeField(blank=True, null=True)),
+                ('expired_at', models.DateTimeField(null=True, blank=True)),
             ],
             options={
                 'abstract': False,
@@ -96,9 +98,9 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='LicenseActivation',
             fields=[
-                ('id', models.AutoField(auto_created=True, verbose_name='ID', primary_key=True, serialize=False)),
-                ('uuid', models.UUIDField(verbose_name='UUID')),
-                ('site', models.CharField(verbose_name='site', max_length=255)),
+                ('id', models.AutoField(auto_created=True, primary_key=True, verbose_name='ID', serialize=False)),
+                ('uuid', models.UUIDField(verbose_name='UUID', default=uuid.uuid4)),
+                ('site', models.CharField(max_length=255, verbose_name='site')),
                 ('activate_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
                 ('status', models.IntegerField(default=20, choices=[(10, 'inactive'), (20, 'active')])),
@@ -111,17 +113,17 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Order',
             fields=[
-                ('id', models.AutoField(auto_created=True, verbose_name='ID', primary_key=True, serialize=False)),
-                ('uuid', models.UUIDField(verbose_name='UUID')),
-                ('created_at', models.DateTimeField(auto_now_add=True, db_index=True)),
-                ('updated_at', models.DateTimeField(auto_now=True, db_index=True)),
+                ('id', models.AutoField(auto_created=True, primary_key=True, verbose_name='ID', serialize=False)),
+                ('uuid', models.UUIDField(verbose_name='UUID', default=uuid.uuid4)),
+                ('created_at', models.DateTimeField(db_index=True, default=django.utils.timezone.now)),
+                ('updated_at', models.DateTimeField(db_index=True, default=django.utils.timezone.now)),
                 ('status', models.IntegerField(verbose_name='Status', default=10, choices=[(10, 'Building'), (20, 'Confirming'), (30, 'Received'), (40, 'Accepted'), (50, 'Rejected')])),
-                ('full_name', models.CharField(blank=True, verbose_name='Full name', max_length=255)),
-                ('email', models.EmailField(verbose_name='Email address', max_length=254)),
-                ('received_at', models.DateTimeField(blank=True, verbose_name='received_at', null=True)),
-                ('order_key', models.CharField(blank=True, max_length=255, verbose_name='Order Key', unique=True)),
-                ('order_subtotal', shopie.models.fields.CurrencyField(max_digits=30, verbose_name='Order Subtotal', default=Decimal('0.0'), decimal_places=2)),
-                ('order_total', shopie.models.fields.CurrencyField(max_digits=30, verbose_name='Order Total', default=Decimal('0.0'), decimal_places=2)),
+                ('full_name', models.CharField(max_length=255, verbose_name='Full name', blank=True)),
+                ('email', models.EmailField(max_length=254, verbose_name='Email address')),
+                ('received_at', models.DateTimeField(verbose_name='received_at', null=True, blank=True)),
+                ('order_key', models.CharField(max_length=255, unique=True, verbose_name='Order Key', blank=True)),
+                ('order_subtotal', shopie.models.fields.CurrencyField(verbose_name='Order Subtotal', decimal_places=2, default=Decimal('0.0'), max_digits=30)),
+                ('order_total', shopie.models.fields.CurrencyField(verbose_name='Order Total', decimal_places=2, default=Decimal('0.0'), max_digits=30)),
                 ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, null=True, blank=True, verbose_name='customer')),
             ],
             options={
@@ -132,13 +134,13 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='OrderItem',
             fields=[
-                ('id', models.AutoField(auto_created=True, verbose_name='ID', primary_key=True, serialize=False)),
-                ('uuid', models.UUIDField(verbose_name='UUID')),
-                ('unit_price', shopie.models.fields.CurrencyField(max_digits=30, verbose_name='Unit Price', default=Decimal('0.0'), decimal_places=2)),
+                ('id', models.AutoField(auto_created=True, primary_key=True, verbose_name='ID', serialize=False)),
+                ('uuid', models.UUIDField(verbose_name='UUID', default=uuid.uuid4)),
+                ('unit_price', shopie.models.fields.CurrencyField(verbose_name='Unit Price', decimal_places=2, default=Decimal('0.0'), max_digits=30)),
                 ('quantity', models.IntegerField(verbose_name='Quantity', default=1)),
-                ('line_subtotal', shopie.models.fields.CurrencyField(max_digits=30, verbose_name='Line Subtotal', default=Decimal('0.0'), decimal_places=2)),
-                ('line_total', shopie.models.fields.CurrencyField(max_digits=30, verbose_name='Line Total', default=Decimal('0.0'), decimal_places=2)),
-                ('order', models.ForeignKey(related_name='items', to='shopie.Order', verbose_name='Order Item')),
+                ('line_subtotal', shopie.models.fields.CurrencyField(verbose_name='Line Subtotal', decimal_places=2, default=Decimal('0.0'), max_digits=30)),
+                ('line_total', shopie.models.fields.CurrencyField(verbose_name='Line Total', decimal_places=2, default=Decimal('0.0'), max_digits=30)),
+                ('order', models.ForeignKey(to='shopie.Order', related_name='items', verbose_name='Order Item')),
             ],
             options={
                 'abstract': False,
@@ -147,16 +149,16 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Payment',
             fields=[
-                ('id', models.AutoField(auto_created=True, verbose_name='ID', primary_key=True, serialize=False)),
-                ('created_at', models.DateTimeField(auto_now_add=True, db_index=True)),
-                ('updated_at', models.DateTimeField(auto_now=True, db_index=True)),
-                ('amount', shopie.models.fields.CurrencyField(max_digits=30, verbose_name='amount', default=Decimal('0.00'), decimal_places=2)),
-                ('method', models.CharField(verbose_name='payment method', max_length=255)),
-                ('transaction_id', models.CharField(verbose_name='transaction ID', max_length=255)),
-                ('reference', models.CharField(verbose_name='payment reference', max_length=255)),
+                ('id', models.AutoField(auto_created=True, primary_key=True, verbose_name='ID', serialize=False)),
+                ('created_at', models.DateTimeField(db_index=True, default=django.utils.timezone.now)),
+                ('updated_at', models.DateTimeField(db_index=True, default=django.utils.timezone.now)),
+                ('amount', shopie.models.fields.CurrencyField(verbose_name='amount', decimal_places=2, default=Decimal('0.00'), max_digits=30)),
+                ('method', models.CharField(max_length=255, verbose_name='payment method')),
+                ('transaction_id', models.CharField(max_length=255, verbose_name='transaction ID')),
+                ('reference', models.CharField(max_length=255, verbose_name='payment reference')),
                 ('confirmed', models.BooleanField(verbose_name='confirmed', default=True)),
                 ('refundable', models.BooleanField(verbose_name='refundable', default=False)),
-                ('amount_refunded', shopie.models.fields.CurrencyField(max_digits=30, verbose_name='amount refunded', default=Decimal('0.00'), decimal_places=2)),
+                ('amount_refunded', shopie.models.fields.CurrencyField(verbose_name='amount refunded', decimal_places=2, default=Decimal('0.00'), max_digits=30)),
                 ('order', models.ForeignKey(to='shopie.Order', verbose_name='Order')),
                 ('parent', models.ForeignKey(to='shopie.Payment', null=True, blank=True, verbose_name='payment parent')),
             ],
@@ -167,19 +169,19 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Product',
             fields=[
-                ('id', models.AutoField(auto_created=True, verbose_name='ID', primary_key=True, serialize=False)),
-                ('uuid', models.UUIDField(verbose_name='UUID')),
-                ('slug', models.CharField(verbose_name='Slug', max_length=250)),
-                ('created_at', models.DateTimeField(auto_now_add=True, db_index=True)),
-                ('updated_at', models.DateTimeField(auto_now=True, db_index=True)),
-                ('name', models.CharField(verbose_name='Product Name', max_length=255)),
-                ('short_description', models.TextField(verbose_name='Short Description', max_length=255)),
+                ('id', models.AutoField(auto_created=True, primary_key=True, verbose_name='ID', serialize=False)),
+                ('uuid', models.UUIDField(verbose_name='UUID', default=uuid.uuid4)),
+                ('slug', models.CharField(max_length=250, verbose_name='Slug')),
+                ('created_at', models.DateTimeField(db_index=True, default=django.utils.timezone.now)),
+                ('updated_at', models.DateTimeField(db_index=True, default=django.utils.timezone.now)),
+                ('name', models.CharField(max_length=255, verbose_name='Product Name')),
+                ('short_description', models.TextField(max_length=255, verbose_name='Short Description')),
                 ('description', models.TextField(verbose_name='Descriptions')),
-                ('unit_price', shopie.models.fields.CurrencyField(blank=True, max_digits=30, verbose_name='Unit Price', default=Decimal('0.00'), decimal_places=2)),
+                ('unit_price', shopie.models.fields.CurrencyField(verbose_name='Unit Price', decimal_places=2, default=Decimal('0.00'), max_digits=30, blank=True)),
                 ('is_active', models.BooleanField(verbose_name='Active', default=False)),
                 ('status', models.IntegerField(verbose_name='Status', default=10, choices=[(10, 'Draft'), (20, 'Pending Review'), (30, 'Published')])),
-                ('activation_limit', models.IntegerField(help_text='Activation limit for this product', blank=True, null=True, default=1)),
-                ('license_expiry', models.IntegerField(blank=True, null=True, default=1)),
+                ('activation_limit', models.IntegerField(help_text='Activation limit for this product', default=1, null=True, blank=True)),
+                ('license_expiry', models.IntegerField(default=1, null=True, blank=True)),
                 ('file', models.FileField(verbose_name='File', upload_to=shopie.models.product.product_file_upload)),
                 ('image', models.FileField(verbose_name='Product image', upload_to='images')),
                 ('author', models.ForeignKey(to=settings.AUTH_USER_MODEL, null=True, blank=True, verbose_name='Author')),
@@ -193,15 +195,15 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='ProductTag',
             fields=[
-                ('id', models.AutoField(auto_created=True, verbose_name='ID', primary_key=True, serialize=False)),
-                ('uuid', models.UUIDField(verbose_name='UUID')),
-                ('slug', models.CharField(verbose_name='Slug', max_length=250)),
-                ('created_at', models.DateTimeField(auto_now_add=True, db_index=True)),
-                ('updated_at', models.DateTimeField(auto_now=True, db_index=True)),
-                ('name', models.CharField(verbose_name='Name', max_length=255)),
-                ('description', models.TextField(blank=True, verbose_name='Description', default='')),
+                ('id', models.AutoField(auto_created=True, primary_key=True, verbose_name='ID', serialize=False)),
+                ('uuid', models.UUIDField(verbose_name='UUID', default=uuid.uuid4)),
+                ('slug', models.CharField(max_length=250, verbose_name='Slug')),
+                ('created_at', models.DateTimeField(db_index=True, default=django.utils.timezone.now)),
+                ('updated_at', models.DateTimeField(db_index=True, default=django.utils.timezone.now)),
+                ('name', models.CharField(max_length=255, verbose_name='Name')),
+                ('description', models.TextField(verbose_name='Description', default='', blank=True)),
                 ('image', models.FileField(verbose_name='Product image', upload_to='images')),
-                ('products', models.ManyToManyField(to='shopie.Product', verbose_name='products')),
+                ('products', models.ManyToManyField(verbose_name='products', to='shopie.Product')),
             ],
             options={
                 'abstract': False,
@@ -210,12 +212,12 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Reply',
             fields=[
-                ('id', models.AutoField(auto_created=True, verbose_name='ID', primary_key=True, serialize=False)),
-                ('uuid', models.UUIDField(verbose_name='UUID')),
-                ('created_at', models.DateTimeField(auto_now_add=True, db_index=True)),
-                ('updated_at', models.DateTimeField(auto_now=True, db_index=True)),
+                ('id', models.AutoField(auto_created=True, primary_key=True, verbose_name='ID', serialize=False)),
+                ('uuid', models.UUIDField(verbose_name='UUID', default=uuid.uuid4)),
+                ('created_at', models.DateTimeField(db_index=True, default=django.utils.timezone.now)),
+                ('updated_at', models.DateTimeField(db_index=True, default=django.utils.timezone.now)),
                 ('body', models.TextField(max_length=10000)),
-                ('issue', models.ForeignKey(related_name='replies', to='shopie.Issue', verbose_name='issue')),
+                ('issue', models.ForeignKey(to='shopie.Issue', related_name='replies', verbose_name='issue')),
                 ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, verbose_name='user')),
             ],
             options={
@@ -245,11 +247,11 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='extrapriceorderfield',
             name='order',
-            field=models.ForeignKey(related_name='extra_price_fields', to='shopie.Order', verbose_name='Order'),
+            field=models.ForeignKey(to='shopie.Order', related_name='extra_price_fields', verbose_name='Order'),
         ),
         migrations.AddField(
             model_name='exrapriceorderitemfield',
             name='order_item',
-            field=models.ForeignKey(related_name='extra_price_fields', to='shopie.OrderItem', verbose_name='Order item'),
+            field=models.ForeignKey(to='shopie.OrderItem', related_name='extra_price_fields', verbose_name='Order item'),
         ),
     ]
