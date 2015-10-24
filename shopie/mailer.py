@@ -34,7 +34,7 @@ def order_added_mailer(user, order, **kwargs):
         'user': user,
         'order': order
     }
-    subject = render_to_string("shopengine/order/new_order_subject.txt", ctx_dict)
-    template = "shopengine/order/new_order_body"
+    subject = render_to_string("shopie/order/new_order_subject.txt", ctx_dict)
+    template = "shopie/order/new_order_body"
     message = mailer([user.email], subject, template, context=ctx_dict)
     message.send()

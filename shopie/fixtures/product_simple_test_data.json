@@ -1,0 +1,16 @@
+[
+    {
+        "fields": {
+            "name": "Foo Product",
+            "slug": "foo-product",
+            "short_description": "Foo description",
+            "description": "foo description",
+            "unit_price": "22.05",
+            "is_active": true,
+            "status": 30,
+            "parent": null
+        },
+        "model": "shopie.product",
+        "pk": 1
+    }
+]

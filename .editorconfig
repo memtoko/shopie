@@ -12,6 +12,19 @@ trim_trailing_whitespace = true
 
 [*.hbs]
 insert_final_newline = false
+indent_size = 2
+
+[*.html]
+indent_size = 2
+
+[*.json]
+indent_size = 2
+insert_final_newline = ignore
+
+# Minified JavaScript files shouldn't be changed
+[**.min.js]
+indent_style = ignore
+insert_final_newline = ignore
 
 [{package,bower}.json]
 indent_size = 2
@@ -23,4 +36,8 @@ trim_trailing_whitespace = false
 indent_size = 2
 
 [Makefile]
+indent_style = tab
+
+# Batch files use tabs for indentation
+[*.bat]
 indent_style = tab
