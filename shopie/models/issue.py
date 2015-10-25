@@ -38,17 +38,17 @@ class Issue(BaseModel, SluggableMixin, TimeStampsMixin):
         ])
         return "%s | %s | %s" % tuple(ctx)
 
-    def mark_closed(self, commit=False):
+    def mark_closed(self, save=False):
         # disscussion. if it already closed raise an exception?
         if not self.is_closed:
             self.is_closed = True
-            if commit:
+            if save:
                 self.save()
 
-    def mark_open(self, commit=False):
+    def mark_open(self, save=False):
         if self.is_closed:
             self.is_closed = False
-            if commit:
+            if save:
                 self.save()
 
 class Reply(BaseModel, TimeStampsMixin):

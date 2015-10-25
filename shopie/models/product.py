@@ -83,7 +83,8 @@ class AbstractProduct(TimeStampsMixin, SluggableMixin, BaseModel):
 
     def get_variants(self):
         """we can't access the manager on object level, so self.objects not work,
-        but clsname.objects will work"""
+        but clsname.objects will work
+        """
         cls = self.__class__
         return cls.objects.filter(parent=self)
 

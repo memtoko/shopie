@@ -23,7 +23,7 @@ class SluggableMixin(models.Model):
         abstract = True
 
 class TimeStampsMixin(models.Model):
-    """Timestamps for the model. I added database index to bot created_at
+    """Timestamps for the model. I added database index to both created_at
     and updated_at, as i always found to orderby them.
 
     I am not use auto_now or auto_now_add because there are can't be used
