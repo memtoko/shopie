@@ -54,7 +54,7 @@ class Payment(TimeStampsMixin):
 
     def __str__(self):
         identification = self.transaction_id or self.pk
-        return "Paymen: #%s" % (identification)
+        return "Payment: #%s" % (identification)
 
     @property
     def is_refund(self):

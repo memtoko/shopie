@@ -13,13 +13,14 @@ from django.db.models.signals import post_save
 from django.db import models
 from django.contrib.auth.models import AnonymousUser
 from django.utils.translation import ugettext_lazy as _
+from django.utils import timezone
 from django.core.urlresolvers import reverse as _urlreverse
 from django.conf import settings
 
 from .product import Product
 from .fields import CurrencyField
 from .base import BaseModel, TimeStampsMixin
-from shopie.signals import order_added, order_status_changed
+from shopie.signals import order_added, order_status_changed, order_confirmed
 from shopie.utils.users import user_model_string
 from shopie.utils.text import create_sha1_key
 
@@ -73,6 +74,16 @@ class OrderState(BaseModel):
     class Meta:
         abstract = True
 
+class OrderQuerySet(models.QuerySet):
+
+    def where_status(self, status):
+        if isinstance(status, int):
+            return self.filter(status=status)
+        else:
+            return self.filter(status__in=status)
+
+    def where_author(self, author):
+        return self.filter(author=author)
 
 class Order(OrderState, TimeStampsMixin):
     """An Order base class to manage order from customer"""
@@ -91,6 +102,7 @@ class Order(OrderState, TimeStampsMixin):
         verbose_name=_('Order Subtotal'))
     order_total = CurrencyField(default=Decimal('0.0'),
         verbose_name=_('Order Total'))
+    objects = OrderQuerySet.as_manager()
 
     def add_item(self, product, quantity=1, merge=True, queryset=None):
         if not product.orderable:
@@ -141,12 +153,19 @@ class Order(OrderState, TimeStampsMixin):
         first round of entering details. This will mark the order as "confirming".
         Now the customer only need to confirm.
         """
-        self.update_status(self.STATE_CONFIRMING, save)
+        self.update_status(self.STATE_CONFIRMING, save=save)
 
-    def confirm(self):
+    def confirm(self, save=True):
         """This method should be executed when the order should be completed
-        by the customer."""
-        pass
+        by the customer.
+        """
+        self.update_status(self.STATE_RECEIVED, save=save)
+        self.received_at = timezone.now()
+        for item in self.items.all():
+            item.confirm()
+
+        # send the signal
+        order_confirmed.send(sender=self, order=self)
 
     @property
     def total_items(self):
@@ -223,6 +242,10 @@ class OrderItem(BaseModel):
             current_total += extra_price.value
 
         self.line_total = current_total
+
+    def confirm(self):
+        """hook when order is about to confirm"""
+        self.save()
 
 class ExtraPriceOrderField(BaseModel):
     order = models.ForeignKey(Order, related_name="extra_price_fields",
