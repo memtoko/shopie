@@ -1,7 +1,8 @@
 from django.conf import settings
 from django.contrib.sites.models import RequestSite
 from django.contrib.sites.models import Site
-from django.contrib.auth.forms import PasswordResetForm
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordResetForm, PasswordChangeForm
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.translation import ugettext as _
 
@@ -66,3 +67,17 @@ def password_reset_endpoint(request):
     else:
         return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
 
+def change_password_endpoint(request):
+    """This endpoint require user to type old password in order to change their
+    password.
+    """
+    form = PasswordChangeForm(user=request.user, data=request.data)
+    if form.is_valid():
+        form.save()
+        #
+        update_session_auth_hash(request, form.user)
+        return Response({
+            'detail': _("Your password has been changed")
+        })
+    else:
+        return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)

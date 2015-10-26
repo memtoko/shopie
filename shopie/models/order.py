@@ -74,6 +74,16 @@ class OrderState(BaseModel):
     class Meta:
         abstract = True
 
+class OrderQuerySet(models.QuerySet):
+
+    def where_status(self, status):
+        if isinstance(status, int):
+            return self.filter(status=status)
+        else:
+            return self.filter(status__in=status)
+
+    def where_author(self, author):
+        return self.filter(author=author)
 
 class Order(OrderState, TimeStampsMixin):
     """An Order base class to manage order from customer"""
@@ -92,6 +102,7 @@ class Order(OrderState, TimeStampsMixin):
         verbose_name=_('Order Subtotal'))
     order_total = CurrencyField(default=Decimal('0.0'),
         verbose_name=_('Order Total'))
+    objects = OrderQuerySet.as_manager()
 
     def add_item(self, product, quantity=1, merge=True, queryset=None):
         if not product.orderable:

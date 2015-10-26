@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from shopengine.models import Product
+from shopie.models import Product
 
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
