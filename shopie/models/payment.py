@@ -9,7 +9,9 @@ from django.conf import settings
 
 from decimal import Decimal
 
-from .base import TimeStampsMixin
+from shopie.signals.payment import payment_refund
+
+from .base import BaseModel, TimeStampsMixin
 from .order import Order
 from .fields import CurrencyField
 
@@ -23,6 +25,7 @@ class PaymentManager(models.Manager):
         if payment is None:
             raise ValueError(_("Make sure you pass payment or payment_id"))
 
+        payment_refund.send(sender=self.__class__, payment=payment)
         amount = Decimal(amount)
         if payment.refundable_amount >= amount:
             _amount = Decimal('0.00') - amount
@@ -38,7 +41,7 @@ class PaymentManager(models.Manager):
                 "Max amount allowed is %s" % (amount, payment.refundable_amount)
             ))
 
-class Payment(TimeStampsMixin):
+class Payment(BaseModel, TimeStampsMixin):
     order = models.ForeignKey(Order, verbose_name=_("Order"))
     amount = CurrencyField(verbose_name=_("amount"))
     method = models.CharField(max_length=255, verbose_name=_("payment method"))
@@ -67,3 +70,9 @@ class Payment(TimeStampsMixin):
     @property
     def refundable_amount(self):
         return self.amount - self.amount_refunded if self.refundable else Decimal('0.00')
+
+class PaymentProperty(models.Model):
+    """Payment property usefull when you need to store custom"""
+    payment = models.ForeignKey(Payment, related_name="payment_properties")
+    key = models.CharField(max_length=255, verbose_name=_('propery key'))
+    value = models.CharField(max_length=255, verbose_name=_('propery value'))
