@@ -13,6 +13,9 @@ from shopie.api.endpoints.user import create_endpoint
 from shopie.api.serializers.user import UserSerializer
 
 class UserPermissions(BasePermission):
+    """Permission class for user viewset, only allow user to edit their profile
+    and or user staff.
+    """
     def has_object_permission(self, request, view, obj):
         return request.user == obj or request.user.is_staff
 
@@ -24,3 +27,7 @@ class UserViewSet(MultipleIDMixin, viewsets.ModelViewSet):
 
     def create(request):
         return create_endpoint(request)
+
+    @list_route(method=['post'])
+    def password_reset(self, request):
+        return password_reset_endpoint(request)
