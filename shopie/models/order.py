@@ -26,7 +26,18 @@ from shopie.utils.users import user_model_string
 from shopie.utils.text import create_sha1_key
 
 class OrderState(BaseModel):
+    """An abstract order model to manage order state. Our order have 5 state on
+    their lifecycle. All of them represented with integer value.
 
+    STATE_BUILDING - this state represent the order still on the cart state, on
+    other words, the customer still adding item to this order or edit the quantity.
+    STATE_CONFIRMING - This state mean the customer has completed their first round
+    of entering details. Now the customer only need to confirm it.
+    STATE_RECEIVED - This state mean the customer has confirmed, and the order marked
+    to received. The store staff need to accept or rejected this order.
+    STATE_ACCEPTED - The store staff accepted this order.
+    STATE_REJECTED - The store staff rejected this order.
+    """
     STATE_BUILDING = 10 # this state indicate the order in "cart" state
     STATE_CONFIRMING = 20
     STATE_RECEIVED = 30
@@ -61,8 +72,13 @@ class OrderState(BaseModel):
         """
         if not self.pk:
             return
+
         old_status = self.status
         new_status = int(new_status)
+
+        # verify the new status is valid
+        if new_status not in dict(self.ORDER_STATES):
+            raise ValueError("Invalid order status.")
 
         if old_status != new_status:
             self.status = new_status
@@ -100,7 +116,7 @@ class OrderQuerySet(models.QuerySet):
             return self.get_or_create(**kwargs)
 
 class Order(OrderState, TimeStampsMixin):
-    """An Order base class to manage order from customer"""
+    """The actul order we use"""
     full_name = models.CharField(max_length=255, blank=True,
         verbose_name=_('Full name'))
     email = models.EmailField(_('Email address'))
@@ -296,11 +312,11 @@ class OrderItem(BaseModel):
 
     def accept(self):
         """Hook when order is accepted by store staff, default is pass"""
-        pass
+        self.save()
 
     def reject(self):
         """Hook when order is rejected by store staff"""
-        pass
+        self.save()
 
 class ExtraPriceOrderField(BaseModel):
     order = models.ForeignKey(Order, related_name="extra_price_fields",

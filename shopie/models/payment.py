@@ -17,7 +17,40 @@ from .fields import CurrencyField
 
 class RefundFailed(Exception): pass
 
+class PaymentQuerySet(models.QuerySet):
+
+    def refundable(self):
+        return self.filter(refundable=True)
+
+    def confirmed(self):
+        return self.filter(confirmed=True)
+
+    def for_order(self, order):
+        """Filter payment for the given order"""
+        return self.fiter(order=order)
+
+    def payment_method(self, method):
+        return self.filter(method=method)
+
+    def payment_method_count(self, method):
+        return self.payment_method(method).count()
+
 class PaymentManager(models.Manager):
+
+    def get_queryset(self):
+        return PaymentQuerySet(self.model, using=self._db)
+
+    def refundable(self):
+        return self.get_queryset().refundable()
+
+    def confirmed(self):
+        return self.get_queryset().confirmed()
+
+    def for_order(self, order):
+        return self.get_queryset().for_order(order=order)
+
+    def payment_method(self, method):
+        return self.get_queryset().payment_method()
 
     def refund(self, amount, payment=None, payment_id=None):
         """Attempt to refund for the given payment, will only success if payment

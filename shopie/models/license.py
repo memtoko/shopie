@@ -1,13 +1,45 @@
+import uuid
+from datetime import timedelta
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse as _urlreverse
+from django.utils import timezone
 
-from .base import BaseModel
+from .base import BaseModel, TimeStampsMixin
 from .product import Product
 from .order import Order
 from shopie.utils.users import user_model_string
-# Product License
-class License(BaseModel):
+from shopie.signals import order_acceptance
+from shopie.utils.text import slugify
+
+class LicenseManager(models.Manager):
+
+    def _generate_license_key(self, item):
+        name = slugify(item.product.name).lower()
+        return '%s-%s' % (name, uuid.uuid4())
+
+    def create_license(self, item):
+        #check if it already processing
+        queryset = self.get_queryset()
+        if not queryset.filter(order=item.order, product=item.product).exists():
+            product = item.product
+            license_key = self._generate_license_key(item)
+            # license_expiry defined on product is per year
+            _days = product.license_expiry * 365
+            expired_at = timezone.now() + timedelta(days=_days)
+            del _days
+
+            self.create(
+                user=order.user,
+                license_key=license_key,
+                active_remaining=activation_limit,
+                expired_at=expired_at,
+                product=product,
+                order=item.order
+            )
+
+class License(TimeStampsMixin, BaseModel):
     # Create your models here.
     LICENCE_STATUSE_INACTIVE = 10
     LICENCE_STATUSE_ACTIVE = 20
@@ -23,8 +55,6 @@ class License(BaseModel):
         verbose_name=_('License owner'))
     status = models.IntegerField(choices=LICENCE_STATUSES,
         default=LICENCE_STATUSE_INACTIVE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
     active_remaining = models.IntegerField(null=True, blank=True,
         verbose_name=_('activate remaining'))
     activate_count = models.IntegerField(default=0,
@@ -33,13 +63,19 @@ class License(BaseModel):
     product = models.ForeignKey(Product)
     order = models.ForeignKey(Order)
 
-    ##objects = LicenseQuerySet.as_manager()
+    objects = LicenseManager()
 
-class LicenseActivation(BaseModel):
+    @property
+    def is_expired(self):
+        return self.expired_at < timezone.now()
+
+class LicenseActivation(TimeStampsMixin, BaseModel):
     license = models.ForeignKey(License)
     site = models.CharField(max_length=255, verbose_name=_('site'))
-    activate_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
     status = models.IntegerField(choices=License.LICENCE_STATUSES,
         default=License.LICENCE_STATUSE_ACTIVE)
 
+def create_license_on_acceptance(sender, order, **kwargs):
+    for item in order.items.all():
+        License.objects.create_license(order_item=item)
+order_acceptance.connect(create_license_on_acceptance, dispatch_uid='shopie.models.license')

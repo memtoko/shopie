@@ -35,6 +35,7 @@ class PaymentBackendBase(object):
     def _create_transaction_id(self, order):
         key = str(order.pk) + '-' + self.backend_name
         return create_sha1_key(key)
+<<<<<<< HEAD
 
     def process_order_payment(self, order, request):
         """Process order payment. If error occured, raise PaymentProcessingError
@@ -47,3 +48,5 @@ class PaymentBackendBase(object):
         to 3rd party payment, return the url here. Default return to thank you page
         """
         return self.get_thank_you_page(request)
+=======
+>>>>>>> 4896fb45dfc61131ce0f1018b20096ed276a9a6a

@@ -37,8 +37,3 @@ class CheckoutForm(forms.Form):
     accept_terms = forms.BooleanField(
             required=True,
             label=_("Saya setuju dengan aturan penggunaan."))
-
-
-
-
-
