@@ -6,6 +6,7 @@ from decimal import Decimal
 
 from django.conf import settings
 from django.db import models
+from django.db.models.aggregates import Min as min_aggregate
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse as _urlreverse
 from django.contrib.contenttypes.fields import GenericRelation
@@ -95,11 +96,20 @@ class AbstractProduct(TimeStampsMixin, SluggableMixin, BaseModel):
 
     @property
     def price(self):
-        return min([v.unit_price for v in self.get_variants()]) if self.is_parent else self.unit_price
+        if self.is_parent:
+            # take the lowest unit price on variants
+            min_price = self.get_variants().aggregate(min_aggregate('unit_price'))
+            return min_price['unit_price__min']
+        else:
+            return self.unit_price
 
     @property
     def has_variant(self):
         return self.get_variants().exists()
+
+    @property
+    def count_variant(self):
+        return self.get_variants().count()
 
     @property
     def is_variant(self):
@@ -107,7 +117,7 @@ class AbstractProduct(TimeStampsMixin, SluggableMixin, BaseModel):
 
     @property
     def is_parent(self):
-        """Alias for has variant"""
+        """Determine if this object is a parent product"""
         return self.parent is None and self.has_variant
 
     @property
