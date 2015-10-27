@@ -8,9 +8,11 @@ from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse as _urlreverse
+from django.contrib.contenttypes.fields import GenericRelation
 
 from .base import BaseModel, SluggableMixin, TimeStampsMixin
 from .fields import CurrencyField
+from .issue import Issue
 from shopie.utils.text import slugify
 from shopie.utils.users import user_model_string
 
@@ -147,6 +149,7 @@ class Product(AbstractProduct):
 
     file = models.FileField(_("File"), upload_to=product_file_upload)
     image = models.FileField(upload_to="images", verbose_name='Product image')
+    issues = GenericRelation(Issue, related_query_name="products", verbose_name="product issue")
 
     class Meta(object):
         verbose_name = _('Product')
