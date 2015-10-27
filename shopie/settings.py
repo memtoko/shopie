@@ -1,12 +1,16 @@
+import os
 from django.conf import settings
 
-USER_SETTINGS = getattr(settings, 'SHOPIE', None)
+USER_SETTINGS = getattr(settings, 'SHOPIE', {})
+
+MEDIA_ROOT = getattr(settings, 'MEDIA_ROOT', None)
 
 DEFAULTS = {
     'PAYMENT_BACKENDS': [
         'shopie.payment.backends.bacs.PaymentBacs',
         'shopie.payment.backends.paypal.PaypalStandard'
-    ]
+    ],
+    'PRODUCT_UPLOAD_DIR': os.path.join(MEDIA_ROOT, 'product_upload')
 }
 
 class _ShopieSettings(dict):
@@ -16,4 +20,15 @@ class _ShopieSettings(dict):
             raise KeyError("Thats not valid settings for shopie")
         return DEFAULTS[key]
 
-shopie_settings = _ShopieSettings(USER_SETTINGS)
+class ShopieSettings(object):
+
+    def __init__(self, settings=USER_SETTINGS):
+        self._settings = _ShopieSettings(settings)
+
+    def __getattr__(self, attr):
+        try:
+            return super(ShopieSettings, self).__getattr__(attr)
+        except AttributeError:
+            return self._settings[attr]
+
+shopie_settings = ShopieSettings()

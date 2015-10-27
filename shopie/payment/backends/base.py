@@ -7,6 +7,8 @@ from shopie.utils.text import create_sha1_key
 
 class PaymentProcessingError(Exception): pass
 
+class PaymentDeclined(PaymentProcessingError): pass
+
 class PaymentBackendBase(object):
 
     backend_name = None
@@ -16,7 +18,7 @@ class PaymentBackendBase(object):
 
         This method should return the urlpattern.
         """
-        raise NotImplementedError
+        pass
 
     def get_thank_you_page(self, request):
         """Return absolute url for thank you page, like the name is used to says
@@ -35,18 +37,30 @@ class PaymentBackendBase(object):
     def _create_transaction_id(self, order):
         key = str(order.pk) + '-' + self.backend_name
         return create_sha1_key(key)
-<<<<<<< HEAD
 
     def process_order_payment(self, order, request):
         """Process order payment. If error occured, raise PaymentProcessingError
         defined in this file.
         """
-        raise NotImplementedError
+        pass
 
-    def get_redirect(order, request):
+    def get_redirect(self, order, request):
         """Get redirect url to process order payment, if it should redirected
         to 3rd party payment, return the url here. Default return to thank you page
         """
         return self.get_thank_you_page(request)
-=======
->>>>>>> 4896fb45dfc61131ce0f1018b20096ed276a9a6a
+
+    # actions listener
+    def on_order_acceptance(self, sender, order, **kwargs):
+        """This method allow you to listen when the order is accepted by store
+        staff."""
+        pass
+
+    def on_order_rejection(self, sender, order, **kwargs):
+        """This method allow you to listen when the order is rejected by store
+        staff."""
+        pass
+
+    def on_order_confirmation(self, sender, order, **kwargs):
+        """This method will fired when the order is confirmed by the customer"""
+        pass

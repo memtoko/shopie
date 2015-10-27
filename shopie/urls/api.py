@@ -13,5 +13,5 @@ router.register('users', UserViewSet)
 router.register('product', ProductViewSet)
 
 urlpatterns = patterns('',
-    url(r'^', include(router.urls)),
+    url(r'^api/v1/', include(router.urls)),
 )

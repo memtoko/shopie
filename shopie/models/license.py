@@ -65,6 +65,9 @@ class License(TimeStampsMixin, BaseModel):
 
     objects = LicenseManager()
 
+    def __str__(self):
+        return self.license_key
+
     @property
     def is_expired(self):
         return self.expired_at < timezone.now()
@@ -74,6 +77,9 @@ class LicenseActivation(TimeStampsMixin, BaseModel):
     site = models.CharField(max_length=255, verbose_name=_('site'))
     status = models.IntegerField(choices=License.LICENCE_STATUSES,
         default=License.LICENCE_STATUSE_ACTIVE)
+
+    def __str__(self):
+        return '%s - %s' % (self.site, self.status)
 
 def create_license_on_acceptance(sender, order, **kwargs):
     for item in order.items.all():

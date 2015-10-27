@@ -8,11 +8,11 @@ from django.utils.decorators import method_decorator
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 
-from paypalrestsdk import Api as PaypalAPI, Payment as PaypalPayment
+from paypalrestsdk import Api as PaypalAPI, Payment as PaypalPaymentSDK
 import requests as requestlib
 
-from .base import PaymentBackendBase
-from shopengine.models import (Order, OrderPayment, ExtraPriceOrderField,
+from .base import PaymentBackendBase, PaymentProcessingError
+from shopie.models import (Order, Payment, PaymentProperty, ExtraPriceOrderField,
     ExraPriceOrderItemField)
 from shopengine.decorators import order_session_required
 from shopengine.utils.formatting import moneyfmt
@@ -31,32 +31,54 @@ shopiepaypal = PaypalAPI({
 
 rate_exchange = getattr(settings, 'PAYPAL_RATE_EXCHANGE', 13800)
 
-class PaypalStandard(PaymentBackendBase):
+class PaypalPayment(PaymentBackendBase):
     url_namespace = 'paypal_payment'
-    backend_name = _('Paypal Standard')
+    backend_name = _('Paypal')
 
     def get_urls(self):
-        urlpatterns = patterns('',
-                url(r'^$', self.payment_view, name='paypal_payment'),
-                url(r'^exec/(?P<payment_key>[^\.]+)/$', self.execute_payment, name='paypal_payment_execute')
-            )
+        urlpatterns('',
+            url(r'^/(?P<order_key>[^\.]+)/$', self.accept_paypal_payment, name='paypal_payment')
+        )
         return urlpatterns
 
-    @method_decorator(order_session_required)
-    def payment_view(self, request):
-        order = Order.objects.get_order_from_request(request)
+    def accept_paypal_payment(self, request, order_key=None):
+        try:
+            payer_id = request.GET['PayerID']
+            payment_id = request.GET['paymentId']
+            token = request.GET.get('token', None)
+            order_key = order_key
+        except KeyError:
+            return HttpResponseBadRequest('Bad request.')
+        else:
+            paypal_payment = PaypalPaymentSDK.find(payment_id, api=shopiepaypal)
+
+            if paypal_payment.execute({'payer_id': payer_id}):
+                # this will success
+                order = Order.objects.get(order_key=order_key)
+                this._create_payment(
+                    order=order, token=token, payment_id=payment_id,
+                    payer_id=payer_id
+                )
+                return HttpResponseRedirect(self.get_thank_you_page(request))
+            else:
+                raise PaymentProcessingError(
+                    "There was an error contacting the payment processor"
+                )
+
+    def get_redirect(self, order, request):
         absolute_uri = request.build_absolute_uri
         items = self._get_order_items(order)
         amount_total = sum([Decimal(it['price']) for it in items])
+
         payment_arguments = {
             'intent': 'sale',
             'payer': {
                 'payment_method': 'paypal'
             },
             'redirect_urls': {
-                'return_url': absolute_uri(reverse('paypal_payment_execute',
+                'return_url': absolute_uri(reverse('paypal_payment',
                     kwargs={
-                        'payment_key': order.order_key
+                        'order_key': order.order_key
                     })),
                 'cancel_url': absolute_uri(reverse('checkout'))
             },
@@ -71,55 +93,46 @@ class PaypalStandard(PaymentBackendBase):
                 'description': 'Make sure to include'
             }]
         }
-        payment = PaypalPayment(payment_arguments, api=shopiepaypal)
+        payment = PaypalPaymentSDK(payment_arguments, api=shopiepaypal)
         if payment.create():
-            # set amount to 0.0 first
-            transaction_id = payment.id or self._create_transaction_id(order)
-            self.create_order_payment(order, transaction_id=transaction_id,
-                amount=Decimal('0.0'))
-            self.empty_cart(order, request)
-            # find the redirect url to let customer approve it
             for link in payment.links:
-                if link.method == 'REDIRECT':
-                    redirect_url = str(link.href)
-                    return HttpResponseRedirect(redirect_url)
-        else:
-            import django.contrib.messages.api as message_api
-            # error
-            message_api.warning('Gagal, memproses pembayaran melalui paypal. ' +
-                'silahkan coba kembali. :)')
-            return HttpResponseRedirect(reverse('cart'))
+                if link == 'REDIRECT':
+                    return str(link)
 
-    def execute_payment(self, request, **kwargs):
-        try:
-            payer_id = request.GET['PayerID']
-            payment_id = request.GET['paymentId']
-            order_key = kwargs.get('payment_key', None)
-        except KeyError:
-            return HttpResponseBadRequest('Bad request.')
-        else:
-            payment = PaypalPayment.find(payment_id, api=shopiepaypal)
-            if payment.execute({'payer_id': payer_id}):
-                if order_key is not None:
-                    order = Order.objects.get(order_key=order_key)
-                    order.update_status(Order.COMPLETED)
-                    try:
-                        payment_order = OrderPayment.objects.get(order=order)
-                    except OrderPayment.DoestNotExist:
-                        pass
-                    else:
-                        payment_order.amount = Decimal(order.order_total)
-                        payment_order.save()
-                return HttpResponseRedirect(reverse('checkout_thankyou', kwargs={
-                        'order_key': order.order_key
-                    }))
-            else:
-                message_api.warning('Gagal, memproses pembayaran melalui paypal ' +
-                    'silahkan coba lagi. :)')
-                order = Order.objects.get(order_key=order_key)
-                return HttpResponseRedirect(reverse('checkout_pay', kwargs={
-                        'order_key': order.order_key
-                    }))
+        raise PaymentProcessingError(
+            "There was an error contacting the payment processor"
+        )
+
+    def _create_payment(self, order=None, token=None, payment_id=None, payer_id=None):
+
+        payment = Payment.objects.create(
+            order=order,
+            amount=order.order_total,
+            method=self.backend_name,
+            reference=payment_id,
+            refundable=True,
+            confirmed=True
+        )
+
+        # save the property
+        PaymentProperty.objects.create(
+            payment=payment,
+            key="paypal_payment_id",
+            value=payment_id
+        )
+
+        PaymentProperty.objects.create(
+            payment=payment,
+            key="paypal_payer_id",
+            value=payer_id
+        )
+
+        if token is not None:
+            PaymentProperty.objects.create(
+                payment=payment,
+                key="paypal_payment_token",
+                value=token
+            )
 
     def _get_order_items(self, order):
         output = []

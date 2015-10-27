@@ -4,7 +4,6 @@ import os
 from datetime import datetime, timezone
 from decimal import Decimal
 
-from django.conf import settings
 from django.db import models
 from django.db.models.aggregates import Min as min_aggregate
 from django.utils.translation import ugettext_lazy as _
@@ -14,6 +13,7 @@ from django.contrib.contenttypes.fields import GenericRelation
 from .base import BaseModel, SluggableMixin, TimeStampsMixin
 from .fields import CurrencyField
 from .issue import Issue
+from shopie.settings import shopie_settings
 from shopie.utils.text import slugify
 from shopie.utils.users import user_model_string
 
@@ -27,7 +27,7 @@ def _normalize_dir(dir_name):
 
 def product_file_upload(instance, filename):
     """We use this to customize upload file for our product"""
-    updir = getattr(settings, 'PRODUCT_UPLOAD_DIR')
+    updir = getattr(shopie_settings, 'PRODUCT_UPLOAD_DIR')
     updir = os.path.normpath(_normalize_dir(updir))
     return os.path.join(updir, instance.file.field.get_filename(filename))
 
@@ -148,6 +148,9 @@ class AbstractProduct(TimeStampsMixin, SluggableMixin, BaseModel):
     @property
     def fullname(self):
         return "%s (%s)" % (self.parent.name, self.name) if self.parent else self.name
+
+    def __str__(self):
+        return self.name
 
 class Product(AbstractProduct):
     """This is the actual product we use on our website.
