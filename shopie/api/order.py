@@ -8,8 +8,8 @@ from rest_framework.decorators import detail_route, list_route
 
 from rest_framework_json_api.mixins import MultipleIDMixin
 
-from shopie.models import Order
-from shopie.api.serializers.order import OrderSerializer
+from shopie.models import Order, OrderItem
+from shopie.api.serializers.order import OrderSerializer, OrderItemSerializer
 
 class OrderViewSet(MultipleIDMixin, viewsets.ModelViewSet):
     resource_name = 'orders'
@@ -21,3 +21,13 @@ class OrderViewSet(MultipleIDMixin, viewsets.ModelViewSet):
         """Filter the queryset for current logged in user"""
         user = self.request.user
         return self.queryset.filter(user=user)
+
+class OrderItemViewSet(MultipleIDMixin, viewsets.ModelViewSet):
+    resource_name = 'order-items'
+    permission_classes = (IsAuthenticated,)
+    queryset = OrderItem.objects.all()
+    serializer_class = OrderItemSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return self.queryset.fiter(order___user=user)
