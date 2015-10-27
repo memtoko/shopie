@@ -1,9 +1,7 @@
-#from .cart import urlpatterns as cart_urlpatterns
-#from .product import urlpatterns as product_urlpatterns
-#from .checkout import urlpatterns as checkout_urlpatterns
-#from .issue import urlpatterns as issue_urlpatterns
+from .product import urlpatterns as product_urlpatterns
+from .issue import urlpatterns as issue_urlpatterns
+from .api import urlpatterns as api_url_patterns
 
-#urlpatterns = cart_urlpatterns
-#urlpatterns += product_urlpatterns
-#urlpatterns += checkout_urlpatterns
-#urlpatterns += issue_urlpatterns
+urlpatterns  = product_urlpatterns
+urlpatterns += issue_urlpatterns
+urlpatterns += api_url_patterns

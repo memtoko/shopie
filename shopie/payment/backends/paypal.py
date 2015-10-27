@@ -31,7 +31,7 @@ shopiepaypal = PaypalAPI({
 
 rate_exchange = getattr(settings, 'PAYPAL_RATE_EXCHANGE', 13800)
 
-class PaypalBackendPaymentStandard(PaymentBackendBase):
+class PaypalStandard(PaymentBackendBase):
     url_namespace = 'paypal_payment'
     backend_name = _('Paypal Standard')
 

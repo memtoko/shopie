@@ -36,7 +36,7 @@ class ProductQuerySet(models.QuerySet):
     def published(self):
         return self.filter(status=AbstractProduct.STATUS_PUBLISHED)
 
-    def where_author(self, author):
+    def author(self, author):
         return self.filter(author=author)
 
     def root(self):
@@ -145,8 +145,9 @@ class Product(AbstractProduct):
         help_text=_("Activation limit for this product"), default=1)
     license_expiry = models.IntegerField(blank=True, null=True, default=1)
 
-    file = models.FileField(_("File"), upload_to=product_file_upload)
-    image = models.FileField(upload_to="images", verbose_name='Product image')
+    file = models.FileField(_("File"), upload_to=product_file_upload, blank=True)
+    image = models.FileField(upload_to="images", verbose_name='Product image',
+        blank=True)
 
     class Meta(object):
         verbose_name = _('Product')

@@ -8,7 +8,11 @@ urlpatterns = patterns('')
 # in its get_urls() method.
 for backend in payment_backend_pool.get_backend_list():
     regexp = '^%s/' % backend.url_namespace
-    urls = backend.get_urls()
+    # trap the backend that doesn't implement get_urls methods.
+    try:
+        urls = backend.get_urls()
+    except NotImplementedError:
+        continue
     pattern = patterns('',
         (regexp, include(backend.get_urls()))
     )

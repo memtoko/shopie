@@ -20,6 +20,9 @@ class RefundFailed(Exception): pass
 class PaymentManager(models.Manager):
 
     def refund(self, amount, payment=None, payment_id=None):
+        """Attempt to refund for the given payment, will only success if payment
+        refundable greater than the amount given.
+        """
         if payment is None and payment_id is not None:
             payment = self.filter(pk=payment)[0]
         if payment is None:

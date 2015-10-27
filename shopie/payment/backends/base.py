@@ -1,36 +1,49 @@
 from decimal import Decimal
 
-from shopengine.models import Order, OrderPayment, Cart
-from shopengine.utils.text import create_sha1_key
-from shopengine.signals.cart import cart_deleted
+from django.core.urlresolvers import reverse
+
+from shopie.models import Order, Payment
+from shopie.utils.text import create_sha1_key
+
+class PaymentProcessingError(Exception): pass
 
 class PaymentBackendBase(object):
 
     backend_name = None
 
     def get_urls(self):
+        """This method allow you to register url view, if the payment need it.
+
+        This method should return the urlpattern.
+        """
         raise NotImplementedError
 
+    def get_thank_you_page(self, request):
+        """Return absolute url for thank you page, like the name is used to says
+        thank you to the customer. When order already completed via 'checkout'
+        process, customer should be redirected to this page.
+        """
+        return request.build_absolute_uri(reverse('shopie:thank_you'))
+
+    def process_order(self, order, request):
+        """Process order through this payment backend, return string url where
+        the user should redirected. Default to thank you page.
+        """
+        self.process_order_payment(order, request)
+        return self.get_redirect(order, request)
+
     def _create_transaction_id(self, order):
-        key = str(order.pk) + str(order.cart_pk) + '-' + self.backend_name
+        key = str(order.pk) + '-' + self.backend_name
         return create_sha1_key(key)
 
-    def empty_cart(self, order, request):
-        try:
-            cart = Cart.objects.get(pk=order.cart_pk)
-        except Cart.DoesNotExist:
-            pass
-        else:
-            cart_deleted.send(sender=self, request=request, cart=cart)
-            cart.empty_cart()
+    def process_order_payment(self, order, request):
+        """Process order payment. If error occured, raise PaymentProcessingError
+        defined in this file.
+        """
+        raise NotImplementedError
 
-    def create_order_payment(self, order, transaction_id=None, amount=None,
-        new_order_status=Order.ON_HOLD):
-        if transaction_id is None:
-            transaction_id = self._create_transaction_id(order)
-        if amount is None:
-            amount = Decimal('0.0')
-        OrderPayment.objects.create(
-            order=order, amount=amount, transaction_id=transaction_id,
-            payment_method=self.backend_name)
-        order.update_status(new_order_status)
+    def get_redirect(order, request):
+        """Get redirect url to process order payment, if it should redirected
+        to 3rd party payment, return the url here. Default return to thank you page
+        """
+        return self.get_thank_you_page(request)
