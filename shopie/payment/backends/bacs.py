@@ -17,7 +17,7 @@ class PaymentBacs(PaymentBackendBase):
     def process_order_payment(self, order, request):
         """Because this payment basically require store staff to check the customer
         already paid the order via bank transfer. If it paid or not, the store staff
-        can accept or reject the order
+        can accept or reject the order accordingly.
         """
         reference = self.backend_name + '-' + order.pk
 
@@ -34,7 +34,8 @@ class PaymentBacs(PaymentBackendBase):
         try:
             payments = Payment.objects.filter(
                 order=order,
-                method=self.backend_name
+                method=self.backend_name,
+                confirmed=False
             )
         except Payment.DoesNotExist:
             pass

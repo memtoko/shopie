@@ -14,8 +14,7 @@ import requests as requestlib
 from .base import PaymentBackendBase, PaymentProcessingError
 from shopie.models import (Order, Payment, PaymentProperty, ExtraPriceOrderField,
     ExraPriceOrderItemField)
-from shopengine.decorators import order_session_required
-from shopengine.utils.formatting import moneyfmt
+from shopie.utils.formatting import moneyfmt
 
 
 if getattr(settings, 'PAYPAL_PAYMENT_SANDBOX', True):

@@ -6,17 +6,17 @@ try:
 except ImportError:
     from django.utils.encoding import force_unicode as force_text
 
-from shopengine.currency import Currency, CurrencyDoesNotExist
+from shopie.currency import Currency, CurrencyDoesNotExist
 
 register = template.Library()
 
 @register(name="with_currency")
 def with_currency(value, args):
-	try:
-		currency = Currency(args):
-	except CurrencyDoesNotExist:
-		return value
-	else:
-		return currency.with_currency_format(value)
+    try:
+        currency = Currency(args):
+    except CurrencyDoesNotExist:
+        return value
+    else:
+        return currency.with_currency_format(value)
 
 with_currency.is_safe = True

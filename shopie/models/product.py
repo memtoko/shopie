@@ -159,8 +159,8 @@ class Product(AbstractProduct):
     activation_limit = models.IntegerField(blank=True, null=True,
         help_text=_("Activation limit for this product"), default=1)
     license_expiry = models.IntegerField(blank=True, null=True, default=1)
-    file = models.FileField(_("File"), upload_to=product_file_upload)
-    image = models.FileField(upload_to="images", verbose_name='Product image')
+    file = models.FileField(_("File"), upload_to=product_file_upload, blank=True)
+    image = models.FileField(upload_to="images", verbose_name='Product image', blank=True)
     issues = GenericRelation(Issue, related_query_name="products", verbose_name="product issue")
 
     class Meta(object):
@@ -168,7 +168,7 @@ class Product(AbstractProduct):
         verbose_name_plural = _('Products')
 
     def get_absolute_url(self):
-        return _urlreverse('product_detail', args=[self.slug, self.pk])
+        return _urlreverse('shopie:product_detail', args=[self.slug, self.pk])
 
 class ProductTag(BaseModel, SluggableMixin, TimeStampsMixin):
 
