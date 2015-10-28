@@ -93,14 +93,27 @@ class OrderState(BaseModel):
 
 class OrderQuerySet(models.QuerySet):
 
-    def where_status(self, status):
+    def statuses(self, status):
         if isinstance(status, int):
             return self.filter(status=status)
         else:
             return self.filter(status__in=status)
 
-    def where_author(self, author):
-        return self.filter(author=author)
+    def users(self, user):
+        return self.filter(user=user)
+
+    def get_user_bag(self, user):
+        """This method return currently order's user, which still in
+        building state.
+        """
+        queryset = self.users(user).statuses(OrderState.STATE_BUILDING)
+        return queryset.get()
+
+    def get_or_create_user_bag(self, user, **kwargs):
+        try:
+            return self.get_user_bag(user)
+        except self.model.DoesNotExist:
+            return self.get_or_create(**kwargs)
 
 class Order(OrderState, TimeStampsMixin):
     """The actul order we use"""
@@ -124,11 +137,11 @@ class Order(OrderState, TimeStampsMixin):
     accepted_at = models.DateTimeField(blank=True, null=True,
         verbose_name=_("accepted date"))
     accepted_by = models.ForeignKey(user_model_string(), blank=True, null=True,
-        verbose_name=_("accepted by"))
+        verbose_name=_("accepted by"), related_name="+")
     rejected_at = models.DateTimeField(blank=True, null=True,
         verbose_name=_("rejected data"))
     rejected_by = models.ForeignKey(user_model_string(), blank=True, null=True,
-        verbose_name=_("rejected by"))
+        verbose_name=_("rejected by"), related_name="+")
 
     def add_item(self, product, quantity=1, merge=True, queryset=None):
         if not product.orderable:

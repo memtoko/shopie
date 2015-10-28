@@ -28,6 +28,14 @@ class UserViewSet(MultipleIDMixin, viewsets.ModelViewSet):
     def create(request):
         return create_endpoint(request)
 
-    @list_route(method=['post'])
-    def password_reset(self, request):
-        return password_reset_endpoint(request)
+    @detail_route(methods=['post'])
+    def password(self, request, *args, **kwargs):
+        user = self.get_object()
+        return change_password_endpoint(request, user=user)
+
+    @detail_route(methods=['get'])
+    def staff(self, request, *args, **kwargs):
+        obj = self.get_object()
+        return Response({
+            'is_staff': obj.is_staff
+        })

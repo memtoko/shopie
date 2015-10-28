@@ -7,8 +7,7 @@ from django.shortcuts import render_to_response
 from django.utils.decorators import method_decorator
 
 from .base import PaymentBackendBase
-from shopengine.models import Order
-from shopengine.decorators import order_session_required
+from shopie.models import Order
 
 class PaymentBacs(PaymentBackendBase):
     url_namespace = 'bacs_payment'
