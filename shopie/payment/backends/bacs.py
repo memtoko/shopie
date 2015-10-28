@@ -7,38 +7,38 @@ from django.shortcuts import render_to_response
 from django.utils.decorators import method_decorator
 
 from .base import PaymentBackendBase
-from shopie.models import Order
+from shopie.models import Order, Payment
 
 class PaymentBacs(PaymentBackendBase):
     url_namespace = 'bacs_payment'
     backend_name = _('Bank Transfer')
     template = 'shopengine/payment/backend/bacs.html'
 
-    def get_urls(self):
-        urlpatterns = patterns('',
-                url(r'^$', self.payment_view, name='bacs_payment')
+    def process_order_payment(self, order, request):
+        """Because this payment basically require store staff to check the customer
+        already paid the order via bank transfer. If it paid or not, the store staff
+        can accept or reject the order
+        """
+        reference = self.backend_name + '-' + order.pk
+
+        payment = Payment.objects.create(
+            order=order,
+            amount=order.order_total,
+            method=self.backend_name,
+            reference=reference,
+            refundable=False,
+            confirmed=False
+        )
+
+    def on_order_acceptance(self, sender, order, **kwargs):
+        try:
+            payments = Payment.objects.filter(
+                order=order,
+                method=self.backend_name
             )
-        return urlpatterns
-
-    @method_decorator(order_session_required)
-    def payment_view(self, request):
-        order = Order.objects.get_order_from_request(request)
-        amount = order.order_total
-        transaction_id = self._create_transaction_id(order)
-
-        # This payment backend doesn't do any charge, it just let
-        # the shop staff to manually check customer already paid
-        # to their bank account, so we just need to create 0 payment order amount
-        self.create_order_payment(order, transaction_id=transaction_id,
-            amount=Decimal('0.0'))
-        # empty the cart
-        self.empty_cart(order, request)
-
-        # prepate the context
-        ctx = {
-            'order': order,
-            'amount': amount,
-            'transaction_id': transaction_id
-        }
-        context = RequestContext(request, ctx)
-        return render_to_response(self.template, context)
+        except Payment.DoesNotExist:
+            pass
+        else:
+            for payment in payments.all():
+                payment.confirmed = True
+                payment.save()

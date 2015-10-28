@@ -78,11 +78,9 @@ class PaymentManager(models.Manager):
             ))
 
 class Payment(BaseModel, TimeStampsMixin):
-    order = models.ForeignKey(Order, verbose_name=_("Order"))
+    order = models.ForeignKey(Order, verbose_name=_("Order"), related_name="payments")
     amount = CurrencyField(verbose_name=_("amount"))
     method = models.CharField(max_length=255, verbose_name=_("payment method"))
-    transaction_id = models.CharField(max_length=255,
-        verbose_name=_('transaction ID'))
     reference = models.CharField(max_length=255, verbose_name=_("payment reference"))
     confirmed = models.BooleanField(verbose_name=_('confirmed'), default=True)
     refundable = models.BooleanField(verbose_name=_('refundable'), default=False)
@@ -112,3 +110,6 @@ class PaymentProperty(models.Model):
     payment = models.ForeignKey(Payment, related_name="payment_properties")
     key = models.CharField(max_length=255, verbose_name=_('propery key'))
     value = models.CharField(max_length=255, verbose_name=_('propery value'))
+
+# connect the signals
+import shopie.payment.backends.signals
