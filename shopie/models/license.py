@@ -40,7 +40,6 @@ class LicenseManager(models.Manager):
             )
 
 class License(TimeStampsMixin, BaseModel):
-    # Create your models here.
     LICENCE_STATUSE_INACTIVE = 10
     LICENCE_STATUSE_ACTIVE = 20
 
@@ -69,6 +68,10 @@ class License(TimeStampsMixin, BaseModel):
     def is_expired(self):
         return self.expired_at < timezone.now()
 
+    @property
+    def is_valid_to_activate(self):
+        return not self.is_expired and (self.active_remaining - 1) > 0
+
 class LicenseActivation(TimeStampsMixin, BaseModel):
     license = models.ForeignKey(License)
     site = models.CharField(max_length=255, verbose_name=_('site'))
@@ -78,4 +81,6 @@ class LicenseActivation(TimeStampsMixin, BaseModel):
 def create_license_on_acceptance(sender, order):
     for item in order.items.all():
         License.objects.create_license(order_item=item)
-order_acceptance.connnect(create_license_on_acceptance, dispatch_uid='shopie.models.license')
+# connect it
+order_acceptance.connnect(
+    create_license_on_acceptance, dispatch_uid='shopie.models.license')
