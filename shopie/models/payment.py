@@ -110,6 +110,3 @@ class PaymentProperty(models.Model):
     payment = models.ForeignKey(Payment, related_name="payment_properties")
     key = models.CharField(max_length=255, verbose_name=_('propery key'))
     value = models.CharField(max_length=255, verbose_name=_('propery value'))
-
-# connect the signals
-import shopie.payment.backends.signals
