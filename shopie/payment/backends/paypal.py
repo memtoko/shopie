@@ -59,6 +59,11 @@ class PaypalPayment(PaymentBackendBase):
                     order=order, token=token, payment_id=payment_id,
                     payer_id=payer_id
                 )
+                # because we want to give acccess to download "thing" as soon
+                # as customer pay the bill, and we just do that here. We will
+                # go ahead and accept this order.
+                order.accept()
+
                 return HttpResponseRedirect(self.get_thank_you_page(request))
             else:
                 raise PaymentProcessingError(
