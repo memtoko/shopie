@@ -1,9 +1,43 @@
 /* global require, module */
-var EmberApp = require('ember-cli/lib/broccoli/ember-app');
+var EmberApp = require('ember-cli/lib/broccoli/ember-app'),
+    environment = EmberApp.env(),
+    isProduction = environment === 'production',
+    mythCompress = isProduction || environment === 'test',
+    disabled = {enabled: false},
+    assetLocation;
+
+assetLocation = function(fileName) {
+    if (isProduction) {
+        fileName = fileName.replace('.', '.min.');
+    }
+    return '/assets/' + fileName;
+}
 
 module.exports = function(defaults) {
-  var app = new EmberApp(defaults, {
-    // Add options here
+    var app = new EmberApp(defaults, {
+        // Add options here
+        outputPaths: {
+            app: {
+                js: assetLocation('shopie.js')
+            },
+            vendor: {
+                js:  assetLocation('vendor.js'),
+                css: assetLocation('vendor.css')
+            }
+        },
+        mythOptions: {
+            source: './app/styles/app.css',
+            inputFile: 'app.css',
+            browsers: 'last 2 versions',
+            sourcemap: false,
+            compress: mythCompress,
+            outputFile: isProduction ? 'shopie.min.css' : 'shopie.css'
+        },
+        hinting: false,
+        fingerprint: disabled,
+        'ember-cli-selectize': {
+            theme: false
+        }
   });
 
   // Use `app.import` to add additional libraries to the generated
@@ -20,7 +54,6 @@ module.exports = function(defaults) {
   // along with the exports of each module as its value.
   app.import('bower_components/validator-js/validator.js');
   app.import('bower_components/rangyinputs/rangyinputs-jquery-src.js');
-  app.import('bower_components/commonmark/dist/commonmark.js');
   app.import('bower_components/moment/moment.js');
   app.import('bower_components/keymaster/keymaster.js');
   app.import('bower_components/devicejs/lib/device.js');
@@ -39,7 +72,8 @@ module.exports = function(defaults) {
   app.import('bower_components/xregexp/xregexp-all.js');
   app.import('bower_components/password-generator/lib/password-generator.js');
   app.import('bower_components/blueimp-md5/js/md5.js');
-
+  app.import('bower_components/markdown-it/dist/markdown-it.js');
+  app.import('bower_components/markdown-it-emoji/dist/markdown-it-emoji.js');
   // 'dem Styles
   app.import('bower_components/codemirror/lib/codemirror.css');
   app.import('bower_components/codemirror/theme/xq-light.css');
