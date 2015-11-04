@@ -1,8 +1,8 @@
 import Ember from 'ember';
-import CartModel from 'shopie/models/cart';
+import orderModel from 'shopie/models/order';
 
 let watchedProps = ['models.items.[]'];
-CartModel.eachAttribute(function (name) {
+orderModel.eachAttribute(function (name) {
     watchedProps.push('model.' + name);
 });
 export default Ember.Controller.extend({

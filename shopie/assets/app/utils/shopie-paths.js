@@ -18,7 +18,7 @@ let makeRoute = function(root, args) {
 };
 
 let shopiePaths = function () {
-    let adminRoot = '/console',
+    let adminRoot = '/shopie',
         oauth2Root = '/o',
         apiRoot = '/api/v1';
 

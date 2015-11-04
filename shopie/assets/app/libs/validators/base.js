@@ -19,7 +19,9 @@ let BaseValidator = Ember.Object.extend({
         return this.get('passed');
     },
 
-    invalidate: () => this.set('passed', false)
+    invalidate: function () {
+        this.set('passed', false)
+    }
 });
 
 export default BaseValidator;

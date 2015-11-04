@@ -4,6 +4,11 @@ from shopie.models import (
     Order, OrderItem, ExtraPriceOrderField, ExraPriceOrderItemField)
 
 class OrderSerializer(serializers.ModelSerializer):
+    extra_price_fields = serializers.PrimaryKeyRelatedField(many=True, required=False,
+        queryset=ExtraPriceOrderField.objects.all())
+    items = serializers.PrimaryKeyRelatedField(many=True, required=False,
+        queryset=OrderItem.objects.all())
+
     class Meta:
         model = Order
         fields = (
@@ -40,7 +45,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
             'extra_price_fields'
         )
 
-class ExtraPriceOrderFieldSerializer(serializer.ModelSerializer):
+class ExtraPriceOrderFieldSerializer(serializers.ModelSerializer):
     class Meta:
         model = ExtraPriceOrderField
         fields = (
@@ -50,7 +55,7 @@ class ExtraPriceOrderFieldSerializer(serializer.ModelSerializer):
             'value'
         )
 
-class ExraPriceOrderItemFieldSerializer(serializer.ModelSerializer):
+class ExraPriceOrderItemFieldSerializer(serializers.ModelSerializer):
     class Meta:
         model = ExraPriceOrderItemField
         fields = (

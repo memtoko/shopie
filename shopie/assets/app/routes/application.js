@@ -1,6 +1,5 @@
 import Ember from 'ember';
-import ApplicationRouteMixin from 'simple-auth/mixins/application-route-mixin';
-import Configuration from 'simple-auth/configuration';
+import ApplicationRouteMixin from 'ember-simple-auth/mixins/application-route-mixin';
 import ShortcutsRoute from 'shopie/mixins/shortcuts-route';
 import ctrlOrCmd from 'shopie/utils/ctrl-or-cmd';
 

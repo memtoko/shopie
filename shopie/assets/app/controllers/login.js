@@ -7,6 +7,7 @@ export default Ember.Controller.extend(ValidationEngine, {
     loggingIn: false,
     authProperties: ['identification', 'password'],
 
+    session: Ember.inject.service(),
     shopiePaths: Ember.inject.service('shopie-paths'),
     notifications: Ember.inject.service(),
     flowErrors: '',
@@ -18,9 +19,9 @@ export default Ember.Controller.extend(ValidationEngine, {
             let model = this.get('model'),
                 data = model.getProperties(this.authProperties);
 
-            const authStrategy = 'shopie-authenticator:oauth2-password-grant';
+            const authStrategy = 'authenticator:oauth2';
 
-            this.get('session').authenticate(authStrategy, data).catch((err) => {
+            this.get('session').authenticate(authStrategy, model.get('identification'), model.get('password')).catch((err) => {
                 this.toggleProperty('loggingIn');
                 if (err.error) {
                     this.set('flowErrors', `${err.error}: ${err.error_description}`);

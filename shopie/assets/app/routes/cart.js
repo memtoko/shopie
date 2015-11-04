@@ -5,13 +5,22 @@ export default Ember.Route.extend({
     classNames: ['cart', 'js-cart'],
 
     config: Ember.inject.service(),
+    notifications: Ember.inject.service(),
+    shoppingCart: Ember.inject.service('shopping-cart'),
 
     model: function() {
-        let cartId = this.get('config.currentCart');
-        return this.get('store').findRecord('cart', cartId).then((cart) => {
-            let items = cart.get('items');
+        let shoppingCart = this.get('shoppingCart'),
+            cartId = shoppingCart.retrieve();
+        if (cartId === null) {
+            let cart = this.store.createRecord('order', {
+                'email': 'customer@placeholder.com'
+            });
+            cart.save();
+            shoppingCart.set(cart.id);
             return cart;
-        });
+        } else {
+            return this.store.findRecord('order', cartId);
+        }
     },
 
     actions: {

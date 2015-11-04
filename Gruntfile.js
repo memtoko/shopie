@@ -52,6 +52,22 @@ var configureGrunt  = function(grunt) {
 
         jshint: lintFiles,
 
+        sass: {
+            options: {
+                style: 'expanded',
+                sourceMap: true,
+                includePaths: [
+                    'shopie/assets/bower_components/foundation/scss',
+                    'shopie/assets/bower_components/octicons/octicons'
+                  ]
+            },
+            dist: {
+                   files: {
+                       'shopie/static/css/shopie.css': 'shopie/assets/frontend/scss/app.scss'
+                   }
+            }
+        },
+
         // ### grunt-bg-shell
         // Used to run ember-cli watch in the background
         bgShell: {
@@ -178,7 +194,7 @@ var configureGrunt  = function(grunt) {
 
     grunt.registerTask('prod', 'Build JS & templates for production',
         ['shell:ember:prod', 'copy:dev']); //todo uglify it
-
+    grunt.registerTask('assets', 'Compile sass file', ['sass:dist']);
     grunt.registerTask('lint', 'Run the code style checks and linter', ['jscs']);
     grunt.registerTask('prod', 'Build for production', ['jsfront', 'uglify:prod']);
 };

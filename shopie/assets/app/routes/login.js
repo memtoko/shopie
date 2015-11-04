@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import Configuration from 'simple-auth/configuration';
+import Configuration from 'ember-simple-auth/configuration';
 import styleBody from 'shopie/mixins/style-body';
 import DS from 'ember-data';
 
@@ -7,10 +7,11 @@ export default Ember.Route.extend(styleBody, {
     titleToken: 'Log In',
 
     classNames: ['shopie-login'],
+    session: Ember.inject.service(),
 
     beforeModel: function () {
-        if (this.get('session').isAuthenticated) {
-            this.transitionTo(Configuration.routeAfterAuthentication);
+        if (this.get('session.isAuthenticated')) {
+            this.transitionTo(Configuration.routeIfAlreadyAuthenticated);
         }
     },
 

@@ -54,7 +54,7 @@ class PaypalPayment(PaymentBackendBase):
             if paypal_payment.execute({'payer_id': payer_id}):
                 # this will success
                 order = Order.objects.get(order_key=order_key)
-                this._create_payment(
+                self._create_payment(
                     order=order, token=token, payment_id=payment_id,
                     payer_id=payer_id
                 )

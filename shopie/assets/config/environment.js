@@ -23,15 +23,7 @@ module.exports = function(environment) {
     'simple-auth': {
       authenticationRoute: 'login',
       routeAfterAuthentication: 'shop',
-      authorizer: 'simple-auth-authorizer:oauth2-bearer',
-      localStorageKey: '<overriden this>'
-    },
-
-    'simple-auth-oauth2': {
-        refreshAccessTokens: true,
-
-        serverTokenEndpoint: '<overriden by initializers/simple-auth-env>',
-        serverTokenRevocationEndpoint: '<overriden by initializers/simple-auth-env>'
+      routeIfAlreadyAuthenticated: 'shop'
     },
 
     contentSecurityPolicy: {

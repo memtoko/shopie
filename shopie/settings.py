@@ -8,7 +8,7 @@ MEDIA_ROOT = getattr(settings, 'MEDIA_ROOT', None)
 DEFAULTS = {
     'PAYMENT_BACKENDS': [
         'shopie.payment.backends.bacs.PaymentBacs',
-        'shopie.payment.backends.paypal.PaypalStandard'
+        'shopie.payment.backends.paypal.PaypalPayment'
     ],
     'PRODUCT_UPLOAD_DIR': os.path.join(MEDIA_ROOT, 'product_upload')
 }

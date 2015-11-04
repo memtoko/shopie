@@ -4,7 +4,6 @@ information about how they should be delivered and billed to a customer.
 Then basket or cart, is simply an order which has not yet been "checked out".
 because of that a cart is simply an order in backends.
 """
-
 import hashlib
 import random
 from decimal import Decimal
@@ -24,6 +23,10 @@ from shopie.signals import (
     order_status_changed, order_confirmation, order_acceptance, order_rejection)
 from shopie.utils.users import user_model_string
 from shopie.utils.text import create_sha1_key
+
+
+def create_order_key():
+    return create_sha1_key(random.random())
 
 class OrderState(BaseModel):
     """An abstract order model to manage order state. Our order have 5 state on
@@ -119,14 +122,14 @@ class Order(OrderState, TimeStampsMixin):
     """The actul order we use"""
     full_name = models.CharField(max_length=255, blank=True,
         verbose_name=_('Full name'))
-    email = models.EmailField(_('Email address'))
+    email = models.EmailField(_('Email address'), blank=True)
     # this is the customer that place the order (customer)
     user = models.ForeignKey(user_model_string(), blank=True, null=True,
         verbose_name=_('customer'))
     received_at = models.DateTimeField(blank=True, null=True,
         verbose_name=_('received_at'))
     order_key = models.CharField(max_length=255, unique=True, blank=True,
-        verbose_name=_('Order Key'))
+        verbose_name=_('Order Key'), default=create_order_key)
     order_subtotal = CurrencyField(default=Decimal('0.0'),
         verbose_name=_('Order Subtotal'))
     order_total = CurrencyField(default=Decimal('0.0'),
@@ -252,8 +255,6 @@ class Order(OrderState, TimeStampsMixin):
 
     def save(self, *args, **kwargs):
         self.calculate()
-        if not self.order_key:
-            self.order_key = create_sha1_key(str(random.random()))
         super(Order, self).save(*args, **kwargs)
 
     def calculate(self):

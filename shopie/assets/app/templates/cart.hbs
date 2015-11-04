@@ -36,19 +36,19 @@
                   <td>{{item.productName}}</td>
                   <td>{{item.productPrice}}</td>
                   <td>{{item.quantity}}</td>
-                  <td>{{item.lineSubtotal}}</td>
+                  <td>{{item.subTotal}}</td>
                 </tr>
                 <tr>
                   <td colspan="4">&nbsp;</td>
                   <td>Line Total:</td>
-                  <td>{{item.lineTotal}}</td>
+                  <td>{{item.total}}</td>
                 </tr>
               {{/each}}
             </tbody>
             <tfoot>
               <td colspan="4">&nbsp;</td>
               <td>Cart Subtotal</td>
-              <td>{{model.totalPrice}}</td>
+              <td>{{model.total}}</td>
             </tfoot>
           </table>
         </form>

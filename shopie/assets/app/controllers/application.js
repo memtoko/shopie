@@ -4,13 +4,14 @@ export default Ember.Controller.extend({
 
     // jscs: disable
     signedOut: Ember.computed.match('currentPath', /(login|signup|setup|reset)/),
+    isAdmin: Ember.computed.match('currentPath', /shopie/),
     // jscs: enable
     showCart: false,
 
     topNotificationCount: 0,
     showMobileMenu: false,
     showSettingsMenu: false,
-
+    session: Ember.inject.service(),
     autoNav: false,
     autoNavOpen: Ember.computed('autoNav', {
         get: function () {
