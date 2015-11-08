@@ -18,7 +18,7 @@ class PaymentBackendBase(object):
 
         This method should return the urlpattern.
         """
-        pass
+        raise NotImplementedError
 
     def get_thank_you_page(self, request):
         """Return absolute url for thank you page, like the name is used to says

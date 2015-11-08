@@ -36,12 +36,12 @@ class OrderState(BaseModel):
     other words, the customer still adding item to this order or edit the quantity.
     STATE_CONFIRMING - This state mean the customer has completed their first round
     of entering details. Now the customer only need to confirm it.
-    STATE_RECEIVED - This state mean the customer has confirmed, and the order marked
-    to received. The store staff need to accept or rejected this order.
+    STATE_RECEIVED - This state mean the customer has confirmed this order, now
+    the store staff only need to accept or reject it.
     STATE_ACCEPTED - The store staff accepted this order.
     STATE_REJECTED - The store staff rejected this order.
     """
-    STATE_BUILDING = 10 # this state indicate the order in "cart" state
+    STATE_BUILDING = 10
     STATE_CONFIRMING = 20
     STATE_RECEIVED = 30
     STATE_ACCEPTED = 40
