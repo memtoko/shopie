@@ -46,6 +46,17 @@ class ProductQuerySet(models.QuerySet):
         """All products which are not variant"""
         return self.filter(parent=None)
 
+    def add_issue(self, name, body, user, product=None, product_id=None):
+        if product is None and product_id is not None:
+            product = self.filter(pk=product_id).get()
+
+        if product is None:
+            raise ValueError("You should provide product or product_id keyword argument")
+
+        Issue.objects.create(name=name, body=body, user=user,
+            target=product)
+
+
 class AbstractProduct(TimeStampsMixin, SluggableMixin, BaseModel):
     """An abstract product that can be used to create product spec on an
     ecommerce site.
@@ -160,8 +171,11 @@ class Product(AbstractProduct):
         help_text=_("Activation limit for this product"), default=1)
     license_expiry = models.IntegerField(blank=True, null=True, default=1)
     file = models.FileField(_("File"), upload_to=product_file_upload, blank=True)
-    image = models.FileField(upload_to="images", verbose_name='Product image', blank=True)
-    issues = GenericRelation(Issue, related_query_name="products", verbose_name="product issue")
+    image = models.FileField(upload_to="images", verbose_name='Product image',
+        blank=True)
+    issues = GenericRelation(Issue, content_type_field='target_content_type',
+        object_id_field='target_object_id', related_query_name="products",
+        verbose_name="product issue")
 
     class Meta(object):
         verbose_name = _('Product')

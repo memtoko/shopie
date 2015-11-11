@@ -13,7 +13,7 @@ from shopie.forms.issue import IssueCreationForm, ReplyCreationForm
 
 class IssueListView(ShopViewMixins, ListView):
 
-    model = Issue
+    model = Product
     ordering = "updated_at"
     generic_template = "shopie/issue/issue_list.html"
     paginate_by = 20
@@ -28,9 +28,11 @@ class IssueListView(ShopViewMixins, ListView):
                 raise AttributeError("%s must be called with either slug and pk"
                     % self.__class__.name)
             try:
-                queryset = Issue.objects.for_product(pk=pk, slug=slug)
+                product = Issue.objects.get(pk=pk, slug=slug)
             except Product.DoesNotExist:
                 raise Http404("Issue for product doesnot exists yet.")
+            else:
+                queryset = product.issues.all()
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -44,7 +46,7 @@ class IssueListView(ShopViewMixins, ListView):
         issues = ctx.get('object_list', None)
         if issues:
             issue = issues[0]
-            product = getattr(issue, 'product', None)
+            product = getattr(issue, 'target_content_type', None)
             if product is not None:
                 ctx.update({
                         'product': product

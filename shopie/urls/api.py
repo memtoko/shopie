@@ -11,7 +11,7 @@ from shopie.api.order import OrderViewSet, OrderItemViewSet
 router = routers.DefaultRouter()
 
 router.register('users', UserViewSet)
-router.register('product', ProductViewSet)
+router.register('products', ProductViewSet)
 router.register('orders', OrderViewSet)
 router.register('order-items', OrderItemViewSet)
 

@@ -19,25 +19,32 @@ class LicenseManager(models.Manager):
         name = slugify(item.product.name).lower()
         return '%s-%s' % (name, uuid.uuid4())
 
-    def create_license(self, item):
+    def renew_or_create_license(self, item):
         #check if it already processing
         queryset = self.get_queryset()
         if not queryset.filter(order=item.order, product=item.product).exists():
             product = item.product
-            license_key = self._generate_license_key(item)
-            # license_expiry defined on product is per year
-            _days = product.license_expiry * 365
-            expired_at = timezone.now() + timedelta(days=_days)
-            del _days
+            if item.is_renewal:
+                license = queryset.filter(license_key=item.renewal_license).get()
+                _days = product.license_expiry * 365
+                license.expired_at += timedelta(days=_days)
+                del _days
+                license.save()
+            else:
+                license_key = self._generate_license_key(item)
+                # license_expiry defined on product is per year
+                _days = product.license_expiry * 365
+                expired_at = timezone.now() + timedelta(days=_days)
+                del _days
 
-            self.create(
-                user=order.user,
-                license_key=license_key,
-                active_remaining=activation_limit,
-                expired_at=expired_at,
-                product=product,
-                order=item.order
-            )
+                self.create(
+                    user=order.user,
+                    license_key=license_key,
+                    active_remaining=activation_limit,
+                    expired_at=expired_at,
+                    product=product,
+                    order=item.order
+                )
 
 class License(TimeStampsMixin, BaseModel):
     LICENCE_STATUSE_INACTIVE = 10
@@ -86,6 +93,6 @@ class LicenseActivation(TimeStampsMixin, BaseModel):
 
 def create_license_on_acceptance(sender, order, **kwargs):
     for item in order.items.all():
-        License.objects.create_license(order_item=item)
+        License.objects.renew_or_create_license(order_item=item)
 # connect it
 order_acceptance.connect(create_license_on_acceptance, dispatch_uid='shopie.models.license')

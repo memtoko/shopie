@@ -109,8 +109,7 @@ class OrderQuerySet(models.QuerySet):
         """This method return currently order's user, which still in
         building state.
         """
-        queryset = self.users(user).statuses(OrderState.STATE_BUILDING)
-        return queryset.get()
+        return self.users(user).statuses(OrderState.STATE_BUILDING).get()
 
     def get_or_create_user_bag(self, user, **kwargs):
         try:
@@ -135,7 +134,6 @@ class Order(OrderState, TimeStampsMixin):
     order_total = CurrencyField(default=Decimal('0.0'),
         verbose_name=_('Order Total'))
     objects = OrderQuerySet.as_manager()
-
     #
     accepted_at = models.DateTimeField(blank=True, null=True,
         verbose_name=_("accepted date"))
@@ -239,7 +237,7 @@ class Order(OrderState, TimeStampsMixin):
 
     @property
     def is_empty(self):
-        return self.items.all().exists()
+        return not self.items.all().exists()
 
     @property
     def has_item(self):
@@ -286,6 +284,9 @@ class OrderItem(BaseModel):
     unit_price = CurrencyField(default=Decimal('0.0'),
         verbose_name=_('Unit Price'))
     quantity = models.IntegerField(verbose_name=_('Quantity'), default=1)
+    is_renewal = models.BooleanField(default=False, verbose_name=_("is renewal"))
+    renewal_license = models.CharField(max_length=255, blank=True, null=True,
+        verbose_name=_("renewal license key"))
     line_subtotal = CurrencyField(default=Decimal('0.0'),
         verbose_name=_('Line Subtotal'))
     line_total = CurrencyField(default=Decimal('0.0'),
