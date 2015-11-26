@@ -1,13 +1,19 @@
 EMBERAPP = shopiejs
+CSSBUILD = shopie/static/shopie/css
+JSBUILD = shopie/static/shopie/js
 
-.PHONY: init js-dev js-production run
+.PHONY: init js-dev js-production run copy-static-dev
 
 init:
 	cd $(EMBERAPP) && npm install
-	bower install
+	bower --allow-root install
 
 run:
 	python manage.py runserver 0.0.0.0:8000
+
+copy-static-dev: js-dev
+	cp $(EMBERAPP)/dists/assets/*.css $(CSSBUILD)
+	cp $(EMBERAPP)/dists/assets/*.js $(JSBUILD)
 
 js-dev:
 	cd $(EMBERAPP) && ember build
