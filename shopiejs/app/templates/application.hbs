@@ -1,0 +1,23 @@
+{{#sh-app showSettingsMenu=showSettingsMenu}}
+
+  {{sh-alerts notify="topNotificationChange"}}
+
+  <div class="sh-viewport {{if autoNav 'sh-autonav'}} {{if showSettingsMenu 'settings-menu-expanded'}} {{if showMobileMenu 'mobile-menu-expanded'}}">
+    {{#unless signedOut}}
+      {{sh-nav-menu open=autoNavOpen toggleMaximise="toggleAutoNav"
+      openAutoNav="openAutoNav" openModal="openModal"
+      closeMobileMenu="closeMobileMenu"}}
+    {{/unless}}
+
+    {{#sh-main onMouseEnter="closeAutoNav" data-notification-count=topNotificationCount}}
+      {{outlet}}
+    {{/sh-main}}
+
+    {{sh-notifications}}
+
+    {{sh-content-cover onClick="closeMenus" onMouseEnter="closeAutoNav"}}
+
+    {{outlet "modal"}}
+    {{outlet "settings-menu"}}
+  </div>
+{{/sh-app}}
