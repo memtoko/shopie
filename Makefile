@@ -1,4 +1,4 @@
-EMBERAPP = shopie/static/shopie/emberapp
+EMBERAPP = shopiejs
 
 .PHONY: init js-dev js-production run
 
