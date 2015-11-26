@@ -31,6 +31,7 @@
     "sinonjs": "1.14.1",
     "validator-js": "3.39.0",
     "xregexp": "2.0.0",
-    "google-caja": "5669.0.0"
+    "google-caja": "5669.0.0",
+    "fastclick": "1.0.6"
   }
 }

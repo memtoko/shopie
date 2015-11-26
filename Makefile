@@ -12,8 +12,8 @@ run:
 	python manage.py runserver 0.0.0.0:8000
 
 copy-static-dev: js-dev
-	cp $(EMBERAPP)/dists/assets/*.css $(CSSBUILD)
-	cp $(EMBERAPP)/dists/assets/*.js $(JSBUILD)
+	cp $(EMBERAPP)/dist/assets/*.css $(CSSBUILD)
+	cp $(EMBERAPP)/dist/assets/*.js $(JSBUILD)
 
 js-dev:
 	cd $(EMBERAPP) && ember build
