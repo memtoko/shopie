@@ -110,7 +110,7 @@ class AbstractProduct(TimeStampsMixin, SluggableMixin, BaseModel):
         if self.is_parent:
             # take the lowest unit price on variants
             min_price = self.get_variants().aggregate(min_aggregate('unit_price'))
-            return min_price['unit_price__min']
+            return min_price['unit_price__min'] or self.unit_price
         else:
             return self.unit_price
 
@@ -130,6 +130,7 @@ class AbstractProduct(TimeStampsMixin, SluggableMixin, BaseModel):
     def is_parent(self):
         """Determine if this object is a parent product"""
         return self.parent is None and self.has_variant
+
 
     @property
     def orderable(self):

@@ -1,10 +1,10 @@
 [
-    {
-        "fields": {
-            "full_name": "syaiful bahri",
-            "email": "syaiful@acme.com"
-        },
-        "model": "shopie.order",
-        "pk": 1
-    }
+  {
+    "fields": {
+        "full_name": "syaiful bahri",
+        "email": "syaiful@acme.com"
+    },
+    "model": "shopie.order",
+    "pk": 1
+  }
 ]

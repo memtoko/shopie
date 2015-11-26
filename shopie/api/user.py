@@ -5,11 +5,12 @@ from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.decorators import detail_route, list_route
-from rest_framework.permissions import BasePermission, AllowAny, SAFE_METHODS
+from rest_framework.permissions import BasePermission, IsAuthenticated, AllowAny, SAFE_METHODS
 
 from rest_framework_json_api.mixins import MultipleIDMixin
 
-from shopie.api.endpoints.user import create_endpoint
+from shopie.api.endpoints.user import (create_endpoint, password_reset_endpoint,
+    change_password_endpoint)
 from shopie.api.serializers.user import UserSerializer
 
 class UserPermissions(BasePermission):
@@ -33,7 +34,17 @@ class UserViewSet(MultipleIDMixin, viewsets.ModelViewSet):
         user = self.get_object()
         return change_password_endpoint(request, user=user)
 
-    @detail_route(methods=['get'])
+    @list_route(methods=['post'])
+    def passwordreset(self, request, *args, **kwargs):
+        return password_reset_endpoint(request)
+
+    @list_route(methods=['get'], permission_classes=(IsAuthenticated,))
+    def me(self, request, *args, **kwargs):
+        user = self.request.user
+        serializer = self.serializer_class(user, many=False)
+        return Response(serializer.data, status=200)
+
+    @detail_route(methods=['get'], permission_classes=(UserPermissions,))
     def staff(self, request, *args, **kwargs):
         obj = self.get_object()
         return Response({

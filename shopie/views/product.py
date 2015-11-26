@@ -8,7 +8,7 @@ class ShopView(ShopViewMixins, ListView):
     paginate_by = 20
 
     def get_queryset(self):
-        queryset = Product.objects.root()
+        queryset = Product.objects.root().select_related('author')
         if self.request.user.is_staff:
             queryset = queryset.all()
         else:

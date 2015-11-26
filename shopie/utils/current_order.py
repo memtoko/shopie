@@ -5,16 +5,16 @@ from django.contrib.auth.models import AnonymousUser
 def get_current_order_from_database(request):
     try:
         return Order.objects.get_user_bag(request.user)
-    except Order.DoestNotExist:
+    except Order.DoesNotExist:
         return None
 
 def get_current_order_from_session(request):
     order = None
-    order_id = request.session.get('_current_order', None)
+    order_id = request.session.get('order_id', None)
     if order_id is not None:
         try:
             order = Order.objects.get(pk=order_id)
-        except Order.DoestNotExist:
+        except Order.DoesNotExist:
             order = None
     return order
 
@@ -40,7 +40,7 @@ def get_or_create_current_order(request, save=False):
             else:
                 order = get_current_order_from_database(request)
                 if order:
-                    request.session['_current_order'] = order
+                    request.session['order_id'] = order.pk
         else:
             order = get_current_order_from_session(request)
 
@@ -52,8 +52,8 @@ def get_or_create_current_order(request, save=False):
 
         if save and not order.pk:
             order.save()
-            request.session['_current_order'] = order
+            request.session['order_id'] = order.pk
 
-        setattr(request, '_current_order')
+        setattr(request, '_current_order', order)
 
     return getattr(request, '_current_order')

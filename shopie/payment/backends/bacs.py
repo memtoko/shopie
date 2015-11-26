@@ -12,7 +12,7 @@ from shopie.models import Order, Payment
 class PaymentBacs(PaymentBackendBase):
     url_namespace = 'bacs_payment'
     backend_name = _('Bank Transfer')
-    template = 'shopengine/payment/backend/bacs.html'
+    template = 'shopie/payment/backend/bacs.html'
 
     def process_order_payment(self, order, request):
         """Because this payment basically require store staff to check the customer
@@ -31,15 +31,12 @@ class PaymentBacs(PaymentBackendBase):
         )
 
     def on_order_acceptance(self, sender, order, **kwargs):
-        try:
-            payments = Payment.objects.filter(
-                order=order,
-                method=self.backend_name,
-                confirmed=False
-            )
-        except Payment.DoesNotExist:
-            pass
-        else:
-            for payment in payments.all():
-                payment.confirmed = True
-                payment.save()
+        payments = Payment.objects.filter(
+            order=order,
+            method=self.backend_name,
+            confirmed=False
+        )
+
+        for payment in payments.all():
+            payment.confirmed = True
+            payment.save()

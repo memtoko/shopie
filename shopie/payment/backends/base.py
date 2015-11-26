@@ -16,9 +16,9 @@ class PaymentBackendBase(object):
     def get_urls(self):
         """This method allow you to register url view, if the payment need it.
 
-        This method should return the urlpattern.
+        This method should return the urlpattern, return None by default.
         """
-        raise NotImplementedError
+        return None
 
     def get_thank_you_page(self, request):
         """Return absolute url for thank you page, like the name is used to says

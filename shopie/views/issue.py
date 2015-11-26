@@ -28,7 +28,7 @@ class IssueListView(ShopViewMixins, ListView):
                 raise AttributeError("%s must be called with either slug and pk"
                     % self.__class__.name)
             try:
-                product = Issue.objects.get(pk=pk, slug=slug)
+                product = Product.objects.get(pk=pk, slug=slug)
             except Product.DoesNotExist:
                 raise Http404("Issue for product doesnot exists yet.")
             else:
@@ -60,7 +60,7 @@ class IssueListView(ShopViewMixins, ListView):
             product = Product.objects.get(pk=pk)
         except (KeyError, ValueError, Product.DoesNotExist):
             return HttpResponseBadRequest("Bad request input")
-        issue = Issue(product=product, user=self.request.user)
+        issue = Issue(target=product, user=self.request.user)
         form = IssueCreationForm(self.request.POST or None, instance=issue)
         if form.is_valid():
             issue = form.save()

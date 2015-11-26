@@ -26,6 +26,6 @@ class AuthCheckoutStep(CheckoutStepMixin, RegistrationView):
 
     def get_success_url(self):
         if self.next_step:
-            return reverse("checkout", kwargs={"step": self.next_step.identifier})
+            return reverse("shopie:checkout", kwargs={"step": self.next_step.identifier})
 
     def process(self): pass
