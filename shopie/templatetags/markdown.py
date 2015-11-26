@@ -7,7 +7,7 @@ try:
 except ImportError:
     from django.utils.encoding import force_unicode as force_text
 
-from shopengine.utils.text import common_markdown
+from shopie.utils.text import common_markdown
 
 register = template.Library()
 

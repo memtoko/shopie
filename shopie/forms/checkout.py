@@ -7,7 +7,7 @@ from shopengine.payment.backends import payment_backend_pool
 def get_backend_choices():
     backends = payment_backend_pool.get_backend_list()
     list_backends = [('', _('Pilih metode pembayaran'))]
-    temp = [(x.url_namespace, getattr(x, 'backend_verbose_name', x.backend_name)) for x in backends]
+    temp = [(x.backend_name, getattr(x, 'backend_verbose_name', x.backend_name)) for x in backends]
     list_backends.extend(temp)
     return tuple(list_backends)
 
@@ -37,8 +37,3 @@ class CheckoutForm(forms.Form):
     accept_terms = forms.BooleanField(
             required=True,
             label=_("Saya setuju dengan aturan penggunaan."))
-
-
-
-
-

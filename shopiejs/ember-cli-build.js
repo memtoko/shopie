@@ -6,11 +6,16 @@ var EmberApp = require('ember-cli/lib/broccoli/ember-app'),
     disabled = {enabled: false},
     assetLocation;
 
+<<<<<<< HEAD:shopiejs/ember-cli-build.js
 assetLocation = function (fileName) {
+=======
+assetLocation = function(fileName) {
+>>>>>>> ac375c0d0f77a63eb560b8ad40bf55ae81790fca:shopie/assets/ember-cli-build.js
     if (isProduction) {
         fileName = fileName.replace('.', '.min.');
     }
     return '/assets/' + fileName;
+<<<<<<< HEAD:shopiejs/ember-cli-build.js
 };
 
 module.exports = function(defaults) {
@@ -37,6 +42,35 @@ module.exports = function(defaults) {
     'ember-cli-selectize': {
       theme: false
     }
+=======
+}
+
+module.exports = function(defaults) {
+    var app = new EmberApp(defaults, {
+        // Add options here
+        outputPaths: {
+            app: {
+                js: assetLocation('shopie.js')
+            },
+            vendor: {
+                js:  assetLocation('vendor.js'),
+                css: assetLocation('vendor.css')
+            }
+        },
+        mythOptions: {
+            source: './app/styles/app.css',
+            inputFile: 'app.css',
+            browsers: 'last 2 versions',
+            sourcemap: false,
+            compress: mythCompress,
+            outputFile: isProduction ? 'shopie.min.css' : 'shopie.css'
+        },
+        hinting: false,
+        fingerprint: disabled,
+        'ember-cli-selectize': {
+            theme: false
+        }
+>>>>>>> ac375c0d0f77a63eb560b8ad40bf55ae81790fca:shopie/assets/ember-cli-build.js
   });
 
   app.import('bower_components/validator-js/validator.js');
@@ -61,7 +95,10 @@ module.exports = function(defaults) {
   app.import('bower_components/blueimp-md5/js/md5.js');
   app.import('bower_components/markdown-it/dist/markdown-it.js');
   app.import('bower_components/markdown-it-emoji/dist/markdown-it-emoji.js');
+<<<<<<< HEAD:shopiejs/ember-cli-build.js
 
+=======
+>>>>>>> ac375c0d0f77a63eb560b8ad40bf55ae81790fca:shopie/assets/ember-cli-build.js
   // 'dem Styles
   app.import('bower_components/codemirror/lib/codemirror.css');
   app.import('bower_components/codemirror/theme/xq-light.css');

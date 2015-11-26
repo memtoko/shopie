@@ -2,7 +2,11 @@
   "predef": [
     "document",
     "window",
-    "-Promise"
+    "-Promise",
+    "-Notification",
+    "$",
+    "validator",
+    "moment"
   ],
   "browser": true,
   "boss": true,

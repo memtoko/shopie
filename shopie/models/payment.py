@@ -9,20 +9,59 @@ from django.conf import settings
 
 from decimal import Decimal
 
-from .base import TimeStampsMixin
+from shopie.signals.payment import payment_refund
+
+from .base import BaseModel, TimeStampsMixin
 from .order import Order
 from .fields import CurrencyField
 
 class RefundFailed(Exception): pass
 
+class PaymentQuerySet(models.QuerySet):
+
+    def refundable(self):
+        return self.filter(refundable=True)
+
+    def confirmed(self):
+        return self.filter(confirmed=True)
+
+    def for_order(self, order):
+        """Filter payment for the given order"""
+        return self.fiter(order=order)
+
+    def payment_method(self, method):
+        return self.filter(method=method)
+
+    def payment_method_count(self, method):
+        return self.payment_method(method).count()
+
 class PaymentManager(models.Manager):
 
+    def get_queryset(self):
+        return PaymentQuerySet(self.model, using=self._db)
+
+    def refundable(self):
+        return self.get_queryset().refundable()
+
+    def confirmed(self):
+        return self.get_queryset().confirmed()
+
+    def for_order(self, order):
+        return self.get_queryset().for_order(order=order)
+
+    def payment_method(self, method):
+        return self.get_queryset().payment_method()
+
     def refund(self, amount, payment=None, payment_id=None):
+        """Attempt to refund for the given payment, will only success if payment
+        refundable greater than the amount given.
+        """
         if payment is None and payment_id is not None:
             payment = self.filter(pk=payment)[0]
         if payment is None:
             raise ValueError(_("Make sure you pass payment or payment_id"))
 
+        payment_refund.send(sender=self.__class__, payment=payment)
         amount = Decimal(amount)
         if payment.refundable_amount >= amount:
             _amount = Decimal('0.00') - amount
@@ -38,12 +77,10 @@ class PaymentManager(models.Manager):
                 "Max amount allowed is %s" % (amount, payment.refundable_amount)
             ))
 
-class Payment(TimeStampsMixin):
-    order = models.ForeignKey(Order, verbose_name=_("Order"))
+class Payment(BaseModel, TimeStampsMixin):
+    order = models.ForeignKey(Order, verbose_name=_("Order"), related_name="payments")
     amount = CurrencyField(verbose_name=_("amount"))
     method = models.CharField(max_length=255, verbose_name=_("payment method"))
-    transaction_id = models.CharField(max_length=255,
-        verbose_name=_('transaction ID'))
     reference = models.CharField(max_length=255, verbose_name=_("payment reference"))
     confirmed = models.BooleanField(verbose_name=_('confirmed'), default=True)
     refundable = models.BooleanField(verbose_name=_('refundable'), default=False)
@@ -67,3 +104,9 @@ class Payment(TimeStampsMixin):
     @property
     def refundable_amount(self):
         return self.amount - self.amount_refunded if self.refundable else Decimal('0.00')
+
+class PaymentProperty(models.Model):
+    """Payment property usefull when you need to store custom"""
+    payment = models.ForeignKey(Payment, related_name="payment_properties")
+    key = models.CharField(max_length=255, verbose_name=_('propery key'))
+    value = models.CharField(max_length=255, verbose_name=_('propery value'))

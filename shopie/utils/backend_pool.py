@@ -1,5 +1,5 @@
 from django.core import exceptions
-from django.conf import settings
+from shopie.settings import shopie_settings
 
 from .import_module import load_module
 
@@ -23,7 +23,7 @@ class BaseBackendPool(object):
     def _get_backend_list(self):
         if self.CONSTANT_SETTINGS is None:
             return []
-        return getattr(settings, self.CONSTANT_SETTINGS, [])
+        return getattr(shopie_settings, self.CONSTANT_SETTINGS, [])
 
     def _load_backend_list(self):
         result = []

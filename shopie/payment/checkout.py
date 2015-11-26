@@ -4,33 +4,37 @@ from django.core.exceptions import ImproperlyConfigured
 from django.http.response import Http404
 from django.core.urlresolvers import reverse
 
-from shopengine.utils.import_module import load_module
+from shopie.utils.import_module import load_module
 
 class CheckoutStepBucket(object):
+    """This class used to store temporary data for checkout step using Django
+    session"""
 
-    def __init__(self, request, step_identifier):
+    def __init__(self, request, step_id):
         self._request = request
-        self._step_identifier = step_identifier
+        self._step_id = step_id
 
     def put(self, key, value):
-        self._request.session[self._get_key(key)] = value
+        self._request.session[self._format_key(key)] = value
 
     def get(self, key, default=None):
-        return self._request.session.get(self._get_key(key), default)
+        return self._request.session.get(self._format_key(key), default)
 
     def reset(self):
         to_pop = filter(
-                lambda i: i.startswith("checkout_%s:" % self._step_identifier),
-                self._request.session.keys()
-            )
+            lambda s: s.startswith("checkout_%s:" % self._step_id),
+            self._request.session.keys()
+        )
         for key in set(to_pop):
             self._request.session.pop(key, None)
 
-    def _get_key(self, key):
-        return "checkout_%s:%s" % (self._step_identifier, key)
+    def _format_key(self, key):
+        """Format key namespace for used to set session, so we can get them back
+        later"""
+        return "checkout_%s:%s" % (self._step_id, key)
 
     def has_all(self, keys):
-        return all(self.get(key) for key in keys)
+        return all([self.get(key) for key in keys])
 
     def __setitem__(self, key, value):
         self.put(key, value)
@@ -38,16 +42,16 @@ class CheckoutStepBucket(object):
     def __getitem__(self, key):
         return self.get(key)
 
-class CheckoutStepMixin:
+class CheckoutStepMixin(object):
     identifier = None
-    title = None  # User-visible
-    final = False  # Should be set for final steps (those that may be accessed via the previous step's URL)
+    title = None
+    final = False
 
-    checkout_process = None  # set as an instance variable
-    steps = ()  # set as an instance variable; likely accessed via template (`view.steps`)
-    next_step = None  # set as an instance variable
-    previous_step = None  # set as an instance variable
-    request = None  # exists via being a view
+    checkout_process = None
+    steps = ()
+    next_step = None
+    previous_step = None
+    request = None
 
     def is_valid(self):
         return True
@@ -59,17 +63,13 @@ class CheckoutStepMixin:
         raise NotImplementedError("`process` MUST be overridden in %r" % self.__class__)
 
     def reset(self):
-        self.storage.reset()
-
-    def get_success_url(self):
-        if self.next_step:
-            return reverse("checkout", kwargs={"step": self.next_step.identifier})
+        self.bucket.reset()
 
     @property
-    def storage(self):
-        if not hasattr(self, "_storage"):
-            self._storage = CheckoutStepBucket(self.request, self.identifier)
-        return self._storage
+    def bucket(self):
+        if not hasattr(self, '_bucket'):
+            self._bucket = CheckoutStepBucket(self.request, self.identifier)
+        return self._bucket
 
 class CheckoutProcess:
 
@@ -139,7 +139,6 @@ class CheckoutProcess:
         """
         Add step instance attributes (previous, next, etc) to the given target step,
         using the optional `current_step` as the current step for previous and next.
-
         This is exposed as a public API for the benefit of steps that need to do sub-step
         initialization and dispatching, such as method steps.
         """

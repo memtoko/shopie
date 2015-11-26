@@ -8,14 +8,14 @@ from django.core.urlresolvers import reverse
 import django.contrib.messages.api as message_api
 
 from .base import ShopViewMixins
-from shopengine.models import Product, Issue
-from shopengine.forms.issue import IssueCreationForm, ReplyCreationForm
+from shopie.models import Product, Issue
+from shopie.forms.issue import IssueCreationForm, ReplyCreationForm
 
 class IssueListView(ShopViewMixins, ListView):
 
-    model = Issue
+    model = Product
     ordering = "updated_at"
-    generic_template = "shopengine/issue/issue_list.html"
+    generic_template = "shopie/issue/issue_list.html"
     paginate_by = 20
     query_pk_and_slug = True
 
@@ -28,9 +28,11 @@ class IssueListView(ShopViewMixins, ListView):
                 raise AttributeError("%s must be called with either slug and pk"
                     % self.__class__.name)
             try:
-                queryset = Issue.objects.for_product(pk=pk, slug=slug)
+                product = Product.objects.get(pk=pk, slug=slug)
             except Product.DoesNotExist:
                 raise Http404("Issue for product doesnot exists yet.")
+            else:
+                queryset = product.issues.all()
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -44,7 +46,7 @@ class IssueListView(ShopViewMixins, ListView):
         issues = ctx.get('object_list', None)
         if issues:
             issue = issues[0]
-            product = getattr(issue, 'product', None)
+            product = getattr(issue, 'target_content_type', None)
             if product is not None:
                 ctx.update({
                         'product': product
@@ -58,7 +60,7 @@ class IssueListView(ShopViewMixins, ListView):
             product = Product.objects.get(pk=pk)
         except (KeyError, ValueError, Product.DoesNotExist):
             return HttpResponseBadRequest("Bad request input")
-        issue = Issue(product=product, user=self.request.user)
+        issue = Issue(target=product, user=self.request.user)
         form = IssueCreationForm(self.request.POST or None, instance=issue)
         if form.is_valid():
             issue = form.save()
@@ -79,7 +81,7 @@ class IssueListView(ShopViewMixins, ListView):
 
 class IssueDetailView(ShopViewMixins, DetailView):
 
-    generic_template = "shopengine/issue/issue_detail.html"
+    generic_template = "shopie/issue/issue_detail.html"
     model = Issue
 
     def get_context_data(self, **kwargs):
