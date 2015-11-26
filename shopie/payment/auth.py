@@ -12,7 +12,7 @@ class AuthCheckoutStep(CheckoutStepMixin, RegistrationView):
     identifier = "auth"
     title = _('Daftar atau Login')
     form_class = RegistrationFormUniqueEmail
-    template_name = "shopengine/checkout/auth.html"
+    template_name = "shopie/checkout/auth.html"
 
     def get_context_data(self, **kwargs):
         ctx = super(AuthCheckoutStep, self).get_context_data(**kwargs)
@@ -26,7 +26,6 @@ class AuthCheckoutStep(CheckoutStepMixin, RegistrationView):
 
     def get_success_url(self):
         if self.next_step:
-            return reverse("checkout", kwargs={"step": self.next_step.identifier})
+            return reverse("shopie:checkout", kwargs={"step": self.next_step.identifier})
 
     def process(self): pass
-

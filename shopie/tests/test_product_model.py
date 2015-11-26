@@ -2,6 +2,7 @@ from decimal import Decimal
 from django.test import TestCase
 
 from shopie.models import Product
+from registration.users import UserModel
 
 class SimpleProductModelTests(TestCase):
     fixtures = ['product_simple_test_data']
@@ -24,6 +25,15 @@ class SimpleProductModelTests(TestCase):
         product = Product.objects.all()[0]
         product.status = Product.STATUS_DRAFT
         self.assertFalse(product.orderable)
+
+    def test_it_can_add_issue(self):
+        product = Product.objects.all()[0]
+        user_info = {'username': 'alice',
+                 'password': 'swordfish',
+                 'email': 'alice@example.com'}
+        new_user = UserModel().objects.create_user(**user_info)
+        Product.objects.add_issue('foo', 'baz', new_user, product=product)
+        self.assertTrue(product.issues.all().exists())
 
 class VariableProduct(TestCase):
     fixtures = ['product_variant_test_data']

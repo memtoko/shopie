@@ -67,11 +67,12 @@ def password_reset_endpoint(request):
     else:
         return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
 
-def change_password_endpoint(request):
+def change_password_endpoint(request, user=None):
     """This endpoint require user to type old password in order to change their
     password.
     """
-    form = PasswordChangeForm(user=request.user, data=request.data)
+    user = user or request.user
+    form = PasswordChangeForm(user=user, data=request.data)
     if form.is_valid():
         form.save()
         #

@@ -1,10 +1,15 @@
-from shopengine.cart.bucket import get_or_create_cart
-"""List of context processors for shop engine"""
+from oauth2_provider.models import get_application_model
 
-def cart(request):
-    bucket = get_or_create_cart(request, save=True)
-    bucket.update(request)
-    return {
-        'cart': bucket,
-        'cart_items': bucket.get_updated_cart_items()
-    }
+Application = get_application_model()
+
+def application(request):
+    try:
+        selfapp = Application.objects.get(pk=1)
+    except Application.DoesNotExist:
+        pass
+    else:
+        request._ember_preload.update({
+            'clientId': selfapp.client_id,
+            'clientSecret': selfapp.client_secret
+        })
+    return {'ember_preload': request._ember_preload}

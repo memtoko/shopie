@@ -5,6 +5,10 @@
     "ember-cli-shims": "ember-cli/ember-cli-shims#0.0.3",
     "ember-cli-test-loader": "0.1.3",
     "ember-data": "1.13.13",
+<<<<<<< HEAD:shopiejs/bower.json
+=======
+    "ember-mocha": "0.8.4",
+>>>>>>> ac375c0d0f77a63eb560b8ad40bf55ae81790fca:shopie/assets/bower.json
     "ember-load-initializers": "ember-cli/ember-load-initializers#0.1.5",
     "ember-qunit": "0.4.9",
     "ember-qunit-notifications": "0.0.7",
@@ -31,7 +35,13 @@
     "sinonjs": "1.14.1",
     "validator-js": "3.39.0",
     "xregexp": "2.0.0",
+<<<<<<< HEAD:shopiejs/bower.json
     "google-caja": "5669.0.0",
     "fastclick": "1.0.6"
+=======
+    "foundation": "~5.4.7",
+    "octicons": "*",
+    "google-caja": "5669.0.0"
+>>>>>>> ac375c0d0f77a63eb560b8ad40bf55ae81790fca:shopie/assets/bower.json
   }
 }
