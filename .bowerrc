@@ -1,4 +1,4 @@
 {
-    "cwd": "shopie/assets/",
+    "cwd": "shopie/static/shopie/emberapp",
     "directory": "bower_components"
 }

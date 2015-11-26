@@ -28,10 +28,10 @@ bower_components
 logs
 
 # generated files
-/shopie/static/js
-/shopie/static/css
-/shopie/static/fonts
-/shopie/static/images
+/shopie/static/shopie/js
+/shopie/static/shopie/css
+/shopie/static/shopie/fonts
+/shopie/static/shopie/images
 
 # Local development stuff
 dev
