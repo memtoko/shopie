@@ -20,7 +20,7 @@ module.exports = function(environment) {
       API_NAMESPACE: 'api/v1'
     },
 
-    'simple-auth': {
+    'ember-simple-auth': {
       authenticationRoute: 'login',
       routeAfterAuthentication: 'orders',
       routeIfAlreadyAuthenticated: 'orders'

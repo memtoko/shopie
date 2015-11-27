@@ -23,6 +23,8 @@ export default Ember.Mixin.create({
    */
   session: service('session'),
 
+
+
   beforeModel(transition) {
     if (!this.get('session.isAuthenticated')) {
       transition.abort();
@@ -32,6 +34,7 @@ export default Ember.Mixin.create({
     } else {
       let _super = this.__nextSuper;
       return this.get('session.user').then((user) => user.isStaff()).catch(() => {
+        transition.abort();
         this.transitionTo(Configuration.authenticationRoute);
       }).then(() => _super.call(this, transition));
     }

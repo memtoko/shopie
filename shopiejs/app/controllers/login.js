@@ -68,7 +68,7 @@ export default Ember.Controller.extend(ValidationEngine, {
 
         this.ajax.post(this.get('shopiePaths.url').api('users', 'passwordreset'), {
           data: {
-            passwordreset: email
+            email: email
           }
         }).then(() => {
           this.toggleProperty('submitting');

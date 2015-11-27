@@ -37,10 +37,9 @@ class UserViewSet(MultipleIDMixin, viewsets.ModelViewSet):
         return change_password_endpoint(request, user=user)
 
     @list_route(methods=['post'], permission_classes=[])
-    @csrf_protect
     def passwordreset(self, request, *args, **kwargs):
         user = request.user
-        if user and isinstance(user, AnonymousUser):
+        if user and not isinstance(user, AnonymousUser):
             return Response({
                 'error': {
                     'errors': [

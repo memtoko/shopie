@@ -8,7 +8,6 @@ export default DS.Model.extend({
   email: DS.attr('string'),
   username: DS.attr('string'),
   dateJoined: DS.attr('moment-date'),
-
   /**
    * this information must not stored in all application instance (the value of is_staff,
    * as we seen in Django user model). Because it considered dangerous, to store it.
@@ -23,7 +22,8 @@ export default DS.Model.extend({
     return this.ajax.request(
       shopiePaths().url.api('users', (this.get('id')).toString(), 'staff')
     ).then((response) => {
-      if (response.is_staff) {
+      let data = response.data || response;
+      if (data.is_staff) {
         return Ember.RSVP.resolve();
       } else {
         return Ember.RSVP.reject();

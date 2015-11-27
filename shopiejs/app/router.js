@@ -1,12 +1,11 @@
 import Ember from 'ember';
 import config from './config/environment'
 import shopiePaths from './utils/shopie-paths';
-
-let isProduction = config.environment === 'production';
+import ensureSlash from './utils/ensure-slash';
 
 let Router = Ember.Router.extend({
   location: config.locationType,
-  rootURL: isProduction ? shopiePaths().adminRoot : '/',
+  rootURL: ensureSlash(shopiePaths().adminRoot),
 });
 
 Router.map(function() {

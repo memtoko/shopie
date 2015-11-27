@@ -1,25 +1,10 @@
 import Ember from 'ember';
+import ensureSlash from '../utils/ensure-slash';
 import { AjaxFailed, UnauthorizedError,
   InvalidError, ForbiddenError} from 'shopie/libs/ajax-error';
 
 let { get, merge, isBlank} = Ember;
 let _keys = Object.keys || Ember.keys;
-/**
- * Under certain circumtance, Django cant maintain post data when there are not
- * slash at the end of url.Here we will normalize all url, to end up with it
- */
-function ensureSlash(url) {
-  var queryStart, queryString ;
-
-  queryStart = url.indexOf('?');
-  //this url include query params, so take it out
-  if (queryStart !== -1) {
-    queryString = url.substr(queryStart + 1, url.length);
-    url = path.substr(0, queryStart);
-  }
-  url = url.slice(-1) !== '/' ? `${url}/` : url;
-  return queryString == null ? url : `${url}?$queryString`;
-}
 
 function forceOptionType(options, method) {
   options = options || {};
@@ -113,14 +98,15 @@ export default Ember.Service.extend({
   },
 
   _options(url, options) {
-    var hash, headers;
+    var hash, headers, optheaders;
     hash = options || {};
+    optheaders = hash.headers || {};
     hash.url = this._buildURL(url);
     hash.type = hash.type || 'GET';
     hash.dataType = hash.dataType || 'json';
     hash.context = this;
 
-    headers = merge(options.headers || {}, get(this, 'headers'));
+    headers = merge(optheaders || {}, get(this, 'headers'));
     if (headers) {
       hash.beforeSend = function (xhr) {
         _keys(headers).forEach((name) =>  xhr.setRequestHeader(name, headers[name]));

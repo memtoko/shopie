@@ -1,9 +1,9 @@
 import Ember from 'ember';
-import AuthenticatedStaffRoute from './shopie-authenticated-staff';
+import AuthenticatedRouteStaff from './shopie-authenticated-staff';
 import ShortcutsRoute from '../mixins/shortcuts-route';
 import PaginationRouteMixin from '../mixins/pagination-route';
 
-export default AuthenticatedStaffRoute.extend(ShortcutsRoute, PaginationRouteMixin, {
+export default AuthenticatedRouteStaff.extend(ShortcutsRoute, PaginationRouteMixin, {
   titleToken: 'Orders',
   paginationModel: 'order',
 
