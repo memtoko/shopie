@@ -5,6 +5,7 @@ export default DS.Model.extend({
   status: DS.attr(),
   fullName: DS.attr(),
   email: DS.attr(),
+  status: DS.attr(),
   createdAt: DS.attr('moment-date'),
   updatedAt: DS.attr('moment-date'),
   receivedAt: DS.attr('moment-date'),

@@ -1,16 +1,5 @@
 import Ember from 'ember';
-
-let setScrollClass = function (options) {
-  var $target = options.target || this,
-    offset = options.offset,
-    className = options.className || 'scrolling';
-
-  if (this.scrollTop() > offset) {
-    $target.addClass(className);
-  } else {
-    $target.removeClass(className);
-  }
-};
+import setScrollClass from '../utils/set-scroll-class';
 
 export default Ember.Component.extend({
   classNames: ['content-preview-content'],
@@ -19,7 +8,7 @@ export default Ember.Component.extend({
 
   didInsertElement() {
     let el = this.$();
-    el.on('scroll', Ember.run.bind(el, setScrollClassName, {
+    el.on('scroll', Ember.run.bind(el, setScrollClass, {
       target: el.closest('.content-preview'),
       offset: 10
     }));

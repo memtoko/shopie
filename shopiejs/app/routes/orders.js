@@ -37,5 +37,40 @@ export default AuthenticatedStaffRoute.extend(ShortcutsRoute, PaginationRouteMix
       scrolled = content.scrollTop();
 
     content.scrollTop(scrolled + 50 * amount);
+  },
+
+  shortcuts: {
+    'up, k': 'moveUp',
+    'down, j': 'moveDown',
+    left: 'focusList',
+    right: 'focusContent',
+    //n: 'newPost'
+  },
+
+  actions: {
+
+    focusList() {
+      this.controller.set('keyboardFocus', 'orderList');
+    },
+
+    focusContent() {
+      this.controller.set('keyboardFocus', 'orderContent');
+    },
+
+    moveUp() {
+      if (this.controller.get('orderContentFocused')) {
+        this.scrollContent(-1);
+      } else {
+        this.stepThroughPosts(-1);
+      }
+    },
+
+    moveDown() {
+      if (this.controller.get('orderContentFocused')) {
+        this.scrollContent(1);
+      } else {
+        this.stepThroughPosts(1);
+      }
+    }
   }
 });

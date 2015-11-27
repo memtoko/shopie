@@ -49,7 +49,7 @@ export default Ember.Service.extend({
 
   headers: Ember.computed('session.csrfToken', function () {
     var _headers = {}, _ref;
-    if ((_ref = this.get('session.csrfToken'))) {
+    if (_ref = this.get('session.csrfToken')) {
       _headers["X-CSRFToken"] = _ref;
     }
     return _headers;
@@ -96,22 +96,18 @@ export default Ember.Service.extend({
     }, `shopie-ajax: ${hash.type} to ${url}`);
   },
 
-  // calls `request()` but forces `options.type` to `POST`
   post(url, options) {
     return this.request(url, forceOptionType(options, 'POST'));
   },
 
-  // calls `request()` but forces `options.type` to `PUT`
   put(url, options) {
     return this.request(url, forceOptionType(options, 'PUT'));
   },
 
-  // calls `request()` but forces `options.type` to `PATCH`
   patch(url, options) {
     return this.request(url, forceOptionType(options, 'PATCH'));
   },
 
-  // calls `request()` but forces `options.type` to `DELETE`
   del(url, options) {
     return this.request(url, forceOptionType(options, 'DELETE'));
   },
@@ -138,7 +134,7 @@ export default Ember.Service.extend({
     if (isBlank(host)) {
       return ensureSlash(url);
     }
-    const startsWith = String.prototype.startsWith || function(searchString, position) {
+    let startsWith = String.prototype.startsWith || function(searchString, position) {
       position = position || 0;
       return this.indexOf(searchString, position) === position;
     };
