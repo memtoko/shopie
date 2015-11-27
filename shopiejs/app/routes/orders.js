@@ -8,7 +8,28 @@ export default AuthenticatedStaffRoute.extend(ShortcutsRoute, PaginationRouteMix
   paginationModel: 'order',
 
   model() {
-    return this.loadFirstPage();
+    return this.loadFirstPage().then((function (_this) {
+      return function () {
+        return _this.store.filter('order', function (order) {
+          return true;
+        });
+      };
+    })(this));
+  },
+
+  stepThroughOrders(step) {
+    var currentOrder = this.get('controller.currentOrder'),
+      orders = this.get('controller.sortedOrders'),
+      length = orders.get('length'),
+      newPosition;
+
+    newPosition = orders.indexOf(currentOrder) + step;
+
+    if (newPosition >= length || newPosition < 0) {
+      return;
+    }
+
+    this.transitionTo('orders.order', orders.objectAt(newPosition));
   },
 
   scrollContent(amount) {

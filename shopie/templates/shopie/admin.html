@@ -21,7 +21,9 @@
 
   </head>
   <body>
-
+    <form style="display:none">
+      {% csrf_token %}
+    </form>
 
     <script src="{% static "shopie/js/vendor.min.js" %}"></script>
     <script src="{% static "shopie/js/shopie.min.js" %}"></script>

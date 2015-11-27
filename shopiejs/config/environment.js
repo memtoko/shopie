@@ -22,24 +22,8 @@ module.exports = function(environment) {
 
     'simple-auth': {
       authenticationRoute: 'login',
-<<<<<<< HEAD:shopiejs/config/environment.js
       routeAfterAuthentication: 'orders',
       routeIfAlreadyAuthenticated: 'orders'
-=======
-      routeAfterAuthentication: 'shop',
-      routeIfAlreadyAuthenticated: 'shop'
-    },
-
-    contentSecurityPolicy: {
-      'default-src': "'none'",
-      'script-src': "'self' 'unsafe-inline' 'unsafe-eval'",
-      'font-src': "'self'",
-      'connect-src': "'self'",
-      'img-src': "'self'",
-      'report-uri':"'localhost'",
-      'style-src': "'self' 'unsafe-inline'",
-      'frame-src': "'none'"
->>>>>>> ac375c0d0f77a63eb560b8ad40bf55ae81790fca:shopie/assets/config/environment.js
     }
   };
 

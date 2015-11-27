@@ -22,6 +22,8 @@ class OrderViewSet(MultipleIDMixin, viewsets.ModelViewSet):
     def get_queryset(self):
         """Filter the queryset for current logged in user"""
         user = self.request.user
+        if user.is_staff:
+            return self.queryset.all()
         return self.queryset.filter(user=user)
 
     @list_route(methods=['get'])

@@ -16,6 +16,10 @@ Router.map(function() {
   this.route('orders', {path: '/'}, function () {
     this.route('order', {path: ':order_id'});
   });
+
+  this.route('team', {path: '/team'}, function () {
+    this.route('user', {path: ':user_id'});
+  });
 });
 
 export default Router;

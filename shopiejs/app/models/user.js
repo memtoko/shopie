@@ -20,7 +20,7 @@ export default DS.Model.extend({
    * })
    */
   isStaff() {
-    return this.get('ajax').request(
+    return this.ajax.request(
       shopiePaths().url.api('users', (this.get('id')).toString(), 'staff')
     ).then((response) => {
       if (response.is_staff) {

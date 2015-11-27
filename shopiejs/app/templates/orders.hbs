@@ -1,1 +1,19 @@
-{{outlet}}
+{{#sh-content-view-container as |container|}}
+<header class="view-header">
+  {{#sh-view-title openMobileMenu="openMobileMenu"}}
+    <span>Content</span>
+  {{/sh-view-title}}
+  <section class="view-actions">
+
+  </section>
+</header>
+<div class="view-container">
+  <section class="content-list js-content-list {{if postListFocused 'keyboard-focused'}}">
+    {{#sh-infinite-scroll-box tagName="section" classNames="content-list-content js-content-scrollbox" fetch="loadNextPage"}}
+      <ol class="posts-list">
+
+      </ol>
+    {{/sh-infinite-scroll-box}}
+  </section>
+</div>
+{{/sh-content-view-container}}
