@@ -12,6 +12,10 @@ export default Ember.Mixin.create({
   registerShortcuts() {
     let shortcuts = this.get('shortcuts');
 
+    if (typeof shortcuts !== 'object') {
+      return;
+    }
+
     _keys(shortcuts).forEach((shortcut) => {
       var scope = shortcuts[shortcut].scope || 'default',
         action = shortcuts[shortcut],
@@ -34,6 +38,9 @@ export default Ember.Mixin.create({
 
   removeShortcuts() {
     let shortcuts = this.get('shortcuts');
+    if (typeof shortcuts !== 'object') {
+      return;
+    }
 
     _keys(shortcuts).forEach((shortcut) => {
       var scope = shortcuts[shortcut].scope || 'default';

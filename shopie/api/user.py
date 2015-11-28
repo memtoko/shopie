@@ -49,7 +49,7 @@ class UserViewSet(MultipleIDMixin, viewsets.ModelViewSet):
             })
         return password_reset_endpoint(request)
 
-    @list_route(methods=['get'], permission_classes=(IsAuthenticated,))
+    @list_route(methods=['get'], permission_classes=[IsAuthenticated,])
     def me(self, request, *args, **kwargs):
         user = self.request.user
         serializer = self.serializer_class(user, many=False)

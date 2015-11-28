@@ -4,7 +4,19 @@
 {{#sh-content-preview-content tagName="section" content=model}}
   <div class="wrapper">
     <h1 class="content-preview-title">
-      # {{model.id}}
+      #{{model.id}} - {{#link-to "users.user" model.user.id}}<span>by {{model.user.username}}</span>{{/link-to}}
     </h1>
+    <span class="order-meta">
+      {{#sh-moment-timeago dateTime=model.createdAt as |componentTimeAgo|}}
+        <time datetime="{{model.createdAt}}" class="date createdAt">
+          Created {{componentTimeAgo.timeago}}
+        </time>
+      {{/sh-moment-timeago}}
+    </span>
+    <ul class="order-items">
+      {{#each model.items key="id" as |item|}}
+        <li>{{item.quantity}} x {{item.productName}}</li>
+      {{/each}}
+    </ul>
   </div>
 {{/sh-content-preview-content}}

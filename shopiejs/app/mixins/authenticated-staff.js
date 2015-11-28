@@ -23,8 +23,6 @@ export default Ember.Mixin.create({
    */
   session: service('session'),
 
-
-
   beforeModel(transition) {
     if (!this.get('session.isAuthenticated')) {
       transition.abort();

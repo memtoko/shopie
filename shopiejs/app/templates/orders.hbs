@@ -1,19 +1,33 @@
 {{#sh-content-view-container as |container|}}
 <header class="view-header">
   {{#sh-view-title openMobileMenu="openMobileMenu"}}
-    <span>Content</span>
+    <span>Orders</span>
   {{/sh-view-title}}
   <section class="view-actions">
 
   </section>
 </header>
 <div class="view-container">
-  <section class="content-list js-content-list {{if postListFocused 'keyboard-focused'}}">
+  <section class="content-list js-content-list {{if orderListFocused 'keyboard-focused'}}">
     {{#sh-infinite-scroll-box tagName="section" classNames="content-list-content js-content-scrollbox" fetch="loadNextPage"}}
-      <ol class="posts-list">
-
+      <ol class="orders-list">
+        {{#each sortedOrders key="id" as |order|}}
+          {{#sh-order-list-item order=order active=(is-equal order currentOrder) onDoubleClick="openEditor" previewIsHidden=container.previewIsHidden as |component|}}
+            {{#link-to component.viewOrEdit order.id class="permalink" title="Edit this order"}}
+              <h3 class="entry-title">#{{order.id}} by <span>{{component.customerName}}</span></h3>
+              <section class="entry-meta">
+                <span class="status">
+                  <span class="name {{component.statusName}}">{{component.statusName}}</span>
+                </span>
+            </section>
+            {{/link-to}}
+          {{/sh-order-list-item}}
+        {{/each}}
       </ol>
     {{/sh-infinite-scroll-box}}
+  </section>
+  <section class="content-preview js-content-preview {{if postContentFocused 'keyboard-focused'}}">
+    {{outlet}}
   </section>
 </div>
 {{/sh-content-view-container}}
