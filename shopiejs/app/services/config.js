@@ -36,7 +36,7 @@ export default Ember.Service.extend(Ember._ProxyMixin, {
       key = el.name;
       value = el.content;
       propertyName = key.substring(4);
-      return config[propertyName] = _mapType(value);
+      return config[propertyName] = mapType(value);
     });
     return config;
   })

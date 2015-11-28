@@ -1,5 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
+from django.contrib.auth.models import AnonymousUser
+from django.views.decorators.csrf import csrf_protect
 
 from rest_framework.response import Response
 from rest_framework import viewsets
@@ -34,11 +36,20 @@ class UserViewSet(MultipleIDMixin, viewsets.ModelViewSet):
         user = self.get_object()
         return change_password_endpoint(request, user=user)
 
-    @list_route(methods=['post'])
+    @list_route(methods=['post'], permission_classes=[])
     def passwordreset(self, request, *args, **kwargs):
+        user = request.user
+        if user and not isinstance(user, AnonymousUser):
+            return Response({
+                'error': {
+                    'errors': [
+                        'You cant reset password when still authenticated.'
+                    ]
+                }
+            })
         return password_reset_endpoint(request)
 
-    @list_route(methods=['get'], permission_classes=(IsAuthenticated,))
+    @list_route(methods=['get'], permission_classes=[IsAuthenticated,])
     def me(self, request, *args, **kwargs):
         user = self.request.user
         serializer = self.serializer_class(user, many=False)

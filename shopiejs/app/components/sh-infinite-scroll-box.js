@@ -1,17 +1,6 @@
 import Ember from 'ember';
 import InfiniteScrollMixin from '../mixins/infinite-scroll';
-
-let setScrollClass = function (options) {
-  var $target = options.target || this,
-    offset = options.offset,
-    className = options.className || 'scrolling';
-
-  if (this.scrollTop() > offset) {
-    $target.addClass(className);
-  } else {
-    $target.removeClass(className);
-  }
-};
+import setScrollClass from '../utils/set-scroll-class';
 
 export default Ember.Component.extend(InfiniteScrollMixin, {
 

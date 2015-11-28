@@ -66,9 +66,9 @@ export default Ember.Controller.extend(ValidationEngine, {
       this.validate({property: 'forgotPassword'}).then(() => {
         this.toggleProperty('submitting');
 
-        this.get('ajax').post(this.get('shopiePaths.url').api('users', 'passwordreset'), {
+        this.ajax.post(this.get('shopiePaths.url').api('users', 'passwordreset'), {
           data: {
-            passwordreset: email
+            email: email
           }
         }).then(() => {
           this.toggleProperty('submitting');
