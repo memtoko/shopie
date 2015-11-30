@@ -2,11 +2,14 @@ import Ember from 'ember';
 import config from './config/environment'
 import shopiePaths from './utils/shopie-paths';
 import ensureSlash from './utils/ensure-slash';
+import documentTitle from './libs/document-title';
 
 let Router = Ember.Router.extend({
   location: config.locationType,
   rootURL: ensureSlash(shopiePaths().adminRoot),
 });
+
+documentTitle();
 
 Router.map(function() {
   this.route('login');

@@ -4,8 +4,6 @@ import shopiePaths from '../utils/shopie-paths';
 import ctrlOrCmd from 'shopie/utils/ctrl-or-cmd'
 import ShortcutsRoute from 'shopie/mixins/shortcuts-route';
 
-let { RSVP } = Ember;
-
 let shortcuts = {
   esc: {
     action: 'closeMenus',
