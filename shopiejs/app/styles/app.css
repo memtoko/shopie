@@ -11,7 +11,7 @@
 @import "patterns/buttons.css";
 @import "patterns/labels.css";
 @import "patterns/tables.css";
-
+@import "../../bower_components/font-awesome/css/font-awesome.css";
 /**
 *
 */
@@ -25,3 +25,4 @@
 @import "layouts/flow.css";
 @import "layouts/auth.css";
 @import "layouts/order.css";
+@import "layouts/users.css";

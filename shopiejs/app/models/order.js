@@ -23,8 +23,8 @@ export default DS.Model.extend({
     async: true
   }),
 
-  orderTotal: DS.attr(),
-  orderSubtotal: DS.attr(),
+  orderTotal: DS.attr('number'),
+  orderSubtotal: DS.attr('number'),
 
   user: DS.belongsTo('user', {
     async: true
@@ -36,16 +36,25 @@ export default DS.Model.extend({
 
   orderKey: DS.attr(),
 
+  // exact state
   isBuilding: Ember.computed.equal('status', 10),
   isConfirming: Ember.computed.equal('status', 20),
-  isReceived: Ember.computed.equal('status', 30),
+  isReceived: Ember.computed('status', 'receivedAt', function () {
+    var receivedAt = this.get('receivedAt'),
+      status = this.get('status');
+    return (receivedAt !== null && status >= 30) ? true : false;
+  }),
   isAccepted: Ember.computed.equal('status', 40),
   isRejected: Ember.computed.equal('status', 50),
 
+  // build time in human format
   buildTime: Ember.computed('createdAt', 'receivedAt', function () {
     var receivedAt = this.get('receivedAt'),
       createdAt = this.get('createdAt');
-    return receivedAt !== null ? receivedAt.diff(createdAt, 'hours') : null;
+    if (receivedAt !== null) {
+      let diff = receivedAt.diff(createdAt);
+      return moment.duration(diff).humanize();
+    }
   }),
 
   isOwnedBy(user) {

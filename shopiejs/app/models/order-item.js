@@ -2,10 +2,10 @@ import DS from 'ember-data';
 import Ember from 'ember';
 
 export default DS.Model.extend({
-  quantity: DS.attr(),
-  lineTotal: DS.attr(),
-  lineSubtotal: DS.attr(),
-  unitPrice: DS.attr(),
+  quantity: DS.attr('number'),
+  lineTotal: DS.attr('number'),
+  lineSubtotal: DS.attr('number'),
+  unitPrice: DS.attr('number'),
   product: DS.belongsTo('product', {
     async: true
   }),

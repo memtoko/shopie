@@ -107,6 +107,9 @@ export default Ember.Service.extend({
     hash.context = this;
 
     headers = merge(optheaders || {}, get(this, 'headers'));
+    if (hash.type === 'GET') {
+      delete headers['X-CSRFToken'];
+    }
     if (headers) {
       hash.beforeSend = function (xhr) {
         _keys(headers).forEach((name) =>  xhr.setRequestHeader(name, headers[name]));

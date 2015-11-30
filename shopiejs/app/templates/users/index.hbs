@@ -15,6 +15,12 @@
     <section class="user-list user-staff">
       {{#each users key="id" as |user|}}
         {{#link-to 'users.user' user class="user-list-item"}}
+          {{#sh-user-avatar email=user.email as |component|}}
+            <span class="user-list-item-figure">
+              <img class="avatar" src={{component.avatarUrl}}>
+              <span class="hidden">Photo of {{user.name}}</span>
+            </span>
+          {{/sh-user-avatar}}
           <div class="user-list-item-body">
             <span class="name">{{user.username}} {{user.email}}</span>
             <br>

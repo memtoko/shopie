@@ -1,0 +1,20 @@
+<section class="post-controls">
+  {{#link-to "orders.order" order.id}}
+    <i class="fa fa-arrow-right"></i> <span>Back</span>
+  {{/link-to}}
+</section>
+<section class="content-preview-content">
+  <div class="wrapper order-edit">
+    <header class="order-header">
+      <h1 class="content-preview-title">
+        Order #{{model.id}} Details
+      </h1>
+      <section class="entry-meta">
+        {{#link-to "users.user" model.user.id class="order-customer"}}<span>by {{customerName}}</span>{{/link-to}}
+      </section>
+    </header>
+    <section class="details">
+
+    </section>
+  </div>
+</section>

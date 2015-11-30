@@ -7,7 +7,7 @@ export default DS.Model.extend({
   shortDescription: DS.attr('string'),
   description: DS.attr('string'),
   image: DS.attr('string'),
-  unitPrice: DS.attr('string'),
+  unitPrice: DS.attr('number'),
   isActive: DS.attr('boolean'),
   status: DS.attr(),
   parent: DS.belongsTo('product', {

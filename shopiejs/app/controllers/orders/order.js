@@ -7,6 +7,18 @@ export default Ember.Controller.extend({
   session: Ember.inject.service(),
 
   currentUser: Ember.computed.alias('session.user'),
+  orderItems: Ember.computed.alias('model.items'),
+
+  customerName: Ember.computed('model.user.username', 'model.fullName', function () {
+    var fullName = this.get('model.fullName'),
+      username = this.get('model.user.username');
+    return fullName ? fullName : username;
+  }),
+
+  displayButtonAction: Ember.computed('model.status', function () {
+    var status = this.get('model.status');
+    return status === 30;
+  }),
 
   actions: {
     acceptOrder() {

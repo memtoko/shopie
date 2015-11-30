@@ -32,6 +32,7 @@
     "validator-js": "3.39.0",
     "xregexp": "2.0.0",
     "google-caja": "5669.0.0",
-    "fastclick": "1.0.6"
+    "fastclick": "1.0.6",
+    "font-awesome": "~4.5.0"
   }
 }

@@ -3,7 +3,6 @@ import ShortcutsRoute from '../../mixins/shortcuts-route';
 import isNumber, { isFinite } from '../../utils/number-type';
 
 export default AuthenticatedRouteStaff.extend(ShortcutsRoute, {
-
   model(params) {
     var orderId,
      order,
@@ -16,7 +15,7 @@ export default AuthenticatedRouteStaff.extend(ShortcutsRoute, {
     }
     order = this.store.peekRecord('order', orderId);
     if (order && order.get('status') > 20) {
-      order.get('items'); // force reload
+      order.get('items'); // make order items loaded
       return order;
     }
     query = {
@@ -30,33 +29,5 @@ export default AuthenticatedRouteStaff.extend(ShortcutsRoute, {
       }
       return this.replaceRoute('orders.index');
     });
-  },
-
-  setupController(controller, model) {
-    this._super(controller, model);
-    Ember.run.scheduleOnce('afterRender', this, function () {
-      this.controllerFor('orders').set('currentOrder', model);
-    });
-  },
-
-  shortcuts: {
-    'enter, o': 'openEditor',
-    'command+backspace, ctrl+backspace': 'deleteOrder'
-  },
-
-  actions: {
-    openEditor(order) {
-      order = order || this.get('controller.model');
-
-      if (!order) {
-        return;
-      }
-
-      this.transitionTo('orders.edit', order.get('id'));
-    },
-
-    deleteOrder(order) {
-      this.send('openModal', 'delete-order', this.get('controller.model'));
-    }
   }
 });

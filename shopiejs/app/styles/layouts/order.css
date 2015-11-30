@@ -357,13 +357,17 @@
   z-index:10;
 }
 
+.wrapper.order-preview .sh-order-status-bar ul li h4 {
+  font-size: 18px;
+}
+
 .wrapper.order-preview .sh-order-status-bar ul li.received {
   background: url('../images/received.svg') no-repeat center 0;
   background-size: 36px;
 }
 
 .wrapper.order-preview .sh-order-status-bar ul li.received h4 {
-  color: var(--midgrey);
+  color: var(--darkgrey);
 }
 
 .wrapper.order-preview .sh-order-status-bar ul li.accepted {
@@ -372,7 +376,7 @@
 }
 
 .wrapper.order-preview .sh-order-status-bar ul li.accepted h4 {
-  color: var(--green);
+  color: color(var(--green) lightness(-20%));
 }
 
 .wrapper.order-preview .sh-order-status-bar ul li.rejected {
@@ -381,11 +385,11 @@
 }
 
 .wrapper.order-preview .sh-order-status-bar ul li.rejected h4 {
-  color: var(--red);
+  color: color(var(--red) lightness(-20%));
 }
 
 .wrapper.order-preview .sh-order-status-bar ul li p {
-  color: var(--midgrey);
+  color: var(--darkgrey);
   margin-top: 5px;
   font-size: 0.9em;
 }

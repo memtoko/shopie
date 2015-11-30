@@ -1,10 +1,15 @@
 <section class="post-controls">
-  <i class="icon-edit"></i>
+  {{#link-to "orders.edit" model.id}}
+    <i class="fa fa-pencil-square-o"></i>
+  {{/link-to}}
 </section>
 {{#sh-content-preview-content tagName="section" content=model}}
   <div class="wrapper order-preview">
     <h1 class="content-preview-title">
-      #{{model.id}} - {{#link-to "users.user" model.user.id}}<span>by {{model.user.username}}</span>{{/link-to}}
+      Order #{{model.id}} Details
+      <section class="entry-meta">
+        {{#link-to "users.user" model.user.id class="order-customer"}}<span>by {{customerName}}</span>{{/link-to}}
+      </section>
     </h1>
     <section class="details">
       <div class="left">
@@ -15,9 +20,9 @@
       </div>
       <div class="right">
         <dl>
-          <dt>Build time</dt><dd>{{model.buildTime}} hours</dd>
+          <dt>Build time</dt><dd>{{model.buildTime}}</dd>
           <dt>Total</dt><dd>{{model.orderTotal}}</dd>
-          {{#if model.isReceived}}
+          {{#if displayButtonAction}}
             <dl class="form">
               <dd>
                 {{#sh-spin-button class="accepted-link btn btn-green" type="button" action="acceptOrder" tabindex="3" submitting=accepting autoWidth="false"}}Accept{{/sh-spin-button}}
@@ -29,5 +34,30 @@
       </div>
     </section>
     {{sh-order-status-bar order=model}}
+    <fieldset class="padded"><legend>Order items</legend>
+      <table class="order-item-table">
+        <thead><tr>
+          <th>Product name</th>
+          <th>Unit price</th>
+          <th>Quantity</th>
+          <th>&nbsp;</th>
+        </tr></thead>
+        <tbody>
+          {{#each orderItems key="id" as |item|}}
+            <tr>
+              <td>{{item.productName}}</td>
+              <td>{{item.unitPrice}}</td>
+              <td>{{item.quantity}}</td>
+              <td>{{item.lineSubtotal}}</td>
+            </tr>
+            <tr><td colspan="2">&nbsp;</td><td>Line Total:</td><td>{{item.lineTotal}}</td></tr>
+          {{/each}}
+        </tbody>
+        <tfoot>
+          <tr><td colspan="2">&nbsp;</td><td>Order Subtotal</td><td>{{model.orderSubtotal}}</td></tr>
+          <tr><td colspan="2">&nbsp;</td><td>Order Total</td><td>{{model.orderTotal}}</td></tr>
+        </tfoot>
+      </table>
+    </fieldset>
   </div>
 {{/sh-content-preview-content}}

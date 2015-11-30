@@ -40,8 +40,8 @@ body > .ember-view {
   display: flex;
   flex-direction: column;
   min-width: 0; /* TODO: This is a bullshit Firefox hack */
-  border-right: var(--rough) 1px solid;
-  background: var(--sea);
+  border-right: color(#30373b lightness(-10%)) 1px solid;
+  background: #30373b;
   transform: translateX(0);
 }
 
@@ -56,8 +56,9 @@ body > .ember-view {
   margin-right: 8px;
   width: 11px;
   height: 11px;
-  font-size: 11px;
+  font-size: 14px;
   line-height: 11px;
+  color: #fff;
 }
 
 .sh-nav-menu:hover {
@@ -67,10 +68,10 @@ body > .ember-view {
 .sh-nav-menu-icon {
   flex-shrink: 0;
   margin-right: 10px;
+  font-size: 34px;
   width: 34px;
   height: 34px;
-  background-color: #222;
-  background-size: 34px;
+  color: var(--green);
 }
 
 .sh-nav-menu-details {
@@ -80,6 +81,7 @@ body > .ember-view {
 }
 
 .sh-nav-menu-details-shop {
+  color: #fff;
   overflow: hidden;
   margin-bottom: 1px;
   text-overflow: ellipsis;
@@ -91,7 +93,7 @@ body > .ember-view {
 
 .sh-nav-menu-details-user {
   overflow: hidden;
-  color: var(--midgrey);
+  color: #fff;
   text-overflow: ellipsis;
   white-space: nowrap;
   font-size: 1.2rem;
@@ -184,25 +186,25 @@ body > .ember-view {
   align-items: center;
   padding: 5px 10px 5px 15px;
   border-radius: 0 4px 4px 0;
-  color: var(--darkgrey);
+  color: #a9a9a9;
   transition: none;
 }
 
 .sh-nav-list .active {
-  background: color(var(--green) lightness(+10%));
+  background: color(#30373b lightness(+10%));
   color: #fff;
 }
 
 .sh-nav-list a:not(.active):hover {
-  background: color(var(--green) alpha(-85%));
-  color: var(--darkgrey);
+  background: color(#30373b alpha(-85%));
+  color: #fff;
 }
 
 .sh-nav-list i {
   margin-right: 8px;
   width: 15px;
   height: 15px;
-  color: rgba(0,0,0,0.6);
+  color: #a9a9a9;
   text-align: center;
   font-size: 15px;
 }
@@ -212,7 +214,7 @@ body > .ember-view {
 }
 
 .sh-nav-list a:not(.active):hover i {
-  color: var(--darkgrey);
+  color: #fff;
 }
 
 .sh-nav-footer {
@@ -220,8 +222,8 @@ body > .ember-view {
   display: flex;
   align-items: center;
   height: 40px;
-  border-top: #dfe1e3 1px solid;
-  color: var(--midgrey);
+  border-top: #a9a9a9 1px solid;
+  color: #ddd;
 }
 
 .sh-nav-footer-sitelink {
@@ -241,7 +243,7 @@ body > .ember-view {
 }
 
 .sh-nav-footer-sitelink:hover {
-  color: var(--green);
+  color: #fff;
 }
 
 
