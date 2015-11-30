@@ -64,6 +64,7 @@ module.exports = function(defaults) {
   app.import('bower_components/markdown-it-emoji/dist/markdown-it-emoji.js');
 
   // 'dem Styles
+  app.import('bower_components/font-awesome/css/font-awesome.css');
   app.import('bower_components/codemirror/lib/codemirror.css');
   app.import('bower_components/codemirror/theme/xq-light.css');
   // Use `app.import` to add additional libraries to the generated

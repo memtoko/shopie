@@ -6,16 +6,15 @@
 {{#sh-content-preview-content tagName="section" content=model}}
   <div class="wrapper order-preview">
     <h1 class="content-preview-title">
-      Order #{{model.id}} Details
-      <section class="entry-meta">
-        {{#link-to "users.user" model.user.id class="order-customer"}}<span>by {{customerName}}</span>{{/link-to}}
-      </section>
+      #{{model.number}}
     </h1>
     <section class="details">
       <div class="left">
         <dl>
-          <dt>Name</dt><dd>{{model.fullName}}</dd>
-          <dt>Email</dt><dd>{{model.email}}</dd>
+          <dt>Name</dt>
+          <dd>{{#link-to "users.user" customer.id}}{{model.fullName}}{{/link-to}}</dd>
+          <dt>Email</dt>
+          <dd>{{model.email}}</dd>
         </dl>
       </div>
       <div class="right">

@@ -14,7 +14,7 @@
         {{#each sortedOrders key="id" as |order|}}
           {{#sh-order-list-item order=order active=(is-equal order currentOrder) onDoubleClick="openEditor" previewIsHidden=container.previewIsHidden as |component|}}
             {{#link-to component.viewOrEdit order.id class="permalink" title="Edit this order"}}
-              <h3 class="entry-title">#{{order.id}} by <span>{{component.customerName}}</span></h3>
+              <h3 class="entry-title">#{{order.number}} by <span>{{component.customerName}}</span></h3>
               <section class="entry-meta">
                 <span class="status">
                   <span class="name {{component.statusName}}">{{component.statusName}}</span>

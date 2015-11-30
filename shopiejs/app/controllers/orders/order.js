@@ -8,7 +8,7 @@ export default Ember.Controller.extend({
 
   currentUser: Ember.computed.alias('session.user'),
   orderItems: Ember.computed.alias('model.items'),
-
+  customer: Ember.computed('model.user'),
   customerName: Ember.computed('model.user.username', 'model.fullName', function () {
     var fullName = this.get('model.fullName'),
       username = this.get('model.user.username');

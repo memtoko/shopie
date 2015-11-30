@@ -12,6 +12,7 @@ class OrderSerializer(ModelSerializer):
         model = Order
         fields = (
             'id',
+            'number',
             'status',
             'full_name',
             'email',

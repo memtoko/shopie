@@ -117,10 +117,23 @@ class OrderQuerySet(models.QuerySet):
         except self.model.DoesNotExist:
             return self.get_or_create(**kwargs)
 
+def order_number_generator():
+    segments = (3,5,3) # 999.99999.999 possibility
+    while True:
+        collections = []
+        for item in segments:
+            sample = map(str, random.sample(range(10), item))
+            segment = ''.join(sample)
+            collections.append(segment)
+        num = '-'.join(collections)
+        if not Order.objects.filter(number=x).exists():
+            return num
+
 class Order(OrderState, TimeStampsMixin):
     """The actul order we use"""
     full_name = models.CharField(max_length=255, blank=True,
         verbose_name=_('Full name'))
+    number = models.CharField(max_length=255, blank=True, verbose_name=_("order number"))
     email = models.EmailField(_('Email address'), blank=True)
     # this is the customer that place the order (customer)
     user = models.ForeignKey(user_model_string(), blank=True, null=True,
@@ -258,6 +271,8 @@ class Order(OrderState, TimeStampsMixin):
 
     def save(self, *args, **kwargs):
         self.calculate()
+        if not self.number:
+            self.number = order_number_generator()
         super(Order, self).save(*args, **kwargs)
 
     def calculate(self):

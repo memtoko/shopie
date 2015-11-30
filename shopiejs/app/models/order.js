@@ -6,7 +6,7 @@ export default DS.Model.extend({
   status: DS.attr(),
   fullName: DS.attr(),
   email: DS.attr(),
-
+  number: DS.attr(),
   status: DS.attr('number'),
 
   createdAt: DS.attr('moment-date'),
