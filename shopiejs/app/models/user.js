@@ -28,6 +28,8 @@ export default DS.Model.extend({
       } else {
         return Ember.RSVP.reject();
       }
+    }, (err) => {
+      return Ember.RSVP.reject();
     });
   }
 });

@@ -12,6 +12,7 @@ from rest_framework_json_api.mixins import MultipleIDMixin
 from shopie.models import Order, OrderItem
 from shopie.api.serializers.order import OrderSerializer, OrderItemSerializer
 from shopie.utils.current_order import get_or_create_current_order
+from shopie.rest_permissions import UserStaffOnly
 
 class OrderViewSet(MultipleIDMixin, viewsets.ModelViewSet):
     resource_name = 'orders'
@@ -35,6 +36,27 @@ class OrderViewSet(MultipleIDMixin, viewsets.ModelViewSet):
         except (TypeError, KeyError):
             headers = {}
         return Response(serializer.data, status=200, headers=headers)
+
+    @detail_route(methods=['post'], permission_classes=[IsAuthenticated,])
+    def confirm(self, request, *args, **kwargs):
+        order = self.get_object()
+        order.confirm()
+        serializer = OrderSerializer(order, many=False)
+        return Response(serializer.data, status=200)
+
+    @detail_route(methods=['post'], permission_classes=[IsAuthenticated, UserStaffOnly,])
+    def accept(self, request, *args, **kwargs):
+        order = self.get_object()
+        order.accept(request.user)
+        serializer = OrderSerializer(order, many=False)
+        return Response(serializer.data, status=200)
+
+    @detail_route(methods=['post'], permission_classes=[IsAuthenticated, UserStaffOnly,])
+    def reject(self, request, *args, **kwargs):
+        order = self.get_object()
+        order.reject(request.user)
+        serializer = OrderSerializer(order, many=False)
+        return Response(serializer.data, status=200)
 
 class OrderItemViewSet(MultipleIDMixin, viewsets.ModelViewSet):
     resource_name = 'order-items'

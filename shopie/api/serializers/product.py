@@ -1,8 +1,8 @@
-from rest_framework import serializers
+from .base import ModelSerializer
 
 from shopie.models import Product
 
-class ProductSerializer(serializers.ModelSerializer):
+class ProductSerializer(ModelSerializer):
     class Meta:
         model = Product
         fields = (

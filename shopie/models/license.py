@@ -22,8 +22,8 @@ class LicenseManager(models.Manager):
     def renew_or_create_license(self, item):
         #check if it already processing
         queryset = self.get_queryset()
-        if not queryset.filter(order=item.order, product=item.product).exists():
-            product = item.product
+        product = item.product
+        if not queryset.filter(order=item.order, product=product).exists():
             if item.is_renewal:
                 license = queryset.filter(license_key=item.renewal_license).get()
                 _days = product.license_expiry * 365
@@ -36,9 +36,9 @@ class LicenseManager(models.Manager):
                 _days = product.license_expiry * 365
                 expired_at = timezone.now() + timedelta(days=_days)
                 del _days
-
+                activation_limit = product.activation_limit
                 self.create(
-                    user=order.user,
+                    user=item.order.user,
                     license_key=license_key,
                     active_remaining=activation_limit,
                     expired_at=expired_at,
@@ -93,6 +93,6 @@ class LicenseActivation(TimeStampsMixin, BaseModel):
 
 def create_license_on_acceptance(sender, order, **kwargs):
     for item in order.items.all():
-        License.objects.renew_or_create_license(order_item=item)
+        License.objects.renew_or_create_license(item)
 # connect it
 order_acceptance.connect(create_license_on_acceptance, dispatch_uid='shopie.models.license')

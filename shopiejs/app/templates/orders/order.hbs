@@ -2,21 +2,32 @@
   <i class="icon-edit"></i>
 </section>
 {{#sh-content-preview-content tagName="section" content=model}}
-  <div class="wrapper">
+  <div class="wrapper order-preview">
     <h1 class="content-preview-title">
       #{{model.id}} - {{#link-to "users.user" model.user.id}}<span>by {{model.user.username}}</span>{{/link-to}}
     </h1>
-    <span class="order-meta">
-      {{#sh-moment-timeago dateTime=model.createdAt as |componentTimeAgo|}}
-        <time datetime="{{model.createdAt}}" class="date createdAt">
-          Created {{componentTimeAgo.timeago}}
-        </time>
-      {{/sh-moment-timeago}}
-    </span>
-    <ul class="order-items">
-      {{#each model.items key="id" as |item|}}
-        <li>{{item.quantity}} x {{item.productName}}</li>
-      {{/each}}
-    </ul>
+    <section class="details">
+      <div class="left">
+        <dl>
+          <dt>Name</dt><dd>{{model.fullName}}</dd>
+          <dt>Email</dt><dd>{{model.email}}</dd>
+        </dl>
+      </div>
+      <div class="right">
+        <dl>
+          <dt>Build time</dt><dd>{{model.buildTime}} hours</dd>
+          <dt>Total</dt><dd>{{model.orderTotal}}</dd>
+          {{#if model.isReceived}}
+            <dl class="form">
+              <dd>
+                {{#sh-spin-button class="accepted-link btn btn-green" type="button" action="acceptOrder" tabindex="3" submitting=accepting autoWidth="false"}}Accept{{/sh-spin-button}}
+                {{#sh-spin-button class="accepted-link btn btn-red" type="button" action="rejectOrder" tabindex="3" submitting=rejecting autoWidth="false"}}Reject{{/sh-spin-button}}
+              </dd>
+            </dl>
+          {{/if}}
+        </dl>
+      </div>
+    </section>
+    {{sh-order-status-bar order=model}}
   </div>
 {{/sh-content-preview-content}}

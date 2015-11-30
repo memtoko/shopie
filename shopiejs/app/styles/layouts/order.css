@@ -285,3 +285,111 @@
 .content-preview.keyboard-focused {
   animation: keyboard-focus-style-fade-out 1.5s 1 forwards;
 }
+
+.wrapper.order-preview .details {
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+}
+
+.wrapper.order-preview .details .left {
+  width: 55%;
+  float: left;
+}
+
+.wrapper.order-preview .details .right {
+  width: 45%;
+  float: left;
+}
+
+.wrapper.order-preview .details dl dt {
+  float: left;
+  width: 30%;
+  text-align: right;
+  color: var(--midgrey);
+  white-space: nowrap;
+}
+
+.wrapper.order-preview .details dl dd {
+  font-weight: bold;
+  margin-left:35%;
+  white-space:nowrap
+}
+
+.wrapper.order-preview .details dl dd a {
+  color: inherit;
+}
+
+.wrapper.order-preview .details dl dt.padding {
+  padding-top: 6px;
+}
+
+.wrapper.order-preview .details dl.form {
+  margin-top:15px;
+}
+
+.wrapper.order-preview .details dl.form input.text {
+  width: 70%;
+}
+
+.wrapper.order-preview .details .btn {
+  margin-right: 5px;
+}
+
+.wrapper.order-preview .sh-order-status-bar {
+  background: url('../images/square.svg') repeat-x 0 15px;
+  background-size: 8px;
+  margin: 45px 0;
+  overflow: hidden;
+}
+
+.wrapper.order-preview .sh-order-status-bar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.wrapper.order-preview .sh-order-status-bar ul li {
+  width: 33%;
+  float: left;
+  text-align: center;
+  padding-top: 42px;
+  z-index:10;
+}
+
+.wrapper.order-preview .sh-order-status-bar ul li.received {
+  background: url('../images/received.svg') no-repeat center 0;
+  background-size: 36px;
+}
+
+.wrapper.order-preview .sh-order-status-bar ul li.received h4 {
+  color: var(--midgrey);
+}
+
+.wrapper.order-preview .sh-order-status-bar ul li.accepted {
+  background: url('../images/accepted.svg') no-repeat center 0;
+  background-size:36px;
+}
+
+.wrapper.order-preview .sh-order-status-bar ul li.accepted h4 {
+  color: var(--green);
+}
+
+.wrapper.order-preview .sh-order-status-bar ul li.rejected {
+  background: url('../images/rejected.svg') no-repeat center 0;
+  background-size: 36px;
+}
+
+.wrapper.order-preview .sh-order-status-bar ul li.rejected h4 {
+  color: var(--red);
+}
+
+.wrapper.order-preview .sh-order-status-bar ul li p {
+  color: var(--midgrey);
+  margin-top: 5px;
+  font-size: 0.9em;
+}
+
+.wrapper.order-preview .sh-order-status-bar ul h4 {
+  color: var(--midcoffee);
+}

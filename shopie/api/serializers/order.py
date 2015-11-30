@@ -1,12 +1,11 @@
-from rest_framework import serializers
-
+from .base import ModelSerializer, ResourceRelatedField
 from shopie.models import (
     Order, OrderItem, ExtraPriceOrderField, ExraPriceOrderItemField)
 
-class OrderSerializer(serializers.ModelSerializer):
-    extra_price_fields = serializers.PrimaryKeyRelatedField(many=True, required=False,
+class OrderSerializer(ModelSerializer):
+    extra_price_fields = ResourceRelatedField(many=True, required=False,
         queryset=ExtraPriceOrderField.objects.all())
-    items = serializers.PrimaryKeyRelatedField(many=True, required=False,
+    items = ResourceRelatedField(many=True, required=False,
         queryset=OrderItem.objects.all())
 
     class Meta:
@@ -31,7 +30,7 @@ class OrderSerializer(serializers.ModelSerializer):
             'extra_price_fields'
         )
 
-class OrderItemSerializer(serializers.ModelSerializer):
+class OrderItemSerializer(ModelSerializer):
     class Meta:
         model = OrderItem
         fields = (
@@ -45,7 +44,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
             'extra_price_fields'
         )
 
-class ExtraPriceOrderFieldSerializer(serializers.ModelSerializer):
+class ExtraPriceOrderFieldSerializer(ModelSerializer):
     class Meta:
         model = ExtraPriceOrderField
         fields = (
@@ -55,7 +54,7 @@ class ExtraPriceOrderFieldSerializer(serializers.ModelSerializer):
             'value'
         )
 
-class ExraPriceOrderItemFieldSerializer(serializers.ModelSerializer):
+class ExraPriceOrderItemFieldSerializer(ModelSerializer):
     class Meta:
         model = ExraPriceOrderItemField
         fields = (

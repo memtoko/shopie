@@ -17,7 +17,7 @@ function inject(registry, factoryNameOrType, property, injectionName) {
 }
 
 export function setupAjax(registry) {
-  inject(registry, 'service:ajax', 'ajax', 'service:session');
+  inject(registry, 'service:ajax', 'session', 'service:session');
   inject(registry, ['route', 'controller', 'model'], 'ajax', 'service:ajax');
 };
 

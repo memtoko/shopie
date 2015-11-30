@@ -1,5 +1,5 @@
-from rest_framework import serializers
+from .base import ModelSerializer
 
 from shopie.models import Payment
 
-class PaymentSerializer(serializers.ModelSerializer): pass
+class PaymentSerializer(ModelSerializer): pass

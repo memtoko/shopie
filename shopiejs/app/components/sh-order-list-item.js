@@ -20,11 +20,11 @@ export default Ember.Component.extend({
 
   shopiePaths: Ember.inject.service('shopie-paths'),
 
-  isBuilding: Ember.computed.equal('order.status', 10),
-  isConfirming: Ember.computed.equal('order.status', 20),
-  isReceived: Ember.computed.equal('order.status', 30),
-  isAccepted: Ember.computed.equal('order.status', 40),
-  isRejected: Ember.computed.equal('order.status', 50),
+  isBuilding: Ember.computed.alias('order.isBuilding'),
+  isConfirming: Ember.computed.alias('order.isConfirming'),
+  isReceived: Ember.computed.alias('order.isReceived'),
+  isAccepted: Ember.computed.alias('order.isAccepted'),
+  isRejected: Ember.computed.alias('order.isRejected'),
 
   customerName: Ember.computed('order.user.username', 'ember.user.email', function () {
     return this.get('order.user.username') || this.get('order.user.email');

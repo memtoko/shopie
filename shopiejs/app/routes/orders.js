@@ -11,7 +11,7 @@ export default AuthenticatedRouteStaff.extend(ShortcutsRoute, PaginationRouteMix
     return this.loadFirstPage().then((function (_this) {
       return function () {
         return _this.store.filter('order', function (order) {
-          return true;
+          return order.get('status') > 20;
         });
       };
     })(this));

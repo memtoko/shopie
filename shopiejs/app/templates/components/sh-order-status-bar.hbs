@@ -1,0 +1,22 @@
+<ul>
+  {{#if order.isReceived}}
+    <li class="received">
+      <h4>Order received</h4>
+      {{#sh-moment-timeago dateTime=order.receivedAt as |receivedTime|}}
+        <p title="{{order.receivedAt}}">{{receivedTime.timeago}}</p>
+      {{/sh-moment-timeago}}
+    </li>
+  {{/if}}
+  {{#if order.isAccepted}}
+    <li class="accepted">
+      <h4>Order accepted</h4>
+      {{#link-to "users.user" accepter}}<p>by {{accepterName}}</p>{{/link-to}}
+    </li>
+  {{/if}}
+  {{#if order.isRejected}}
+    <li class="rejected">
+       <h4>Order rejected</h4>
+       {{#link-to "users.user" rejected}}<p>by {{rejecterName}}</p>{{/link-to}}
+    </li>
+  {{/if}}
+</ul>

@@ -15,7 +15,7 @@ export default AuthenticatedRouteStaff.extend(ShortcutsRoute, {
       return this.transitionTo('error404', params.order_id);
     }
     order = this.store.peekRecord('order', orderId);
-    if (order) {
+    if (order && order.get('status') > 20) {
       return order;
     }
     query = {
@@ -23,7 +23,7 @@ export default AuthenticatedRouteStaff.extend(ShortcutsRoute, {
       status: 'all'
     };
     return this.store.query('order', query).then((order) => {
-      if (order) {
+      if (order && order.get('status') > 20) {
         return order;
       }
       return this.replaceRoute('orders.index');
@@ -32,7 +32,9 @@ export default AuthenticatedRouteStaff.extend(ShortcutsRoute, {
 
   setupController(controller, model) {
     this._super(controller, model);
-    this.controllerFor('orders').set('currentOrder', model);
+    Ember.run.scheduleOnce('afterRender', this, function () {
+      this.controllerFor('orders').set('currentOrder', model);
+    });
   },
 
   actions: {

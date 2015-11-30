@@ -33,6 +33,7 @@ module.exports = function(defaults) {
       outputFile: isProduction ? 'shopie.min.css' : 'shopie.css'
     },
     hinting: false,
+    storeConfigInMeta: false,
     fingerprint: disabled,
     'ember-cli-selectize': {
       theme: false

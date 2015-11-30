@@ -3,6 +3,12 @@ import Ember from 'ember';
 let {get, set, computed} = Ember;
 let { RSVP } = Ember;
 
+function methodAlias(methodName) {
+  return function () {
+    return this[methodName].apply(this, arguments);
+  };
+}
+
 export default Ember.Service.extend({
   delayedNotifications: Ember.A(),
   content: Ember.A(),
@@ -85,5 +91,7 @@ export default Ember.Service.extend({
 
   closeAll() {
     this.get('content').clear();
-  }
+  },
+
+  clearAll: methodAlias('closeAll')
 });

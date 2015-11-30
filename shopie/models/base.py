@@ -33,7 +33,7 @@ class TimeStampsMixin(models.Model):
     updated_at = models.DateTimeField(default=timezone.now, db_index=True)
 
     def save(self, **kwargs):
-        self.created_at = timezone.now()
+        self.updated_at = timezone.now()
         super(TimeStampsMixin, self).save(**kwargs)
 
     class Meta:
