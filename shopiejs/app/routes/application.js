@@ -25,7 +25,7 @@ export default Ember.Route.extend(ApplicationRouteMixin, ShortcutsRoute, {
   notifications: Ember.inject.service(),
 
   title(tokens) {
-    return tokens.join(' - ') + 'Shopie';
+    return tokens.join(' - ') + ' Shopie';
   },
 
   /**
