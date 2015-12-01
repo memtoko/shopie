@@ -8,7 +8,7 @@ export default Ember.Controller.extend({
 
   currentUser: Ember.computed.alias('session.user'),
   orderItems: Ember.computed.alias('model.items'),
-  customer: Ember.computed('model.user'),
+  customer: Ember.computed.alias('model.user'),
   customerName: Ember.computed('model.user.username', 'model.fullName', function () {
     var fullName = this.get('model.fullName'),
       username = this.get('model.user.username');
@@ -33,6 +33,7 @@ export default Ember.Controller.extend({
           key: 'order.accepting.failed'
         });
       }).then(() => {
+        order.set('acceptedAt', moment());
         order.set('acceptedBy', this.get('currentUser'));
         order.set('status', 40);
         return order;
@@ -51,6 +52,7 @@ export default Ember.Controller.extend({
           key: 'order.rejecting.failed'
         });
       }).then(() => {
+        order.set('rejectedAt', moment());
         order.set('rejectedBy', this.get('currentUser'));
         order.set('status', 50);
         return order;

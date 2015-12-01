@@ -126,7 +126,7 @@ def order_number_generator():
             segment = ''.join(sample)
             collections.append(segment)
         num = '-'.join(collections)
-        if not Order.objects.filter(number=x).exists():
+        if not Order.objects.filter(number=num).exists():
             return num
 
 class Order(OrderState, TimeStampsMixin):
