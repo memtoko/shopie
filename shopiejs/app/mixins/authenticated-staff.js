@@ -31,11 +31,15 @@ export default Ember.Mixin.create({
       this.transitionTo(Configuration.authenticationRoute);
     } else {
       let _super = this.__nextSuper;
-      return this.get('session.user').then((user) => user.isStaff()).catch(() => {
+      return this.get('session.user').then((user) => user.isStaff()).then(() => {
+        return _super.call(this, transition);
+      }, () => {
         transition.send('invalidateSession');
         transition.abort();
-        this.transitionTo(Configuration.authenticationRoute);
-      }).then(() => _super.call(this, transition));
+        this.get('session').set('attemptedTransition', transition);
+        assertRoute(this.get('routeName'));
+        this.transitionTo(Configuration.authenticationRoute)
+      });
     }
   }
 });

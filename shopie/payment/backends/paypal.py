@@ -80,11 +80,11 @@ class PaypalPayment(PaymentBackendBase):
                 'payment_method': 'paypal'
             },
             'redirect_urls': {
-                'return_url': absolute_uri(reverse('paypal_payment',
+                'return_url': absolute_uri(reverse('shopie:paypal_payment',
                     kwargs={
                         'order_key': order.order_key
                     })),
-                'cancel_url': absolute_uri(reverse('checkout'))
+                'cancel_url': absolute_uri(reverse('shopie:checkout'))
             },
             'transactions': [{
                 'item_list': {

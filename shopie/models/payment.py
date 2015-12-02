@@ -66,9 +66,9 @@ class PaymentManager(models.Manager):
         if payment.refundable_amount >= amount:
             _amount = Decimal('0.00') - amount
             self.create(
-                    order=payment.order, parent=payment, amount=_amount,
-                    method=payment.method, reference=payment.reference,
-                )
+                order=payment.order, parent=payment, amount=_amount,
+                method=payment.method, reference=payment.reference,
+            )
             payment.amount_refunded += amount
             payment.save()
         else:
@@ -91,7 +91,7 @@ class Payment(BaseModel, TimeStampsMixin):
 
     def __str__(self):
         identification = self.transaction_id or self.pk
-        return "Payment: #%s" % (identification)
+        return "Payment: #%s" % (identification,)
 
     @property
     def is_refund(self):
