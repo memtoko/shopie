@@ -24,8 +24,9 @@ Router.map(function() {
   this.route('users', {path: '/users'}, function () {
     this.route('user', {path: ':user_id'});
   });
-
+  this.route('media');
   this.route('error404', {path: '/*path'});
+
 });
 
 export default Router;

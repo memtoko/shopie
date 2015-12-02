@@ -6,8 +6,12 @@ const EMPTYSTRING = ' ';
 let { computed } = Ember;
 
 export default Ember.Component.extend({
+  confirmRejectDisabled: false,
+  confirmAcceptDisabled: false,
 
   didInsertElement() {
+    this.set('confirmRejectDisabled', false);
+    this.set('confirmAcceptDisabled', false);
     this.$('.js-modal-container, .js-modal-background').addClass('fade-in open');
     this.$('.js-modal').addClass('open');
   },
@@ -24,7 +28,7 @@ export default Ember.Component.extend({
   },
 
   _handleAction(promise) {
-    promise.finally(() => {
+    promise.then(() => {
       this.close();
     });
   },
@@ -58,11 +62,17 @@ export default Ember.Component.extend({
     },
 
     confirmAccept() {
-      return this._handleAction(this.attrs.confirmAccept());
+      if (!this.get('confirmAcceptDisabled')) {
+        this.set('confirmAcceptDisabled', true);
+        return this._handleAction(this.attrs.confirmAccept());
+      }
     },
 
     confirmReject() {
-      return this._handleAction(this.attrs.confirmReject());
+      if (!this.get('confirmRejectDisabled')) {
+        this.set('confirmRejectDisabled', true);
+        return this._handleAction(this.attrs.confirmReject());
+      }
     },
 
     noBubble: Ember.K

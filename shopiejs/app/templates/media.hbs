@@ -1,0 +1,27 @@
+<section class="sh-view">
+  <header class="view-header">
+    {{#sh-view-title openMobileMenu="openMobileMenu"}}<span>Media Library</span>{{/sh-view-title}}
+    <section class="view-actions">
+      <button class="btn btn-green" {{action "openModal" "upload-media"}} >Upload</button>
+    </section>
+  </header>
+  <section class="view-content media-library">
+    <ul class="media-gallery">
+    {{#each media key="id" as |medium|}}
+      <li class="medium">
+        <div class="medium-preview">
+          <div class="thumbnail">
+            <div class="centered">
+            {{#if medium.isEmage}}
+              <img src={{medium.file}} class="medium image-file">
+            {{else}}
+              non image.
+            {{/if}}
+            </div>
+          </div>
+        </div>
+      </li>
+    {{/each}}
+    </ul>
+  </section>
+</section>
