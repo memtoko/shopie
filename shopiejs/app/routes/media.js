@@ -1,9 +1,12 @@
 import Ember from 'ember';
 import AuthenticatedRouteStaff from './shopie-authenticated-staff';
+import PaginationRouteMixin from '../mixins/pagination-route';
 
-export default AuthenticatedRouteStaff.extend({
+export default AuthenticatedRouteStaff.extend(PaginationRouteMixin, {
+  titleToken: 'Media',
+  paginationModel: 'medium',
+
   model() {
-    let store = this.get('store');
-    return store.findAll('media');
+    return this.loadFirstPage();
   }
 });

@@ -9,6 +9,6 @@ class MediaSerializer(ModelSerializer):
             'name',
             'description',
             'file',
-            'owner',
+            'user',
             'is_public'
         )

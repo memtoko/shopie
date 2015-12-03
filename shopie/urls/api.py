@@ -15,6 +15,7 @@ router.register('users', UserViewSet)
 router.register('products', ProductViewSet)
 router.register('orders', OrderViewSet)
 router.register('order-items', OrderItemViewSet)
+router.register('media', MediaViewSet)
 
 #media
 router.register('media', MediaViewSet)

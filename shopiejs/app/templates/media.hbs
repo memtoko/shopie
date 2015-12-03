@@ -1,16 +1,27 @@
 <section class="sh-view">
   <header class="view-header">
-    {{#sh-view-title openMobileMenu="openMobileMenu"}}<span>Media</span>{{/sh-view-title}}
+    {{#sh-view-title openMobileMenu="openMobileMenu"}}<span>Media Library</span>{{/sh-view-title}}
+    <section class="view-actions">
+      <button class="btn btn-green" {{action "openModal" "upload-media"}} >Upload</button>
+    </section>
   </header>
-
   <section class="view-content media-library">
-    <form id="settings-import" enctype="multipart/form-data">
-      <fieldset>
-        <div class="form-group">
-          <label>Import</label>
-          {{sh-file-upload id="sh-upload-file" classNames="flex" uploadButtonText=uploadButtonText onUpload="onUpload"}}
+    <ul class="media-gallery">
+    {{#each media key="id" as |medium|}}
+      <li class="medium">
+        <div class="medium-preview">
+          <div class="thumbnail">
+            <div class="centered">
+            {{#if medium.isEmage}}
+              <img src={{medium.file}} class="medium image-file">
+            {{else}}
+              non image.
+            {{/if}}
+            </div>
+          </div>
         </div>
-      </fieldset>
-    </form>
+      </li>
+    {{/each}}
+    </ul>
   </section>
 </section>
