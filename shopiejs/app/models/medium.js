@@ -13,5 +13,12 @@ export default DS.Model.extend({
   isImage: Ember.computed('file', function () {
     let file = this.get('file');
     return(file.match(/\.(jpeg|jpg|gif|png)$/) != null);
+  }),
+
+  userName: Ember.computed('user.username', 'user.email', function () {
+    var username = this.get('user.username'),
+      email = this.get('user.email');
+
+    return username ? username : email;
   })
 });

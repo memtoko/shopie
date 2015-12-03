@@ -6,22 +6,32 @@
     </section>
   </header>
   <section class="view-content media-library">
-    <ul class="media-gallery">
-    {{#each media key="id" as |medium|}}
-      <li class="medium">
-        <div class="medium-preview">
-          <div class="thumbnail">
-            <div class="centered">
-            {{#if medium.isEmage}}
-              <img src={{medium.file}} class="medium image-file">
-            {{else}}
-              non image.
-            {{/if}}
-            </div>
-          </div>
-        </div>
-      </li>
-    {{/each}}
-    </ul>
+    {{#sh-dropzone-file onDragOver="onDragOver"}}
+      <form id="media-upload-form" enctype="multipart/form-data">
+        {{sh-file-input name="files[]" id="media-drop-input" class="media-drop-input" change=(action "fileChange") multiple=multiple resetInput=resetInput}}
+        <label for="media-drop-input"><strong>Choose a file</strong><span class="box_dragndrop"> or drag it here</span>.</label>
+        <div class="box-uploading">Uploading&hellip;</div>
+        <div class="box-success">Done!</div>
+        <div class="box-error">Error! <span></span>.</div>
+      </form>
+    {{/sh-dropzone-file}}
+    <table class="table-media">
+      <tbody class="medium file">
+        {{#each media key="id" as |medium|}}
+          <tr class="medium-item">
+            <td><span class="preview">
+              {{#if medium.isImage}}
+                <a href=""><img src={{medium.file}}></a>
+              {{else}}
+                <a href="">Placeholder</a>
+              {{/if}}
+              </span>
+            </td>
+            <td><p class="name">{{medium.name}}</p></td>
+            <td><p class="user">Uploaded by {{medium.userName}}</p></td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
   </section>
 </section>

@@ -23,13 +23,9 @@ Router.map(function() {
   this.route('users', {path: '/users'}, function () {
     this.route('user', {path: ':user_id'});
   });
-<<<<<<< HEAD
 
   this.route('media');
 
-=======
-  this.route('media');
->>>>>>> e7aa22a4de1764cce7b04af7daa96325fa25953a
   this.route('error404', {path: '/*path'});
 
 });

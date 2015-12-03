@@ -56,21 +56,21 @@ export default Ember.Controller.extend({
     },
 
     acceptOrder() {
-      let order = this.get('model');
+      let order = this.get('model'),
+        store = this.get('store'),
+        notifications = this.get('notifications')
+
       this.toggleProperty('accepting');
       order.acceptOrder().then((payload) => {
         this.toggleProperty('accepting');
         return payload;
-      }, () => {
+      }).catch(() => {
         this.toggleProperty('accepting');
-        this.get('notifications').showAlert('Failed to accept order. :(', {
+        notifications.showAlert('Failed to accept order.', {
           key: 'order.accepting.failed'
         });
-      }).then(() => {
-        order.set('acceptedAt', moment());
-        order.set('acceptedBy', this.get('currentUser'));
-        order.set('status', 40);
-        return order;
+      }).then((payload) => {
+        this.store.pushPayload('order', payload);
       });
     },
 
@@ -80,16 +80,13 @@ export default Ember.Controller.extend({
       order.rejectOrder().then((payload) => {
         this.toggleProperty('rejecting');
         return payload;
-      }, () => {
+      }).catch(() => {
         this.toggleProperty('rejecting');
-        this.get('notifications').showAlert('Failed to reject order. :(', {
+        this.get('notifications').showAlert('Failed to reject order.', {
           key: 'order.rejecting.failed'
         });
-      }).then(() => {
-        order.set('rejectedAt', moment());
-        order.set('rejectedBy', this.get('currentUser'));
-        order.set('status', 50);
-        return order;
+      }).then((payload) => {
+        this.store.pushPayload('order', payload);
       });
     }
   }
