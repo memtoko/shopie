@@ -4,7 +4,8 @@ will be displayed according to the state by js
 */
 .sh-dropzone {
   position: relative;
-  background-color: #f6f7f8;
+  background-color: #f5f5f5;
+  border: 2px dashed #ddd;
   padding: 6.25rem 1.25rem;
 }
 
@@ -12,19 +13,19 @@ will be displayed according to the state by js
   background-color: #fff;
 }
 
-form#media-upload-form {
+.media-upload-form {
   position: relative;
   max-width: 600px;
   margin: 0 auto;
 }
 
-#media-upload-form .box-uploading,
-#media-upload-form .box-success,
-#media-upload-form .box-error {
+.media-upload-form .box-uploading,
+.media-upload-form .box-success,
+.media-upload-form .box-error {
   display: none;
 }
 
-#media-upload-form .media-drop-input {
+.media-upload-form .media-drop-input {
   width: 0.1px;
   height: 0.1px;
   opacity: 0;
@@ -33,7 +34,7 @@ form#media-upload-form {
   z-index: -1;
 }
 
-#media-upload-form .media-drop-input + label {
+.media-upload-form .media-drop-input + label {
   font-size: 1.25em;
   font-weight: normal;
   color: var(--midgrey);
@@ -41,16 +42,37 @@ form#media-upload-form {
   cursor: pointer;
 }
 
-#media-upload-form .media-drop-input:focus + label,
-#media-upload-form .media-drop-input + label:hover {
+.media-upload-form .media-drop-input:focus + label,
+.media-upload-form .media-drop-input + label:hover {
   color: color(var(--midgrey) lightness(-10%));
 }
 
-#media-upload-form .media-drop-input:focus + label {
+.media-upload-form .media-drop-input:focus + label {
   outline: 1px dotted #000;
   outline: -webkit-focus-ring-color auto 5px;
 }
 
-#media-upload-form .media-drop-input + label * {
+.media-upload-form .media-drop-input + label * {
   pointer-events: none;
+}
+
+.media-upload-form.is-uploading .box-input {
+  visibility: none;
+}
+
+.media-upload-form.is-uploading .box-uploading {
+  display: block;
+}
+
+.media-upload-form.is-uploading-error .box-error {
+  display: block;
+}
+
+.media-upload-form.is-uploading-success .box-success {
+  display: block;
+}
+
+table.table-media .medium-list-item .preview,
+table.table-media .medium-list-item .preview img {
+  max-width: 150px;
 }

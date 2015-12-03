@@ -6,17 +6,21 @@
     </section>
   </header>
   <section class="view-content media-library">
-    {{#sh-dropzone-file onDragOver="onDragOver"}}
-      <form id="media-upload-form" enctype="multipart/form-data">
-        {{sh-file-input name="files[]" id="media-drop-input" class="media-drop-input" change=(action "fileChange") multiple=multiple resetInput=resetInput}}
-        <label for="media-drop-input"><strong>Choose a file</strong><span class="box_dragndrop"> or drag it here</span>.</label>
+    {{#sh-dropzone-file onDrop="onDrop"}}
+      <form class="media-upload-form {{stateklass}}" id="media-upload-form" enctype="multipart/form-data">
+        <div class="box-input">
+          {{sh-file-input name="file" id="media-drop-input" class="media-drop-input" change=(action "fileChange") multiple=multiple resetInput=resetInput}}
+          <label for="media-drop-input"><strong>Choose a file</strong><span class="box_dragndrop"> or drag it here</span>.</label>
+        </div>
         <div class="box-uploading">Uploading&hellip;</div>
         <div class="box-success">Done!</div>
         <div class="box-error">Error! <span></span>.</div>
       </form>
     {{/sh-dropzone-file}}
     <table class="table-media">
-      <tbody class="medium file">
+      {{#sh-infinite-scroll fetch="loadNextPage"
+        isLoading=isLoading classNames="medium-list-item"}}
+      <tbody class="medium file medium-list-item">
         {{#each media key="id" as |medium|}}
           <tr class="medium-item">
             <td><span class="preview">
@@ -28,10 +32,15 @@
               </span>
             </td>
             <td><p class="name">{{medium.name}}</p></td>
-            <td><p class="user">Uploaded by {{medium.userName}}</p></td>
+            <td>
+              {{#link-to "users.user" medium.user.id}}
+              <p class="user">Uploaded by {{medium.userName}}</p>
+              {{/link-to}}
+            </td>
           </tr>
         {{/each}}
       </tbody>
+      {{/sh-infinite-scroll}}
     </table>
   </section>
 </section>

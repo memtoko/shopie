@@ -1,13 +1,11 @@
 import Ember from 'ember';
 
-let { $ } = Ember;
-
 export default Ember.Component.extend({
   classNames: ['sh-dropzone', 'js-dropzone'],
 
   didInsertElement() {
     var elem = this.$();
-    var elem = this.$();
+
     elem.on('dragover', (e) => this._handleDragOver(e));
     elem.on('dragover dragenter', () => {
       elem.addClass('is-dragover');
@@ -19,7 +17,7 @@ export default Ember.Component.extend({
   },
 
   willDestroyElement() {
-    elem = this.$();
+    var elem = this.$();
     elem.off('dragover dragenter dragleave dragend drop');
   },
 
@@ -28,7 +26,7 @@ export default Ember.Component.extend({
     var dataTransfer = e.dataTransfer;
     if (dataTransfer && dataTransfer.files && dataTransfer.files.length) {
       e.preventDefault();
-      this.sendAction('onDragOver', dataTransfer.files)
+      this.sendAction('onDrop', dataTransfer.files)
     }
   },
 
@@ -39,5 +37,5 @@ export default Ember.Component.extend({
       e.preventDefault();
       dataTransfer.dropEffect = 'copy';
     }
-  },
+  }
 });

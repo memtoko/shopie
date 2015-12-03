@@ -7,6 +7,10 @@ export default AuthenticatedRouteStaff.extend(PaginationRouteMixin, {
   paginationModel: 'medium',
 
   model() {
-    return this.loadFirstPage();
+    return this.loadFirstPage().then(() => {
+      return this.store.filter('medium', (medium) => {
+        return true; //no op for now
+      });
+    });
   }
 });
