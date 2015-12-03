@@ -1,4 +1,4 @@
-import BaseAdapter from './base'
+import BaseAdapter from './base';
 
 export default BaseAdapter.extend({
   shouldBackgroundReloadRecord() {

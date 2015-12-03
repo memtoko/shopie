@@ -217,11 +217,21 @@
   right: 25px;
 }
 
-.content-preview .post-controls .post-edit {
+.content-preview .post-controls .cancel-action,
+.content-preview .post-controls .edit-action {
   padding-top: 0;
   padding-right: 0;
   border: none;
   font-size: 18px;
+}
+
+.content-preview .post-controls .edit-action {
+  margin-right: 10px;
+  color: var(--blue);
+}
+
+.content-preview .post-controls .cancel-action {
+  color: var(--orange);
 }
 
 .content-preview img {

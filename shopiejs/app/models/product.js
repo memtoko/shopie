@@ -6,7 +6,7 @@ export default DS.Model.extend({
   slug: DS.attr('string'),
   shortDescription: DS.attr('string'),
   description: DS.attr('string'),
-  image: DS.attr('string'),
+  image: DS.attr(),
   unitPrice: DS.attr('number'),
   isActive: DS.attr('boolean'),
   status: DS.attr(),

@@ -41,6 +41,7 @@ export default AuthenticatedRouteStaff.extend(ShortcutsRoute, {
 
   shortcuts: {
     'enter, o': 'openEditor',
+    'c, q, x': 'cancelEdit',
     'command+backspace, ctrl+backspace': 'deleteOrder'
   },
 
@@ -52,7 +53,17 @@ export default AuthenticatedRouteStaff.extend(ShortcutsRoute, {
         return;
       }
 
-      this.transitionTo('orders.edit', order.get('id'));
+      this.get('controller').send('toggleEditMode');
+    },
+
+    cancelEdit(order) {
+      order = order || this.get('controller.model');
+
+      if (!order) {
+        return;
+      }
+
+      this.get('controller').send('cancelEdit');
     },
 
     deleteOrder(order) {

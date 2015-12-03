@@ -3,16 +3,22 @@ import Ember from 'ember';
 export default Ember.Controller.extend({
   accepting: false,
   rejecting: false,
+  isEditing: false,
+  buffer: null,
   notifications: Ember.inject.service(),
   session: Ember.inject.service(),
-
   currentUser: Ember.computed.alias('session.user'),
   orderItems: Ember.computed.alias('model.items'),
   customer: Ember.computed.alias('model.user'),
+
   customerName: Ember.computed('model.user.username', 'model.fullName', function () {
     var fullName = this.get('model.fullName'),
       username = this.get('model.user.username');
     return fullName ? fullName : username;
+  }),
+
+  _createBuffer: Ember.on('init', function () {
+    this.set('buffer', Object.create(null));
   }),
 
   displayButtonAction: Ember.computed('model.status', function () {
@@ -21,6 +27,34 @@ export default Ember.Controller.extend({
   }),
 
   actions: {
+
+    toggleEditMode() {
+      let mode = this.get('isEditing');
+      if (mode) {
+        let buffer = this.get('buffer');
+        let order = this.get('model');
+        order.setProperties(buffer);
+        this.set('buffer', Object.create(null));
+        if (order.get('hasDirtyAttributes')) {
+          order.save();
+        }
+      }
+      this.toggleProperty('isEditing');
+    },
+
+    cancelEdit() {
+      this.set('buffer', Object.create(null));
+      this.toggleProperty('isEditing');
+    },
+
+    orderNameDidChange(value) {
+      this.set('buffer.fullName', value);
+    },
+
+    orderEmailDidChange(value) {
+      this.set('buffer.email', value);
+    },
+
     acceptOrder() {
       let order = this.get('model');
       this.toggleProperty('accepting');

@@ -171,7 +171,7 @@ class Product(AbstractProduct):
     activation_limit = models.IntegerField(blank=True, null=True,
         help_text=_("Activation limit for this product"), default=1)
     license_expiry = models.IntegerField(blank=True, null=True, default=1)
-    file = models.FileField(_("File"), upload_to=product_file_upload, blank=True)
+    file = models.FileField(verbose_name=_("File"), upload_to=product_file_upload, blank=True)
     image = models.FileField(upload_to="images", verbose_name='Product image',
         blank=True)
     issues = GenericRelation(Issue, content_type_field='target_content_type',
@@ -190,7 +190,7 @@ class ProductTag(BaseModel, SluggableMixin, TimeStampsMixin):
     name = models.CharField(max_length=255, verbose_name=_('Name'))
     description = models.TextField(verbose_name=_('Description'), blank=True,
         default='')
-    image = models.FileField(upload_to="images", verbose_name='Product image')
+    image = models.FileField(upload_to="images", verbose_name='image')
     products = models.ManyToManyField(Product, verbose_name='products')
 
     def __str__(self):

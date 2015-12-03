@@ -1,0 +1,16 @@
+<section class="sh-view">
+  <header class="view-header">
+    {{#sh-view-title openMobileMenu="openMobileMenu"}}<span>Media</span>{{/sh-view-title}}
+  </header>
+
+  <section class="view-content media-library">
+    <form id="settings-import" enctype="multipart/form-data">
+      <fieldset>
+        <div class="form-group">
+          <label>Import</label>
+          {{sh-file-upload id="sh-upload-file" classNames="flex" uploadButtonText=uploadButtonText onUpload="onUpload"}}
+        </div>
+      </fieldset>
+    </form>
+  </section>
+</section>
