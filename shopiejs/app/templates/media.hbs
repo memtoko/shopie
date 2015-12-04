@@ -7,7 +7,7 @@
       {{#sh-dropzone-file onDrop="onDrop"}}
         <form class="media-upload-form {{stateklass}}" id="media-upload-form" enctype="multipart/form-data">
           <div class="box-input">
-            {{sh-file-input name="file" id="media-drop-input" class="media-drop-input" change=(action "fileChange") multiple=multiple resetInput=resetInput}}
+            {{sh-file-input name="files[]" id="media-drop-input" class="media-drop-input" change=(action "fileChange") multiple=multiple resetInput=resetInput}}
             <label for="media-drop-input"><strong>Choose a file</strong><span class="box_dragndrop"> or drag it here</span>.</label>
           </div>
           <div class="box-uploading">Uploading&hellip;</div>

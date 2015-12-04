@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-let { $, RSVP } = Ember;
+let { RSVP } = Ember;
 
 export default Ember.Controller.extend({
   shopiePaths: Ember.inject.service('shopie-paths'),
@@ -19,14 +19,15 @@ export default Ember.Controller.extend({
   mediaContentFocused: Ember.computed.equal('keyboardFocus', 'mediaContent'),
   mediaListFocused: Ember.computed.equal('keyboardFocus', 'mediaList'),
 
+  // sort the model, so newer model on top
   media: Ember.computed.sort('model', function (a, b) {
     var idA = +a.get('id'),
       idB = +b.get('id');
 
     if (idA > idB) {
-      return 1;
-    } else if (idA < idB) {
       return -1;
+    } else if (idA < idB) {
+      return 1;
     }
 
     return 0;
@@ -99,11 +100,11 @@ export default Ember.Controller.extend({
 
   actions: {
     fileChange(files) {
-      this.uploadFiles($.makeArray(files));
+      this.uploadFiles(files);
     },
 
     onDrop(files) {
-      this.uploadFiles($.makeArray(files));
+      this.uploadFiles(files);
     }
   }
 });

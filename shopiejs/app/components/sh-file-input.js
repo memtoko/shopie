@@ -1,6 +1,8 @@
 import Ember from 'ember';
+import HTML5FileMixin from '../mixins/html5-file';
+let { $ } = Ember;
 
-export default Ember.TextField.extend({
+export default Ember.TextField.extend(HTML5FileMixin, {
   type: 'file',
   attributeBindings: ['multiple'],
   multiple: false,
@@ -11,8 +13,11 @@ export default Ember.TextField.extend({
     if (!Ember.isEmpty((input.files))) {
       if (!this.attrs.change) {
         throw new Error(`You must provide an \`change\` action to \`{{${this.templateName}}}\`.`);
-        let action = this.attrs['change'];
-        action(input.files);
+        this.getFilesInput($(input)).then((files) => {
+          console.log(files);
+          let action = this.attrs['change'];
+          action(files);
+        });
       }
     }
   },

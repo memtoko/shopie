@@ -1,6 +1,7 @@
 import Ember from 'ember';
+import HTML5FileMixin from '../mixins/html5-file';
 
-export default Ember.Component.extend({
+export default Ember.Component.extend(HTML5FileMixin, {
   classNames: ['sh-dropzone', 'js-dropzone'],
 
   didInsertElement() {
@@ -26,7 +27,10 @@ export default Ember.Component.extend({
     var dataTransfer = e.dataTransfer;
     if (dataTransfer && dataTransfer.files && dataTransfer.files.length) {
       e.preventDefault();
-      this.sendAction('onDrop', dataTransfer.files)
+      this.getDroppedFiles(dataTransfer).then((files) => {
+        console.log(files);
+        this.sendAction('onDrop', files)
+      });
     }
   },
 
