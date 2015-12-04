@@ -1,46 +1,49 @@
 <section class="sh-view">
   <header class="view-header">
     {{#sh-view-title openMobileMenu="openMobileMenu"}}<span>Media Library</span>{{/sh-view-title}}
-    <section class="view-actions">
-      <button class="btn btn-green" {{action "openModal" "upload-media"}} >Upload</button>
-    </section>
   </header>
   <section class="view-content media-library">
-    {{#sh-dropzone-file onDrop="onDrop"}}
-      <form class="media-upload-form {{stateklass}}" id="media-upload-form" enctype="multipart/form-data">
-        <div class="box-input">
-          {{sh-file-input name="file" id="media-drop-input" class="media-drop-input" change=(action "fileChange") multiple=multiple resetInput=resetInput}}
-          <label for="media-drop-input"><strong>Choose a file</strong><span class="box_dragndrop"> or drag it here</span>.</label>
-        </div>
-        <div class="box-uploading">Uploading&hellip;</div>
-        <div class="box-success">Done!</div>
-        <div class="box-error">Error! <span></span>.</div>
-      </form>
-    {{/sh-dropzone-file}}
-    <table class="table-media">
-      {{#sh-infinite-scroll fetch="loadNextPage"
-        isLoading=isLoading classNames="medium-list-item"}}
-      <tbody class="medium file medium-list-item">
-        {{#each media key="id" as |medium|}}
-          <tr class="medium-item">
-            <td><span class="preview">
-              {{#if medium.isImage}}
-                <a href=""><img src={{medium.file}}></a>
-              {{else}}
-                <a href="">Placeholder</a>
-              {{/if}}
-              </span>
-            </td>
-            <td><p class="name">{{medium.name}}</p></td>
-            <td>
-              {{#link-to "users.user" medium.user.id}}
-              <p class="user">Uploaded by {{medium.userName}}</p>
+    <div class="medium-list-content {{if mediaListFocused 'keyboard-focused'}}">
+      {{#sh-dropzone-file onDrop="onDrop"}}
+        <form class="media-upload-form {{stateklass}}" id="media-upload-form" enctype="multipart/form-data">
+          <div class="box-input">
+            {{sh-file-input name="file" id="media-drop-input" class="media-drop-input" change=(action "fileChange") multiple=multiple resetInput=resetInput}}
+            <label for="media-drop-input"><strong>Choose a file</strong><span class="box_dragndrop"> or drag it here</span>.</label>
+          </div>
+          <div class="box-uploading">Uploading&hellip;</div>
+          <div class="box-success">Done!</div>
+          <div class="box-error">Error! <span></span>.</div>
+        </form>
+        <table class="table-media">
+          {{#sh-infinite-scroll fetch="loadNextPage" isLoading=isLoading classNames="media-container"}}
+          <tbody class="medium file medium-list-item">
+            {{#each media key="id" as |medium|}}
+              {{#link-to 'media.medium' medium class="media-edit-button"}}
+              <tr class="medium-item">
+                <td><span class="preview">
+                  {{#if medium.isImage}}
+                    <a href=""><img src={{medium.file}}></a>
+                  {{else}}
+                    <a href="">Placeholder</a>
+                  {{/if}}
+                  </span>
+                </td>
+                <td><p class="name">{{medium.name}}</p></td>
+                <td>
+                  {{#link-to "users.user" medium.user.id}}
+                  <p class="user">Uploaded by {{medium.userName}}</p>
+                  {{/link-to}}
+                </td>
+              </tr>
               {{/link-to}}
-            </td>
-          </tr>
-        {{/each}}
-      </tbody>
-      {{/sh-infinite-scroll}}
-    </table>
+            {{/each}}
+          </tbody>
+          {{/sh-infinite-scroll}}
+        </table>
+      {{/sh-dropzone-file}}
+    </div>
+    <section class="settings-menu-container media-settings {{if mediaContentFocused 'keyboard-focused'}}">
+      {{outlet}}
+    </section>
   </section>
 </section>

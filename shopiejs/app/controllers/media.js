@@ -3,7 +3,6 @@ import Ember from 'ember';
 let { $, RSVP } = Ember;
 
 export default Ember.Controller.extend({
-  media: Ember.computed.alias('model'),
   shopiePaths: Ember.inject.service('shopie-paths'),
   notifications: Ember.inject.service(),
   session: Ember.inject.service(),
@@ -13,6 +12,25 @@ export default Ember.Controller.extend({
 
   stateklass: '',
   submitting: false,
+
+  mobileWidth: 600,
+  isMobile: false,
+
+  mediaContentFocused: Ember.computed.equal('keyboardFocus', 'mediaContent'),
+  mediaListFocused: Ember.computed.equal('keyboardFocus', 'mediaList'),
+
+  media: Ember.computed.sort('model', function (a, b) {
+    var idA = +a.get('id'),
+      idB = +b.get('id');
+
+    if (idA > idB) {
+      return 1;
+    } else if (idA < idB) {
+      return -1;
+    }
+
+    return 0;
+  }),
 
   uploadFile(file, user) {
     if (!file || !user) {

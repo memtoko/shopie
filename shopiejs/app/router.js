@@ -24,7 +24,9 @@ Router.map(function() {
     this.route('user', {path: ':user_id'});
   });
 
-  this.route('media');
+  this.route('media', {path: '/media'}, function () {
+    this.route('medium', {path: ':medium_id'});
+  });
 
   this.route('error404', {path: '/*path'});
 
