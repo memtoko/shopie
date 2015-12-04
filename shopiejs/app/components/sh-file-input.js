@@ -13,12 +13,12 @@ export default Ember.TextField.extend(HTML5FileMixin, {
     if (!Ember.isEmpty((input.files))) {
       if (!this.attrs.change) {
         throw new Error(`You must provide an \`change\` action to \`{{${this.templateName}}}\`.`);
-        this.getFilesInput($(input)).then((files) => {
-          console.log(files);
-          let action = this.attrs['change'];
-          action(files);
-        });
       }
+      this.getFilesInput($(input)).then((files) => {
+        console.log(files);
+        let action = this.attrs['change'];
+        action(files);
+      }).catch((err) => console.log(err));
     }
   },
 

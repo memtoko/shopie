@@ -30,8 +30,8 @@ export default Ember.Mixin.create({
         files = [{name: value.replace(/^.*\\/, '')}];
       } else if (files[0].name === undefined && files[0].fileName) {
         $.each(files, function (index, file) {
-            file.name = file.fileName;
-            file.size = file.fileSize;
+          file.name = file.fileName;
+          file.size = file.fileSize;
         });
       }
       resolve(files);
@@ -51,7 +51,7 @@ export default Ember.Mixin.create({
     dataTransfer = dataTransfer || {};
     let items = dataTransfer.items;
     if (items && items.length && (items[0].webkitGetAsEntry || items[0].getAsEntry)) {
-      let params = items.map((item) => {
+      let params = $.map(items, (item) => {
         var entry;
         if (item.webkitGetAsEntry) {
           entry = item.webkitGetAsEntry();
