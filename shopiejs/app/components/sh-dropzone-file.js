@@ -28,7 +28,6 @@ export default Ember.Component.extend(HTML5FileMixin, {
     if (dataTransfer && dataTransfer.files && dataTransfer.files.length) {
       e.preventDefault();
       this.getDroppedFiles(dataTransfer).then((files) => {
-        console.log(files);
         this.sendAction('onDrop', files)
       });
     }

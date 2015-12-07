@@ -2,34 +2,30 @@ import DS from 'ember-data';
 import Ember from 'ember';
 import shopiePaths from '../utils/shopie-paths';
 
+let Promise = Ember.RSVP.Promise;
+
+var promiseObject = function(promise, label) {
+  return DS.PromiseObject.create({
+    promise: Promise.resolve(promise, label)
+  });
+};
+
 export default DS.Model.extend({
   firstName: DS.attr('string'),
   lastName: DS.attr('string'),
   email: DS.attr('string'),
   username: DS.attr('string'),
   dateJoined: DS.attr('moment-date'),
-  /**
-   * this information must not stored in all application instance (the value of is_staff,
-   * as we seen in Django user model). Because it considered dangerous, to store it.
-   * If we need that information, call this method and forget it.
-   * usage:
-   *
-   * user.isStaff().then(function () {
-   *   // okay user is staff
-   * })
-   */
-  isStaff() {
-    return this.ajax.request(
-      shopiePaths().url.api('users', (this.get('id')).toString(), 'staff')
-    ).then((response) => {
-      let data = response.data || response;
-      if (data.is_staff) {
-        return Ember.RSVP.resolve();
-      } else {
-        return Ember.RSVP.reject();
-      }
-    }, (err) => {
-      return Ember.RSVP.reject();
-    });
-  }
+
+  _isStaff: Ember.computed('id', function () {
+    var id = this.get('id').toString(),
+      promise = this.ajax.request(
+        shopiePaths().url.api('users', id, 'staff')
+      ).then((response) => response.data || response);
+
+    return promiseObject(promise, 'fect user staff');
+  }).readOnly(),
+
+  isStaff: Ember.computed.equal('_isStaff.is_staff').readOnly()
+
 });

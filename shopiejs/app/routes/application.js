@@ -28,9 +28,6 @@ export default Ember.Route.extend(ApplicationRouteMixin, ShortcutsRoute, {
     return tokens.join(' - ') + ' Shopie';
   },
 
-  /**
-  Make sure user logged in here is staff
-  */
   sessionAuthenticated() {
     let appController = this.controllerFor('application');
 
@@ -51,7 +48,7 @@ export default Ember.Route.extend(ApplicationRouteMixin, ShortcutsRoute, {
   actions: {
 
     openMobileMenu() {
-      this.controller().set('showMobileMenu', true);
+      this.controller.set('showMobileMenu', true);
     },
 
     openSettingsMenu() {
@@ -67,8 +64,9 @@ export default Ember.Route.extend(ApplicationRouteMixin, ShortcutsRoute, {
       });
     },
 
-    signedIn() {
+    signedIn(user) {
       this.get('notifications').clearAll();
+      user.get('_isStaff');
     },
 
     closeMenus() {

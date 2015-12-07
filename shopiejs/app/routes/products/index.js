@@ -8,33 +8,34 @@ export default MobileRoute.extend(AuthenticatedRouteMixin, {
   // Transition to a specific post if we're not on mobile
   beforeModel() {
     if (!mobileQuery.matches) {
-      return this.goToOrder();
+      return this.goToProduct();
     }
   },
 
   setupController(controller, model) {
     /*jshint unused:false*/
-    controller.set('noOrders', this.get('noOrders'));
+    controller.set('noProducts', this.get('noProducts'));
   },
 
-  goToOrder() {
+  goToProduct() {
     // the store has been populated by PostsRoute
-    var orders = this.store.peekAll('order'),
-      order;
+    var products = this.store.peekAll('product'),
+      product;
 
-    order = orders.find(function (order) {
-      return order && order.get('status') > 20;
+    product = products.find(function (product) {
+      return product && product.get('parent.content') == null;
     });
 
-    if (order) {
-      return this.transitionTo('orders.order', order);
+    if (product) {
+      return this.transitionTo('products.product', product);
     }
 
-    this.set('noOrders', true);
+    this.set('noProducts', true);
+
   },
 
   // Mobile posts route callback
   desktopTransition: function () {
-    this.goToOrder();
+    this.goToProduct();
   }
 });

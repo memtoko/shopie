@@ -248,6 +248,7 @@
 /* Empty State
 /* ---------------------------------------------------------- */
 
+.no-products-box,
 .no-orders-box {
   position: relative;
   z-index: 600;
@@ -259,13 +260,15 @@
   height: 90%;
 }
 
+.no-products-box .no-products,
 .no-orders-box .no-orders {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.no-posts-box .no-orders h3 {
+.no-products-box .no-products h3,
+.no-orders-box .no-orders h3 {
   margin-bottom: 20px;
   color: var(--midgrey);
   font-size: 2em;

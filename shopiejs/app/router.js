@@ -24,6 +24,15 @@ Router.map(function() {
     this.route('user', {path: ':user_id'});
   });
 
+  this.route('products', {path: '/products'}, function () {
+    this.route('product', {path: ':product_id'});
+  });
+
+  this.route('editor', function () {
+    this.route('new', {path: ''});
+    this.route('edit', {path: ':product_id'});
+  });
+
   this.route('media', {path: '/media'}, function () {
     this.route('medium', {path: ':medium_id'});
   });

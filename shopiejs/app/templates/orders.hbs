@@ -12,7 +12,7 @@
     {{#sh-infinite-scroll-box tagName="section" classNames="content-list-content js-content-scrollbox" fetch="loadNextPage"}}
       <ol class="orders-list">
         {{#each sortedOrders key="id" as |order|}}
-          {{#sh-order-list-item order=order active=(is-equal order currentOrder) onDoubleClick="openEditor" previewIsHidden=container.previewIsHidden as |component|}}
+          {{#sh-orders-list-item order=order active=(is-equal order currentOrder) onDoubleClick="openEditor" previewIsHidden=container.previewIsHidden as |component|}}
             {{#link-to component.viewOrEdit order.id class="permalink" title="Edit this order"}}
               <h3 class="entry-title">#{{order.number}} by <span>{{component.customerName}}</span></h3>
               <section class="entry-meta">
@@ -21,12 +21,12 @@
                 </span>
             </section>
             {{/link-to}}
-          {{/sh-order-list-item}}
+          {{/sh-orders-list-item}}
         {{/each}}
       </ol>
     {{/sh-infinite-scroll-box}}
   </section>
-  <section class="content-preview js-content-preview {{if postContentFocused 'keyboard-focused'}}">
+  <section class="content-preview js-content-preview {{if orderContentFocused 'keyboard-focused'}}">
     {{outlet}}
   </section>
 </div>

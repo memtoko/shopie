@@ -10,15 +10,10 @@ export default MobileRoute.extend(AuthenticatedRouteMixin, {
   },
 
   goToMedium() {
-    var media = this.store.peekAll('medium'),
-      medium;
+    var media = this.modelFor('media').get('firstObject');
 
-    medium = media.find(function (medium) {
-      return medium && !medium.get('isNew');
-    });
-
-    if (medium) {
-      return this.transitionTo('media.medium', medium);
+    if (media) {
+      this.transitionTo('media.medium', media);
     }
   }
 });

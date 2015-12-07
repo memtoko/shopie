@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-let { RSVP } = Ember;
+let { $, RSVP } = Ember;
 
 export default Ember.Controller.extend({
   shopiePaths: Ember.inject.service('shopie-paths'),
@@ -16,6 +16,8 @@ export default Ember.Controller.extend({
   mobileWidth: 600,
   isMobile: false,
 
+  progressValue: 0,
+
   mediaContentFocused: Ember.computed.equal('keyboardFocus', 'mediaContent'),
   mediaListFocused: Ember.computed.equal('keyboardFocus', 'mediaList'),
 
@@ -25,9 +27,9 @@ export default Ember.Controller.extend({
       idB = +b.get('id');
 
     if (idA > idB) {
-      return -1;
-    } else if (idA < idB) {
       return 1;
+    } else if (idA < idB) {
+      return -1;
     }
 
     return 0;
@@ -46,6 +48,8 @@ export default Ember.Controller.extend({
       };
     formData.append('file', file);
     formData.append('user', JSON.stringify(userObject));
+
+    let progressHandler = (e) => this._progressHandler(e);
     // we have our data now, lets submit it to server
     return ajax.post(this.get('shopiePaths.url').api('media'), {
       data: formData,
@@ -55,6 +59,15 @@ export default Ember.Controller.extend({
       processData: false,
       headers: {
         'accept': 'application/vnd.api+json'
+      },
+      xhr: function () {
+        let xhrRequest = $.ajaxSettings.xhr();
+        if (xhrRequest.upload) {
+          xhrRequest.upload.addEventListener(
+            'progress', progressHandler, false
+          );
+        }
+        return xhrRequest;
       }
     }).catch((err) => {
       let name = file.name || file.fileName;
@@ -65,6 +78,13 @@ export default Ember.Controller.extend({
     });
   },
 
+  _progressHandler(e) {
+    if (e.lengthComputable) {
+      let completedPercent = (e.loaded / e.total) * 100;
+      this.set('progressValue', completedPercent);
+    }
+  },
+
   uploadFiles(files) {
     var submitting = this.get('submitting'),
       notifications = this.get('notifications'),
@@ -73,6 +93,9 @@ export default Ember.Controller.extend({
     if (submitting !== false) {
       return;
     }
+
+    this.set('progressValue', 0);
+
     this.toggleProperty('submitting');
     this.set('stateklass', 'is-uploading');
     // get the current user first, to know who is doing this
@@ -95,12 +118,16 @@ export default Ember.Controller.extend({
       // reset
       this.toggleProperty('submitting');
       this.set('stateklass', '');
+      this.set('progressValue', 0);
     });
   },
 
   actions: {
     fileChange(files) {
-      this.uploadFiles(files);
+      this.toggleProperty('resetInput');
+      this.uploadFiles(files).then(() => {
+        this.toggleProperty('resetInput');
+      });
     },
 
     onDrop(files) {

@@ -15,7 +15,7 @@ export default Ember.Mixin.create({
         files,
         value;
       if (entries && entries.length) {
-        resolve(this._getFileTreeEntries(entries));
+        return resolve(this._getFileTreeEntries(entries));
       }
 
       files = $.makeArray(input.prop('files'));
@@ -42,7 +42,9 @@ export default Ember.Mixin.create({
     if (!(input instanceof $) || input.length === 1) {
       return this.getSingleFileInput(input);
     }
-    return RSVP.all($.map(input, this.getSingleFileInput)).then(function (files) {
+    return RSVP.all(
+      $.map(input, () => this.getSingleFileInput(...arguments))
+    ).then(function (files) {
       return Array.prototype.concat.apply([], files);
     });
   },
@@ -68,7 +70,6 @@ export default Ember.Mixin.create({
   },
 
   _getFileTreeEntries(entries, path) {
-    console.log(entries);
     return RSVP.all(
       $.map(entries, (entry) => this._getFileTreeEntry(entry, path))
     ).then(function (files) {
@@ -98,7 +99,8 @@ export default Ember.Mixin.create({
       } else if(entry.isDirectory) {
         let dirReader = entry.createReader();
         dirReader.readEntries((entries) => {
-          this._getFileTreeEntries(entries).then((files) => {
+          var _path = path + entry.name + '/';
+          this._getFileTreeEntries(entries, _path).then((files) => {
             resolve(files);
           }).catch(errorHandler);
         }, errorHandler);

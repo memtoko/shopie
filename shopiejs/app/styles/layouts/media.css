@@ -78,6 +78,7 @@ will be displayed according to the state by js
   display: block;
 }
 
+
 table.table-media .medium-list-item .preview,
 table.table-media .medium-list-item .preview img {
   max-width: 150px;

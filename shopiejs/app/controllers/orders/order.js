@@ -63,14 +63,13 @@ export default Ember.Controller.extend({
       this.toggleProperty('accepting');
       order.acceptOrder().then((payload) => {
         this.toggleProperty('accepting');
+        this.store.pushPayload('order', payload);
         return payload;
       }).catch(() => {
         this.toggleProperty('accepting');
         notifications.showAlert('Failed to accept order.', {
           key: 'order.accepting.failed'
         });
-      }).then((payload) => {
-        this.store.pushPayload('order', payload);
       });
     },
 
@@ -79,14 +78,13 @@ export default Ember.Controller.extend({
       this.toggleProperty('rejecting');
       order.rejectOrder().then((payload) => {
         this.toggleProperty('rejecting');
+        this.store.pushPayload('order', payload);
         return payload;
       }).catch(() => {
         this.toggleProperty('rejecting');
         this.get('notifications').showAlert('Failed to reject order.', {
           key: 'order.rejecting.failed'
         });
-      }).then((payload) => {
-        this.store.pushPayload('order', payload);
       });
     }
   }

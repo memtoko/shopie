@@ -190,11 +190,12 @@ class ProductTag(BaseModel, SluggableMixin, TimeStampsMixin):
     name = models.CharField(max_length=255, verbose_name=_('Name'))
     description = models.TextField(verbose_name=_('Description'), blank=True,
         default='')
-    image = models.FileField(upload_to="images", verbose_name='image')
-    products = models.ManyToManyField(Product, verbose_name='products')
+    image = models.FileField(upload_to="images", verbose_name='image', blank=True)
+    products = models.ManyToManyField(Product, verbose_name='products',
+        related_name="tags", blank=True)
 
     def __str__(self):
         return self.name
 
     def count_product(self):
-        return self.products.count()
+        return self.products.all().count()

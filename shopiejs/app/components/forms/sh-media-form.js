@@ -7,6 +7,7 @@ export default Ember.Component.extend({
   //the medium model
   medium: null,
   isMobile: false,
+  saving: false,
   name: '',
   description: '',
 
@@ -34,13 +35,6 @@ export default Ember.Component.extend({
   }),
 
   actions: {
-    fileChange(files) {
-
-    },
-
-    onDrop(files) {
-
-    },
 
     updateName(value) {
       this.name = value;

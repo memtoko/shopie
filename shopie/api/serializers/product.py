@@ -1,6 +1,6 @@
 from .base import ModelSerializer
 
-from shopie.models import Product
+from shopie.models import Product, ProductTag
 
 class ProductSerializer(ModelSerializer):
     class Meta:
@@ -9,6 +9,8 @@ class ProductSerializer(ModelSerializer):
             'id',
             'name',
             'slug',
+            'created_at',
+            'updated_at',
             'short_description',
             'description',
             'image',
@@ -17,4 +19,19 @@ class ProductSerializer(ModelSerializer):
             'is_active',
             'status',
             'parent',
+            'tags'
+        )
+
+class ProductTagSerializer(ModelSerializer):
+    class Meta:
+        model = ProductTag
+        fields = (
+            'id',
+            'name',
+            'description',
+            'slug',
+            'image',
+            'updated_at',
+            'created_at',
+            'products'
         )

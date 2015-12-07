@@ -1,37 +1,6 @@
 import Ember from 'ember';
-import cajaSanitizer from '../utils/caja-sanitizer';
+import cajaSanitizers from '../utils/caja-sanitizer';
 import markdown from '../libs/markdown';
-
-function sanitinize_embedded_js(fn) {
-  return function (text) {
-    text = text.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '<pre class="js-embed-placeholder">Embedded JavaScript</pre>');
-    return fn(text);
-  };
-}
-
-function sanitize_iframe_js(fn) {
-  return function (text) {
-    text = text.replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '<pre class="iframe-embed-placeholder">Embedded iFrame</pre>');
-    return fn(text);
-  };
-}
-
-function sanitize_caja(text) {
-  return html_sanitize(text, cajaSanitizer.url, cajaSanitizer.id);
-}
-
-function emberHtmlSafe(fn) {
-  return function (text) {
-    text = Ember.String.htmlSafe(text);
-    return fn(text);
-  };
-}
-
-let pipelines = [
-  emberHtmlSafe,
-  sanitinize_embedded_js,
-  sanitize_iframe_js,
-];
 
 export function shFormatMarkdown(params) {
   if (!params || !params.length) {
@@ -39,12 +8,21 @@ export function shFormatMarkdown(params) {
   }
 
   var text = params[0] || '',
-    rendered = markdown.render(text),
-    sanitizer = pipelines.reduce(function(prev, curr) {
-      return curr(prev);
-    }, sanitize_caja);
+      escaped = '';
 
-  return sanitizer(rendered);
+  escaped = markdown.render(text);
+  // replace script and iFrame
+  escaped = escaped.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
+    '<pre class="js-embed-placeholder">Embedded JavaScript</pre>');
+  escaped = escaped.replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi,
+    '<pre class="iframe-embed-placeholder">Embedded iFrame</pre>');
+
+  // sanitize html
+  // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
+  escaped = html_sanitize(escaped, cajaSanitizers.url, cajaSanitizers.id);
+  // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
+
+  return Ember.String.htmlSafe(escaped);
 }
 
 export default Ember.Helper.helper(shFormatMarkdown);

@@ -134,7 +134,7 @@ export var downcode = (function () {
   return function downcode(slug) {
     Downcoder.initialize();
     return slug.replace(Downcoder.regex, function(m) {
-        return Downcoder.map[m];
+      return Downcoder.map[m];
     });
   }
 })();
