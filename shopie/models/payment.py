@@ -1,5 +1,5 @@
-"""Previously this on order file
-
+"""Payment model manage Order's payment. This model contains information
+the amount of customer pay for the order, payment method, and amount of refunded.
 """
 from django.db import models
 from django.contrib.auth.models import AnonymousUser

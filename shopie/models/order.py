@@ -3,6 +3,9 @@ information about how they should be delivered and billed to a customer.
 
 Then basket or cart, is simply an order which has not yet been "checked out".
 because of that a cart is simply an order in backends.
+
+The order subtotal and total on Order model isnt same as customer actually pay.
+If you are looking that, see Payment model on payment.py file.
 """
 import hashlib
 import random
