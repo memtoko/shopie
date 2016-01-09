@@ -16,6 +16,7 @@ export default AuthenticatedRouteStaff.extend(ShortcutsRoute, {
     }
     order = this.store.peekRecord('order', orderId);
     if (order && order.get('status') > 20) {
+      order.get('items'); // force reload
       return order;
     }
     query = {
@@ -24,6 +25,7 @@ export default AuthenticatedRouteStaff.extend(ShortcutsRoute, {
     };
     return this.store.query('order', query).then((order) => {
       if (order && order.get('status') > 20) {
+        order.get('items');
         return order;
       }
       return this.replaceRoute('orders.index');
@@ -37,8 +39,13 @@ export default AuthenticatedRouteStaff.extend(ShortcutsRoute, {
     });
   },
 
-  actions: {
+  shortcuts: {
+    'enter, o': 'openEditor',
+    'c, q, x': 'cancelEdit',
+    'command+backspace, ctrl+backspace': 'deleteOrder'
+  },
 
+  actions: {
     openEditor(order) {
       order = order || this.get('controller.model');
 
@@ -46,7 +53,17 @@ export default AuthenticatedRouteStaff.extend(ShortcutsRoute, {
         return;
       }
 
-      this.transitionTo('orders.edit', order.get('id'));
+      this.get('controller').send('toggleEditMode');
+    },
+
+    cancelEdit(order) {
+      order = order || this.get('controller.model');
+
+      if (!order) {
+        return;
+      }
+
+      this.get('controller').send('cancelEdit');
     },
 
     deleteOrder(order) {

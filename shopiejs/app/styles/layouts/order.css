@@ -217,11 +217,21 @@
   right: 25px;
 }
 
-.content-preview .post-controls .post-edit {
+.content-preview .post-controls .cancel-action,
+.content-preview .post-controls .edit-action {
   padding-top: 0;
   padding-right: 0;
   border: none;
   font-size: 18px;
+}
+
+.content-preview .post-controls .edit-action {
+  margin-right: 10px;
+  color: var(--blue);
+}
+
+.content-preview .post-controls .cancel-action {
+  color: var(--orange);
 }
 
 .content-preview img {
@@ -238,6 +248,7 @@
 /* Empty State
 /* ---------------------------------------------------------- */
 
+.no-products-box,
 .no-orders-box {
   position: relative;
   z-index: 600;
@@ -249,13 +260,15 @@
   height: 90%;
 }
 
+.no-products-box .no-products,
 .no-orders-box .no-orders {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.no-posts-box .no-orders h3 {
+.no-products-box .no-products h3,
+.no-orders-box .no-orders h3 {
   margin-bottom: 20px;
   color: var(--midgrey);
   font-size: 2em;
@@ -357,13 +370,17 @@
   z-index:10;
 }
 
+.wrapper.order-preview .sh-order-status-bar ul li h4 {
+  font-size: 18px;
+}
+
 .wrapper.order-preview .sh-order-status-bar ul li.received {
   background: url('../images/received.svg') no-repeat center 0;
   background-size: 36px;
 }
 
 .wrapper.order-preview .sh-order-status-bar ul li.received h4 {
-  color: var(--midgrey);
+  color: var(--darkgrey);
 }
 
 .wrapper.order-preview .sh-order-status-bar ul li.accepted {
@@ -372,7 +389,7 @@
 }
 
 .wrapper.order-preview .sh-order-status-bar ul li.accepted h4 {
-  color: var(--green);
+  color: color(var(--green) lightness(-20%));
 }
 
 .wrapper.order-preview .sh-order-status-bar ul li.rejected {
@@ -381,11 +398,11 @@
 }
 
 .wrapper.order-preview .sh-order-status-bar ul li.rejected h4 {
-  color: var(--red);
+  color: color(var(--red) lightness(-20%));
 }
 
 .wrapper.order-preview .sh-order-status-bar ul li p {
-  color: var(--midgrey);
+  color: var(--darkgrey);
   margin-top: 5px;
   font-size: 0.9em;
 }

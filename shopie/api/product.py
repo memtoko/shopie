@@ -1,24 +1,26 @@
-from django.conf import settings
-from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
-from django.shortcuts import get_object_or_404
-from django.utils.translation import ugettext as _
 
 from rest_framework import viewsets
 from rest_framework.decorators import detail_route, list_route
 from rest_framework_json_api.mixins import MultipleIDMixin
 from rest_framework.response import Response
-from rest_framework import permissions as restpermission
 from rest_framework.permissions import BasePermission, AllowAny, SAFE_METHODS
 
-from shopie.models import Product
-from shopie.api.serializers.product import ProductSerializer
+from shopie.models import Product, ProductTag
+from shopie.api.serializers.product import ProductSerializer, ProductTagSerializer
 
 class ReadOnlyOrAuthor(BasePermission):
     def has_object_permission(self, request, view, obj):
         if request.method in SAFE_METHODS:
             return True
         return request.user.is_staff or request.user == obj.author
+
+class ReadOnlyOrStaff(BasePermission):
+
+    def has_object_permission(self, request, view, obj):
+        if request.method in SAFE_METHODS:
+            return True
+        return request.user.is_staff
 
 class ProductViewSet(MultipleIDMixin, viewsets.ModelViewSet):
     resource_name = 'products'
@@ -33,3 +35,9 @@ class ProductViewSet(MultipleIDMixin, viewsets.ModelViewSet):
         else:
             queryset = queryset.published().active()
         return queryset
+
+class ProductTagViewSet(MultipleIDMixin, viewsets.ModelViewSet):
+    resource_name = 'tags'
+    permission_classes = (ReadOnlyOrStaff,)
+    queryset = ProductTag.objects.all()
+    serializer_class = ProductTagSerializer

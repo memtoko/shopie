@@ -1,33 +1,90 @@
 <section class="post-controls">
-  <i class="icon-edit"></i>
+  <a href="" class="edit-action" {{action "toggleEditMode"}}>
+    {{#if isEditing}}
+      <i class="fa fa-floppy-o"></i>
+    {{else}}
+      <i class="fa fa-pencil-square-o"></i>
+    {{/if}}
+  </a>
+  {{#if isEditing}}
+    <a href="" class="cancel-action" {{action "cancelEdit"}}>
+      <i class="fa fa-times"></i>
+    </a>
+  {{/if}}
 </section>
 {{#sh-content-preview-content tagName="section" content=model}}
   <div class="wrapper order-preview">
     <h1 class="content-preview-title">
-      #{{model.id}} - {{#link-to "users.user" model.user.id}}<span>by {{model.user.username}}</span>{{/link-to}}
+      #{{model.number}}
     </h1>
     <section class="details">
-      <div class="left">
-        <dl>
-          <dt>Name</dt><dd>{{model.fullName}}</dd>
-          <dt>Email</dt><dd>{{model.email}}</dd>
-        </dl>
-      </div>
-      <div class="right">
-        <dl>
-          <dt>Build time</dt><dd>{{model.buildTime}} hours</dd>
-          <dt>Total</dt><dd>{{model.orderTotal}}</dd>
-          {{#if model.isReceived}}
-            <dl class="form">
-              <dd>
-                {{#sh-spin-button class="accepted-link btn btn-green" type="button" action="acceptOrder" tabindex="3" submitting=accepting autoWidth="false"}}Accept{{/sh-spin-button}}
-                {{#sh-spin-button class="accepted-link btn btn-red" type="button" action="rejectOrder" tabindex="3" submitting=rejecting autoWidth="false"}}Reject{{/sh-spin-button}}
-              </dd>
+      {{#if isEditing}}
+        <form>
+          <div class="left">
+            <dl>
+              <dt>Name</dt>
+              <dd>{{sh-input-one-way type="text" value=model.fullName class="order-fullname" update=(action "orderNameDidChange")}}</dd>
+              <dt>Email</dt>
+              <dd>{{sh-input-one-way type="email" value=model.email class="order-fullname" update=(action "orderEmailDidChange")}}</dd>
             </dl>
-          {{/if}}
-        </dl>
-      </div>
+          </div>
+          <div class="right">
+            <dl>
+              <dt>Build time</dt><dd>{{model.buildTime}}</dd>
+              <dt>Total</dt><dd>{{model.orderTotal}}</dd>
+            </dl>
+          </div>
+        </form>
+      {{else}}
+        <div class="left">
+          <dl>
+            <dt>Name</dt>
+            <dd>{{#link-to "users.user" customer.id}}{{model.fullName}}{{/link-to}}</dd>
+            <dt>Email</dt>
+            <dd>{{model.email}}</dd>
+          </dl>
+        </div>
+        <div class="right">
+          <dl>
+            <dt>Build time</dt><dd>{{model.buildTime}}</dd>
+            <dt>Total</dt><dd>{{model.orderTotal}}</dd>
+            {{#if displayButtonAction}}
+              <dl class="form">
+                <dd>
+                  {{#sh-spin-button class="accepted-link btn btn-green" type="button" action="acceptOrder" tabindex="3" submitting=accepting autoWidth="false"}}Accept{{/sh-spin-button}}
+                  {{#sh-spin-button class="accepted-link btn btn-red" type="button" action="rejectOrder" tabindex="3" submitting=rejecting autoWidth="false"}}Reject{{/sh-spin-button}}
+                </dd>
+              </dl>
+            {{/if}}
+          </dl>
+        </div>
+      {{/if}}
     </section>
     {{sh-order-status-bar order=model}}
+    <fieldset class="padded"><legend>Order items</legend>
+      <table class="order-item-table">
+        <thead><tr>
+          <th>Product name</th>
+          <th>Unit price</th>
+          <th>Quantity</th>
+          <th>&nbsp;</th>
+        </tr></thead>
+        <tbody>
+          {{#each orderItems key="id" as |item|}}
+            <tr>
+              <td>{{item.productName}}</td>
+              <td>{{item.unitPrice}}</td>
+              <td>{{item.quantity}}</td>
+              <td>{{item.lineSubtotal}}</td>
+            </tr>
+            <tr><td colspan="2">&nbsp;</td><td>Line Total:</td><td>{{item.lineTotal}}</td></tr>
+          {{/each}}
+        </tbody>
+        <tfoot>
+          <tr><td colspan="2">&nbsp;</td><td>Order Subtotal</td><td>{{model.orderSubtotal}}</td></tr>
+          <tr><td colspan="2">&nbsp;</td><td>Order Total</td><td>{{model.orderTotal}}</td></tr>
+        </tfoot>
+      </table>
+    </fieldset>
   </div>
 {{/sh-content-preview-content}}

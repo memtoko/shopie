@@ -3,6 +3,9 @@ information about how they should be delivered and billed to a customer.
 
 Then basket or cart, is simply an order which has not yet been "checked out".
 because of that a cart is simply an order in backends.
+
+The order subtotal and total on Order model isnt same as customer actually pay.
+If you are looking that, see Payment model on payment.py file.
 """
 import hashlib
 import random
@@ -117,10 +120,23 @@ class OrderQuerySet(models.QuerySet):
         except self.model.DoesNotExist:
             return self.get_or_create(**kwargs)
 
+def order_number_generator():
+    segments = (3,5,3) # 999.99999.999 possibility
+    while True:
+        collections = []
+        for item in segments:
+            sample = map(str, random.sample(range(10), item))
+            segment = ''.join(sample)
+            collections.append(segment)
+        num = '-'.join(collections)
+        if not Order.objects.filter(number=num).exists():
+            return num
+
 class Order(OrderState, TimeStampsMixin):
     """The actul order we use"""
     full_name = models.CharField(max_length=255, blank=True,
         verbose_name=_('Full name'))
+    number = models.CharField(max_length=255, blank=True, verbose_name=_("order number"))
     email = models.EmailField(_('Email address'), blank=True)
     # this is the customer that place the order (customer)
     user = models.ForeignKey(user_model_string(), blank=True, null=True,
@@ -144,7 +160,7 @@ class Order(OrderState, TimeStampsMixin):
     rejected_by = models.ForeignKey(user_model_string(), blank=True, null=True,
         verbose_name=_("rejected by"), related_name="+")
 
-    def add_item(self, product, quantity=1, merge=True, queryset=None):
+    def add_item(self, product, quantity=1, merge=True, queryset=None, unit_price=None):
         if not product.orderable:
             raise ValueError(
                 _('Trying to add product to order item which not orderable')
@@ -153,15 +169,20 @@ class Order(OrderState, TimeStampsMixin):
         if queryset is None:
             queryset = OrderItem.objects.filter(order=self, product=product)
 
+        if unit_price is None:
+            unit_price = product.get_price()
+
         if queryset.exists() and merge:
             order_item = queryset[0]
             order_item.quantity += quantity
+            order_item.unit_price = unit_price
             order_item.save()
         else:
             order_item = OrderItem.objects.create(
                 order=self,
                 quantity=quantity,
-                product=product
+                product=product,
+                unit_price=unit_price
             )
             order_item.save()
 
@@ -253,6 +274,8 @@ class Order(OrderState, TimeStampsMixin):
 
     def save(self, *args, **kwargs):
         self.calculate()
+        if not self.number:
+            self.number = order_number_generator()
         super(Order, self).save(*args, **kwargs)
 
     def calculate(self):
@@ -300,7 +323,7 @@ class OrderItem(BaseModel):
         super(OrderItem, self).save(*args, **kwargs)
 
     def calculate(self):
-        self.line_subtotal = self.product.get_price() * self.quantity
+        self.line_subtotal = self.unit_price * self.quantity
         current_total = self.line_subtotal
 
         for extra_price in self.extra_price_fields.all():

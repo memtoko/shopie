@@ -11,13 +11,13 @@
 @import "patterns/buttons.css";
 @import "patterns/labels.css";
 @import "patterns/tables.css";
-
 /**
 *
 */
 @import "components/modals.css";
 @import "components/notifications.css";
 @import "components/dropdowns.css";
+@import "components/settings-menu.css";
 
 /* Layouts: Groups of Components
 /* ---------------------------------------------------------- */
@@ -25,3 +25,5 @@
 @import "layouts/flow.css";
 @import "layouts/auth.css";
 @import "layouts/order.css";
+@import "layouts/users.css";
+@import "layouts/media.css";

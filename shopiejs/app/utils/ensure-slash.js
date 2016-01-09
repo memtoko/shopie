@@ -12,5 +12,5 @@ export default function ensureSlash(url) {
     url = path.substr(0, queryStart);
   }
   url = url.slice(-1) !== '/' ? `${url}/` : url;
-  return queryString == null ? url : `${url}?$queryString`;
+  return queryString == null ? url : `${url}?${queryString}`;
 }

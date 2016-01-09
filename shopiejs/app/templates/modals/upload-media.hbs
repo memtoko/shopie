@@ -1,0 +1,11 @@
+{{#sh-modal-dialog action="closeModal" showClose=true type="action"
+    title="Upload File" confirm=confirm confirmAccept=(action "uploadFile") confirmReject=(action "cancelUpload") class="title-upload-file"}}
+  <form id="settings-import" enctype="multipart/form-data">
+    <fieldset>
+      <div class="form-group">
+        <label>Upload</label>
+        {{sh-file-upload id="upload-file" displayUploadButton=displayUploadButton classNames="flex" uploadButtonText=uploadButtonText onAdd="onAddFile"}}
+      </div>
+    </fieldset>
+  </form>
+{{/sh-modal-dialog}}

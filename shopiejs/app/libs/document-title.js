@@ -53,8 +53,8 @@ routeProperty[routeActionName] = {
         finalTitle = title.call(this, tokens);
       } else {
         finalTitle = title;
-        this.router.setTitle(finalTitle);
       }
+      this.router.setTitle(finalTitle);
     } else {
       return true;
     }

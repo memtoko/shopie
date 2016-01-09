@@ -27,7 +27,6 @@ bower_components
 #logs info
 logs
 
-<<<<<<< HEAD
 =======
 # generated files
 /shopie/static/shopie/js
@@ -35,8 +34,6 @@ logs
 /shopie/static/shopie/fonts
 /shopie/static/shopie/images
 
->>>>>>> ac375c0d0f77a63eb560b8ad40bf55ae81790fca
 # Local development stuff
-dev
+/dev
 manage.py
-media

@@ -61,7 +61,7 @@ export default AuthenticatedRouteStaff.extend(ShortcutsRoute, PaginationRouteMix
       if (this.controller.get('orderContentFocused')) {
         this.scrollContent(-1);
       } else {
-        this.stepThroughPosts(-1);
+        this.stepThroughOrders(-1);
       }
     },
 
@@ -69,7 +69,7 @@ export default AuthenticatedRouteStaff.extend(ShortcutsRoute, PaginationRouteMix
       if (this.controller.get('orderContentFocused')) {
         this.scrollContent(1);
       } else {
-        this.stepThroughPosts(1);
+        this.stepThroughOrders(1);
       }
     }
   }

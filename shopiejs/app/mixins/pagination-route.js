@@ -1,8 +1,7 @@
 import Ember from 'ember';
 
 let defaultPaginationSettings = {
-  page: 1,
-  limit: 15
+  page: 1
 };
 
 export default Ember.Mixin.create({

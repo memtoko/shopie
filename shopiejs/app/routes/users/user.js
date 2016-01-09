@@ -3,7 +3,8 @@ import StyleBody from '../../mixins/style-body';
 import isNumber, { isFinite } from '../../utils/number-type';
 
 export default AuthenticatedRouteStaff.extend(StyleBody, {
-
+  titleToken: 'User',
+  classNames: ['view-user-single'],
   model(params) {
     let userId = Number(params.user_id);
     if (!isNumber(userId) || !isFinite(userId) || userId % 1 !== 0 || userId <= 0) {

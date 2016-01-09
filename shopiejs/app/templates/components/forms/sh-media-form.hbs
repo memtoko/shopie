@@ -1,0 +1,36 @@
+<div class="settings-menu settings-menu-pane media-menu media-menu-pane">
+  <div class="settings-menu-header media-menu-header {{if isMobile 'subview'}}">
+    {{#if isMobile}}
+      {{#link-to 'media' class="back icon-arrow-left settings-menu-header-action"}}<span class="hidden">Back</span>{{/link-to}}
+      <h4>{{title}}</h4>
+      <div style="width:23px;"></div>
+    {{else}}
+        <h4>{{title}}</h4>
+    {{/if}}
+  </div>
+  <div class="settings-menu-content media-menu-content">
+    {{#if medium.isImage}}
+      <img src={{medium.file}}>
+    {{/if}}
+    <form>
+      <div class="form-group">
+        <label for="medium-name">Name</label>
+        {{sh-input-one-way type="text" name="name" value=medium.name id="medium-name" class="medium-name sh-input" update=(action 'updateName')}}
+      </div>
+      <div class="form-group">
+        <label for="medium-description">Description</label>
+        {{sh-textarea id="medium-description" name="description" value=scratchDescription focus-out=(action 'updateDescription')}}
+      </div>
+
+      {{#if medium.isNew}}
+        <button type="button" class="btn btn-green" {{action "saveMedium"}}>Save</button>
+      {{else}}
+        <button type="button" class="btn btn-green" {{action "saveMedium"}}>Update</button>
+      {{/if}}
+
+      {{#unless medium.isNew}}
+        <button type="button" class="btn btn-link btn-sm medium-delete-button" {{action "deleteMedium"}}><i class="fa fa-trash-o"></i> Delete Media</button>
+      {{/unless}}
+    </form>
+  </div>
+</div>

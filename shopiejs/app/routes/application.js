@@ -4,8 +4,6 @@ import shopiePaths from '../utils/shopie-paths';
 import ctrlOrCmd from 'shopie/utils/ctrl-or-cmd'
 import ShortcutsRoute from 'shopie/mixins/shortcuts-route';
 
-let { RSVP } = Ember;
-
 let shortcuts = {
   esc: {
     action: 'closeMenus',
@@ -27,12 +25,9 @@ export default Ember.Route.extend(ApplicationRouteMixin, ShortcutsRoute, {
   notifications: Ember.inject.service(),
 
   title(tokens) {
-    return tokens.join(' - ') + 'Shopie';
+    return tokens.join(' - ') + ' Shopie';
   },
 
-  /**
-  Make sure user logged in here is staff
-  */
   sessionAuthenticated() {
     let appController = this.controllerFor('application');
 
@@ -53,7 +48,7 @@ export default Ember.Route.extend(ApplicationRouteMixin, ShortcutsRoute, {
   actions: {
 
     openMobileMenu() {
-      this.controller().set('showMobileMenu', true);
+      this.controller.set('showMobileMenu', true);
     },
 
     openSettingsMenu() {
@@ -69,8 +64,9 @@ export default Ember.Route.extend(ApplicationRouteMixin, ShortcutsRoute, {
       });
     },
 
-    signedIn() {
+    signedIn(user) {
       this.get('notifications').clearAll();
+      user.get('_isStaff');
     },
 
     closeMenus() {

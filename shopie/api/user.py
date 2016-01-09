@@ -1,7 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.models import AnonymousUser
-from django.views.decorators.csrf import csrf_protect
 
 from rest_framework.response import Response
 from rest_framework import viewsets
@@ -28,7 +27,7 @@ class UserViewSet(MultipleIDMixin, viewsets.ModelViewSet):
     queryset = get_user_model().objects.all()
     serializer_class = UserSerializer
 
-    def create(request):
+    def create(self, request, *args, **kwargs):
         return create_endpoint(request)
 
     @detail_route(methods=['post'])

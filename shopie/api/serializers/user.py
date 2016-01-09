@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from .base import ModelSerializer
+from .base import ModelSerializer, ValidationError, EmailField
 
 User = get_user_model()
 

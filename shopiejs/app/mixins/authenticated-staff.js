@@ -16,6 +16,13 @@ function assertRoute(name) {
 *
 */
 
+function rejectUser(transition) {
+  transition.abort();
+  this.get('session').set('attemptedTransition', transition);
+  assertRoute(this.get('routeName'));
+  this.transitionTo(Configuration.authenticationRoute);
+}
+
 export default Ember.Mixin.create({
 
   /**
@@ -25,17 +32,21 @@ export default Ember.Mixin.create({
 
   beforeModel(transition) {
     if (!this.get('session.isAuthenticated')) {
-      transition.abort();
-      this.get('session').set('attemptedTransition', transition);
-      assertRoute(this.get('routeName'));
-      this.transitionTo(Configuration.authenticationRoute);
+      rejectUser.call(this, transition);
     } else {
       let _super = this.__nextSuper;
-      return this.get('session.user').then((user) => user.isStaff()).catch(() => {
-        transition.send('invalidateSession');
-        transition.abort();
-        this.transitionTo(Configuration.authenticationRoute);
-      }).then(() => _super.call(this, transition));
+      return this.get('session.user').then((user) => {
+        var isStaff = user.get('_isStaff');
+        isStaff.then(() => {
+          var isStaffUser = isStaff.get('is_staff');
+          if (! isStaff) {
+            transition.send('invalidateSession');
+            rejectUser.call(this, transition);
+          } else {
+            _super.call(this, transition);
+          }
+        });
+      });
     }
   }
 });

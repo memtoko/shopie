@@ -22,19 +22,15 @@ export default MobileRoute.extend(AuthenticatedRouteMixin, {
     var orders = this.store.peekAll('order'),
       order;
 
-    return this.get('session.user').then((function (_this) {
-      return function (user) {
-        order = orders.find(function (order) {
-          return true;
-        });
+    order = orders.find(function (order) {
+      return order && order.get('status') > 20;
+    });
 
-        if (order) {
-          return _this.transitionTo('orders.order', order);
-        }
+    if (order) {
+      return this.transitionTo('orders.order', order);
+    }
 
-        _this.set('noOrders', true);
-      }
-    })(this));
+    this.set('noOrders', true);
   },
 
   // Mobile posts route callback

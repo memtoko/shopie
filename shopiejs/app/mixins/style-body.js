@@ -19,10 +19,12 @@ export default Ember.Mixin.create({
   deactivate() {
     this._super(...arguments);
     let cssClasses = this.get('classNames');
-    run.schedule('afterRender', null, () => {
-      cssClasses.forEach(function (curClass) {
-        $('body').removeClass(curClass);
+    if (cssClasses) {
+      run.schedule('afterRender', null, () => {
+        cssClasses.forEach(function (curClass) {
+          $('body').removeClass(curClass);
+        });
       });
-    });
+    }
   }
 });
