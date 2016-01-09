@@ -18,9 +18,6 @@ router.register('orders', OrderViewSet)
 router.register('order-items', OrderItemViewSet)
 router.register('media', MediaViewSet)
 
-#media
-router.register('media', MediaViewSet)
-
 urlpatterns = patterns('',
     url(r'^api/v1/', include(router.urls)),
 )
