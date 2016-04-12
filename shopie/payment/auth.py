@@ -28,4 +28,5 @@ class AuthCheckoutStep(CheckoutStepMixin, RegistrationView):
         if self.next_step:
             return reverse("shopie:checkout", kwargs={"step": self.next_step.identifier})
 
-    def process(self): pass
+    def process(self):
+        pass

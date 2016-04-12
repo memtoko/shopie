@@ -10,7 +10,7 @@ class BaseModel(models.Model):
     uuid = models.UUIDField(verbose_name=_('UUID'), default=uuid.uuid4)
 
     class Meta:
-        abstract= True
+        abstract = True
 
 class SluggableMixin(models.Model):
     slug = models.CharField(max_length=250, verbose_name=_("Slug"))
@@ -18,9 +18,6 @@ class SluggableMixin(models.Model):
     def set_slug(self, base):
         if not self.slug:
             self.slug = slugify(base)
-
-    class Meta:
-        abstract = True
 
 class TimeStampsMixin(models.Model):
     """Timestamps for the model. I added database index to both created_at

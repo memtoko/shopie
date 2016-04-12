@@ -82,7 +82,7 @@ class License(TimeStampsMixin, BaseModel):
     def is_valid_to_activate(self):
         return not self.is_expired and (self.active_remaining - 1) > 0
 
-class LicenseActivation(TimeStampsMixin, BaseModel):
+class LicenseActivation(BaseModel, TimeStampsMixin):
     license = models.ForeignKey(License)
     site = models.CharField(max_length=255, verbose_name=_('site'))
     status = models.IntegerField(choices=License.LICENCE_STATUSES,

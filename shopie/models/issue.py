@@ -16,7 +16,7 @@ class IssueQuerySet(models.QuerySet):
     def closed(self):
         return self.filter(is_closed=True)
 
-class Issue(BaseModel, SluggableMixin, TimeStampsMixin):
+class Issue(SluggableMixin, TimeStampsMixin, BaseModel):
     """Issue is like on git website services, such as Github or Bitbucket.
 
     we use this for our website to allow customer report an issue. An issue

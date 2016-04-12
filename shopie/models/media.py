@@ -16,7 +16,7 @@ class MediaQuerySet(models.QuerySet):
     def for_user(self, user):
         return self.filter(user=user)
 
-class Media(BaseModel,TimeStampsMixin, SluggableMixin):
+class Media(TimeStampsMixin, SluggableMixin, BaseModel):
     name = models.CharField(max_length=255, verbose_name=_('Product Name'), blank=True)
     description = models.TextField(verbose_name=_('Descriptions'), blank=True)
     file = models.FileField(_("File"))

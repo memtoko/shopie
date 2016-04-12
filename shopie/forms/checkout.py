@@ -2,22 +2,21 @@ from django import forms
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
-from shopengine.payment.backends import payment_backend_pool
+from shopie.payment.backends import payment_backend_pool
+from shopie.models import Order
 
 def get_backend_choices():
     backends = payment_backend_pool.get_backend_list()
-    list_backends = [('', _('Pilih metode pembayaran'))]
-    temp = [(x.backend_name, getattr(x, 'backend_verbose_name', x.backend_name)) for x in backends]
-    list_backends.extend(temp)
+    list_backends = [(x.backend_name, getattr(x, 'backend_verbose_name', x.backend_name)) for x in backends]
     return tuple(list_backends)
 
-class CheckoutForm(forms.Form):
+class CheckoutForm(forms.ModelForm):
     """Manage checkout form"""
-    name = forms.CharField(
+    full_name = forms.CharField(
         required=True,
         widget=forms.TextInput(
             attrs={
-                'placeholder': 'name'
+                'placeholder': 'Full name'
             }
         ),
         help_text=_("We use this name to personalize your account experience")
@@ -26,14 +25,25 @@ class CheckoutForm(forms.Form):
         required=True,
         widget=forms.TextInput(
             attrs={
-                'placeholder': 'email'
+                'class': 'required',
+                'placeholder': 'email',
+                'type': 'email'
             }
         ),
         help_text=_("We will send receipt to this email address")
         )
-    payment_methods = forms.ChoiceField(choices=get_backend_choices(),
+    payment_method = forms.ChoiceField(choices=get_backend_choices(),
         required=True,
+        widget=forms.RadioSelect(
+            attrs={
+                'class': 'required'
+            }
+        ),
         label=_('Payment method'))
     accept_terms = forms.BooleanField(
             required=True,
             label=_("Saya setuju dengan aturan penggunaan."))
+
+    class Meta:
+        model = Order
+        fields = ('full_name', 'email')

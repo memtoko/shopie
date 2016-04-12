@@ -2,15 +2,11 @@ from django.db import models
 from django.conf import settings
 from django.db.models.signals import post_save
 
-from shopengine.utils.users import user_model
+from .base import BaseModel, TimeStampsMixin
+from shopie.utils.users import user_model_string, user_model
 
-try:
-    USER_MODEL = settings.AUTH_USER_MODEL
-except AttributeError:
-    USER_MODEL = 'django.contrib.auth.models.User'
-
-class UserProfile(models.Model):
-    user = models.OneToOneField(USER_MODEL)
+class UserProfile(BaseModel, TimeStampsMixin):
+    user = models.OneToOneField(user_model_string())
     full_name = models.CharField(max_length=200, blank=True)
     bio = models.CharField(max_length=200, blank=True)
     website = models.URLField(blank=True)

@@ -3,8 +3,6 @@ from django.conf.urls import url, include
 from registration.forms import RegistrationFormUniqueEmail
 from registration.backends.default.views import RegistrationView
 
-from .views import user_dashboard
-
 urlpatterns = [
     url(
         r'^register/$',
@@ -13,5 +11,4 @@ urlpatterns = [
     ),
     url(r'', include('django.contrib.auth.urls')),
     url(r'', include('registration.backends.default.urls')),
-    url(r'^/profile/(?P<username>.+)/$', user_dashboard, name='account_dashboard'),
 ]

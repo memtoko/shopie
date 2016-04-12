@@ -4,8 +4,8 @@
   padding: 40px;
   max-width: 400px;
   width: 100%;
-  border: color(var(--sea) lightness(-10%)) 1px solid;
-  background: color(var(--sea) alpha(-60%));
+  border: #dae1e3 1px solid;
+  background: #f8fbfd;
   border-radius: 5px;
   text-align: left;
 }
@@ -43,7 +43,7 @@
 
 .forgotten-link:hover {
   border-left: #dae1e3 1px solid;
-  color: color(var(--green) lightness(-20%));
+  color: color(var(--blue) lightness(-20%));
   text-decoration: none;
 }
 
