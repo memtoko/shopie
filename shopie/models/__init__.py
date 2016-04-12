@@ -5,6 +5,7 @@ from .license import *
 from .issue import *
 from .fields import *
 from .base import *
+from .account import *
 from .media import Media, MediaQuerySet
 
 __all__ = [
@@ -13,5 +14,5 @@ __all__ = [
     'Order', 'OrderItem', 'ExtraPriceOrderField', 'ExraPriceOrderItemField',
     'RefundFailed', 'PaymentManager', 'Payment', 'License', 'LicenseActivation',
     'LabelQuerySet', 'Label', 'Issue', 'IssueQuerySet', 'Reply', 'MediaQuerySet',
-    'Media'
+    'Media', 'UserProfile'
 ]

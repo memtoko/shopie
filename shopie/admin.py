@@ -11,3 +11,4 @@ class ProductTagAdmin(admin.ModelAdmin):
 
 admin.site.register(models.Product, ProductAdmin)
 admin.site.register(models.ProductTag, ProductTagAdmin)
+admin.site.register(models.Order)

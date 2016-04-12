@@ -77,7 +77,7 @@ class PaymentManager(models.Manager):
                 "Max amount allowed is %s" % (amount, payment.refundable_amount)
             ))
 
-class Payment(BaseModel, TimeStampsMixin):
+class Payment(TimeStampsMixin, BaseModel):
     order = models.ForeignKey(Order, verbose_name=_("Order"), related_name="payments")
     amount = CurrencyField(verbose_name=_("amount"))
     method = models.CharField(max_length=255, verbose_name=_("payment method"))

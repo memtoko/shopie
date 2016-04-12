@@ -71,7 +71,7 @@ class CheckoutStepMixin(object):
             self._bucket = CheckoutStepBucket(self.request, self.identifier)
         return self._bucket
 
-class CheckoutProcess:
+class CheckoutProcess(object):
 
     def __init__(self, step_specs, step_kwargs):
         self.step_specs = step_specs

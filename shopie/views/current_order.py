@@ -6,8 +6,8 @@ import django.contrib.messages.api as message_api
 from django.core.urlresolvers import reverse
 
 from shopie.utils.current_order import get_or_create_current_order
-from shopie.froms.order import get_current_order_item_formset
-from shopie.models import Order
+from shopie.forms.order import get_current_order_item_formset
+from shopie.models import Order, Product
 
 class CurrentOrderItem(View):
 
@@ -89,5 +89,40 @@ class CurrentOrderView(TemplateResponseMixin, CurrentOrderItem):
         return self.render_to_response(ctx)
 
     def post(self, request, *args, **kwargs):
-        pass
+        try:
+            product_id = int(self.request.POST['add_item_id'])
+            product_quantity = int(self.request.POST.get('add_item_quantity', 1))
+        except (KeyError, ValueError):
+            message_api.warning(self.request, 'error, silahkan pilih product')
+            return HttpResponseRedirect(reverse('cart'))
+
+        product = Product.objects.get(pk=product_id)
+        order = get_or_create_current_order(self.request, save=True)
+        item = order.add_item(product, product_quantity)
+        order.save()
+
+        return self.post_success(product, item)
+
+    def delete(self, *args, **kwargs):
+        order = get_or_create_current_order(self.request)
+        if order.pk:
+            order.items.all().delete()
+            order.delete()
+        return self.delete_success()
+
+    def put(self, *args, **kwargs):
+        order = get_or_create_current_order(self.request)
+        order_items = order.items.all()
+        try:
+            formset = get_current_order_item_formset(order_items=order_items,
+                    data=self.request.POST)
+        except ValidationError:
+            return redirect('shopie:cart')
+        if formset.is_valid():
+            formset.save()
+            return self.put_success()
+        ctx = self.get_context_data(**kwargs)
+        ctx.update({'formset': formset, })
+        return self.render_to_response(ctx)
+
 

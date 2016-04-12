@@ -132,7 +132,7 @@ def order_number_generator():
         if not Order.objects.filter(number=num).exists():
             return num
 
-class Order(OrderState, TimeStampsMixin):
+class Order(TimeStampsMixin, OrderState):
     """The actul order we use"""
     full_name = models.CharField(max_length=255, blank=True,
         verbose_name=_('Full name'))

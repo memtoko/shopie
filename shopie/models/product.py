@@ -185,7 +185,7 @@ class Product(AbstractProduct):
     def get_absolute_url(self):
         return _urlreverse('shopie:product_detail', args=[self.slug, self.pk])
 
-class ProductTag(BaseModel, SluggableMixin, TimeStampsMixin):
+class ProductTag(SluggableMixin, TimeStampsMixin, BaseModel):
 
     name = models.CharField(max_length=255, verbose_name=_('Name'))
     description = models.TextField(verbose_name=_('Description'), blank=True,
@@ -196,6 +196,10 @@ class ProductTag(BaseModel, SluggableMixin, TimeStampsMixin):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name = _('Product Tag')
+        verbose_name_plural = _('Product Tags')
 
     def count_product(self):
         return self.products.all().count()

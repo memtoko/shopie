@@ -35,7 +35,7 @@ class PaypalPayment(PaymentBackendBase):
     backend_name = _('Paypal')
 
     def get_urls(self):
-        urlpatterns('',
+        urlpatterns = patterns('',
             url(r'^/(?P<order_key>[^\.]+)/$', self.accept_paypal_payment, name='paypal_payment')
         )
         return urlpatterns
@@ -100,12 +100,12 @@ class PaypalPayment(PaymentBackendBase):
         payment = PaypalPaymentSDK(payment_arguments, api=shopiepaypal)
         if payment.create():
             for link in payment.links:
-                if link == 'REDIRECT':
-                    return str(link)
-
-        raise PaymentProcessingError(
-            "There was an error contacting the payment processor"
-        )
+                if link.method == 'REDIRECT':
+                    return str(link.href)
+        else:
+            raise PaymentProcessingError(
+                "There was an error contacting the payment processor"
+            )
 
     def _create_payment(self, order=None, token=None, payment_id=None, payer_id=None):
 
