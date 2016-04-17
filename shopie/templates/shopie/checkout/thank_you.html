@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Terima kasih :){% endblock %}
+{% block content %}
+<div class="page-wrapper">
+  <div class="row">
+    <div class="medium-10 large-9 columns medium-centered">
+      <article class="page-article checkout-view">
+        <header class="entry-header">
+          <h1 class="entry-title">Terima Kasih</h1>
+        </header>
+        <div class="entry-content">
+        	<p>Terima kasih, order Anda telah diterima.</p>
+        	<ul class="order_details">
+        		<li class="order">
+        			Order Number: <strong>{{ order.order_key }}</strong>
+        		</li>
+        		<li class="date">
+        			Tanggal: <strong>{{ order.order_data|date:"d M Y" }}</strong>
+        		</li>
+        		<li class="total">
+        			Total: <strong>{{ order.order_total }}</strong>
+        		</li>
+        		<li class="status">
+        			Status: <strong>{{ order.get_status_name }}</strong>
+        		</li>
+        	</ul>
+        </div>
+      </article>
+    </div>
+  </div>
+</div>
+{% endblock %}

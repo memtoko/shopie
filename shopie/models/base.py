@@ -19,6 +19,9 @@ class SluggableMixin(models.Model):
         if not self.slug:
             self.slug = slugify(base)
 
+    class Meta:
+        abstract = True
+
 class TimeStampsMixin(models.Model):
     """Timestamps for the model. I added database index to both created_at
     and updated_at, as i always found to orderby them.

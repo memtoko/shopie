@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load markdown %}
+{% block title %}Issues - {{ product.name }}{% endblock %}
+
+{% block bodyclass %}single-issue issue-{{ object.pk }}{% endblock %}
+{% block content %}
+<div class="page-wrapper">
+    <div class="row">
+    <div class="large-12 columns">
+    <div class="header">
+      <div class="row">
+        <div class="large-9 columns">
+          <ul class="breadcrumbs">
+            <li><a href="{% url 'shopie:product_detail' product.slug product.pk %}">{{ product.name }}</a></li>
+            <li class="current"><a href="#">Issues</a></li>
+          </ul>
+        </div>
+        <div class="large-3 columns">
+          <ul class="sub-nav hide-for-small">
+            <li><a href="#" data-reveal-id="issue-creation-form" class="button small round primary"><span class="white-text">New Issue</span></a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% if object_list %}
+    <table class="issue-lists large-12">
+      <thead>
+        <tr>
+          <th width="20">&nbsp;</th>
+          <th>&nbsp;</th>
+          <th>&nbsp;</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for issue in object_list %}
+        <tr>
+          <td><i class="octicon octicon-issue-{% if issue.is_closed %}closed issue-closed{% else %}opened issue-open{% endif %}"></i></td>
+          <td>
+            <div class="issue-title">
+              <a class="issue-title-link" href="{% url 'shopie:issue_detail' product.slug product.pk issue.pk %}">{{ issue.name }}</a>
+              <div class="issue-meta">
+                <span class="issue-meta-section opened-by">
+                  #{{ issue.pk }} opened <span title="{{ issue.created_at|date:"c" }}">{{ issue.created_at|timesince }} ago</span> by {{ issue.user.firstname|default:issue.user.username }}
+                </span>
+            </div>
+          </td>
+          <td><span class="octicon octicon-comment"> {{ issue.replies.count }}</span></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+  <div class="row">
+    <div class="large-6 small-12 columns center-column">
+      <h6>Welcome to Issues!<h6>
+        <p>Issues are used to track todos, bugs, feature requests, and more. As issues are created, they’ll appear here in a searchable and filterable list.</p>
+    </div>
+  </div>
+  {% endif %}
+</div>
+</div>
+<div id="issue-creation-form" class="issue-creation-form reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+  <h2 id="modalTitle">Post Issue</h2>
+  {% if form_issue %}
+  <form class="issue-form" method="post">
+    {% csrf_token %}
+    {{ form_issue.as_p }}
+    <input type="hidden" name="product_pk" value="{{ product.pk }}">
+    <input type="submit" class="button primary round" value="Submit" />
+  </form>
+  {% endif %}
+  <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+</div>
+{% endblock %}

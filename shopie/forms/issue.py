@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from shopie.models import Issue, Reply
 
 class IssueCreationForm(forms.ModelForm):
-    title = forms.CharField(required=True,
+    name = forms.CharField(required=True,
         widget=forms.TextInput(
             attrs={
                 'placeholder': 'Title'
@@ -22,7 +22,7 @@ class IssueCreationForm(forms.ModelForm):
 
     class Meta:
         model = Issue
-        fields = ('title', 'body',)
+        fields = ('name', 'body',)
 
 class ReplyCreationForm(forms.ModelForm):
     body = forms.CharField(required=True,

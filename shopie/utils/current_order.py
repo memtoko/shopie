@@ -16,6 +16,10 @@ def get_current_order_from_session(request):
             order = Order.objects.get(pk=order_id)
         except Order.DoesNotExist:
             order = None
+        else:
+            if order.status >= 30:
+                order = None
+                request.session['order_id'] = None
     return order
 
 def get_or_create_current_order(request, save=False):

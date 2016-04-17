@@ -1,7 +1,7 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from shopie.views.current_order import CurrentOrderItem, CurrentOrderView
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^cart/delete/$', CurrentOrderView.as_view(action='delete'),  # DELETE
         name='cart_delete'),
     url(r'^cart/item/$', CurrentOrderView.as_view(action='post'),  # POST
@@ -16,5 +16,4 @@ urlpatterns = patterns('',
     url(r'^cart/item/(?P<id>[0-9]+)/delete$',
         CurrentOrderItem.as_view(action='delete'),
         name='cart_item_delete'),
-)
-
+]

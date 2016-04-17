@@ -47,20 +47,22 @@ class LicenseManager(models.Manager):
                 )
 
 class License(TimeStampsMixin, BaseModel):
-    LICENCE_STATUSE_INACTIVE = 10
-    LICENCE_STATUSE_ACTIVE = 20
+    LICENCE_STATE_INACTIVE = 10
+    LICENCE_STATE_ACTIVE = 20
+    LICENSE_STATE_EXPIRED = 30
 
-    LICENCE_STATUSES = (
-        (LICENCE_STATUSE_INACTIVE, 'inactive'),
-        (LICENCE_STATUSE_ACTIVE, 'active'),
+    LICENCE_STATES = (
+        (LICENCE_STATE_INACTIVE, 'inactive'),
+        (LICENCE_STATE_ACTIVE, 'active'),
+        (LICENSE_STATE_EXPIRED, 'expired')
     )
 
     license_key = models.CharField(max_length=255, unique=True,
         verbose_name=_('license key'))
     user = models.ForeignKey(user_model_string(),
         verbose_name=_('License owner'))
-    status = models.IntegerField(choices=LICENCE_STATUSES,
-        default=LICENCE_STATUSE_INACTIVE)
+    status = models.IntegerField(choices=LICENCE_STATES,
+        default=LICENCE_STATE_INACTIVE)
     active_remaining = models.IntegerField(null=True, blank=True,
         verbose_name=_('activate remaining'))
     activate_count = models.IntegerField(default=0,
@@ -85,8 +87,8 @@ class License(TimeStampsMixin, BaseModel):
 class LicenseActivation(BaseModel, TimeStampsMixin):
     license = models.ForeignKey(License)
     site = models.CharField(max_length=255, verbose_name=_('site'))
-    status = models.IntegerField(choices=License.LICENCE_STATUSES,
-        default=License.LICENCE_STATUSE_ACTIVE)
+    status = models.IntegerField(choices=License.LICENCE_STATES,
+        default=License.LICENCE_STATE_ACTIVE)
 
     def __str__(self):
         return '%s - %s' % (self.site, self.status)

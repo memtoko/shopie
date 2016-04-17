@@ -80,8 +80,9 @@ class AbstractProduct(TimeStampsMixin, SluggableMixin, BaseModel):
     )
 
     name = models.CharField(max_length=255, verbose_name=_('Product Name'))
-    short_description = models.TextField(max_length=255, verbose_name=_('Short Description'))
-    description = models.TextField(verbose_name=_('Descriptions'))
+    short_description = models.TextField(max_length=255, blank=True,
+        verbose_name=_('Short Description'))
+    description = models.TextField(blank=True, verbose_name=_('Descriptions'))
     author = models.ForeignKey(user_model_string(), blank=True, null=True,
         verbose_name=_('Author'))
     unit_price = CurrencyField(verbose_name=_('Unit Price'), blank=True,

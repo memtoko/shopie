@@ -8,7 +8,5 @@ urlpatterns = [
         r'^register/$',
         RegistrationView.as_view(form_class=RegistrationFormUniqueEmail),
         name='registration_register',
-    ),
-    url(r'', include('django.contrib.auth.urls')),
-    url(r'', include('registration.backends.default.urls')),
+    )
 ]

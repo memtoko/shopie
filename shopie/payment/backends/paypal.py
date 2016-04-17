@@ -3,7 +3,7 @@ from decimal import Decimal
 
 from django.conf import settings
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from django.utils.decorators import method_decorator
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
@@ -35,10 +35,9 @@ class PaypalPayment(PaymentBackendBase):
     backend_name = _('Paypal')
 
     def get_urls(self):
-        urlpatterns = patterns('',
+        return [
             url(r'^/(?P<order_key>[^\.]+)/$', self.accept_paypal_payment, name='paypal_payment')
-        )
-        return urlpatterns
+        ]
 
     def accept_paypal_payment(self, request, order_key=None):
         try:

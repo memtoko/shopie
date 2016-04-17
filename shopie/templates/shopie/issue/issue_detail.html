@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load markdown %}
+{% block title %}{{ object.name }}{% endblock %}
+
+{% block bodyclass %}single-issue issue-{{ object.pk }}{% endblock %}
+{% block content %}
+<div class="page-wrapper">
+  <div class="row">
+    <div class="large-12 columns">
+      <ul class="breadcrumbs">
+        <li><a href="{% url 'shopie:product_detail' object.target.slug object.target.pk %}">{{ object.target.name }}</a></li>
+        <li><a href="{% url 'shopie:product_issues' object.target.slug object.target.pk %}">issues</a></li>
+        <li class="current"><a href="#">{{ object.name }}</a></li>
+      </ul>
+      <h1 class="entry-title">{{ object.name }}</h1>
+    </div>
+  </div>
+  <div id="issue-thread" class="issues row">
+    <article id="issue-{{ object.pk }}" class="issue">
+      <div class="avatar">
+        <a href="#"><img src="//www.gravatar.com/avatar/{{ object.user.email|md5 }}?s=130" class="img-circle" alt="@{{ object.user.username }}"></a>
+        <div class="name">
+          <a href="#">@{{ object.user.username }}</a>
+        </div>
+      </div>
+      <div class="body">
+        <div class="meta">
+          <p class="issue-author-name"><a href="#">@{{ object.user.username }}</a></p>
+        </div>
+        {{ object.body|markdown }}
+      </div>
+    </article>
+    {% csrf_token %}
+    <div class="replies">
+    {% for reply in replies %}
+      <article id="reply-{{ reply.pk }}" class="issue">
+        <div class="avatar">
+          <a href="#"><img src="//www.gravatar.com/avatar/{{ reply.user.email|md5 }}?s=130" class="img-circle" alt="@{{ reply.user.username }}"></a>
+          <div class="name">
+            <a href="#">@{{ reply.user.username }}</a>
+          </div>
+        </div>
+        <div class="body">
+          <div class="meta">
+            <p class="issue-author-name"><a href="#">@{{ reply.user.username }}</a></p>
+          </div>
+          {{ reply.body|markdown }}
+        </div>
+      </article>
+    {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

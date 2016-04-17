@@ -1,0 +1,76 @@
+{% extends "base.html" %}{% load i18n %}{% load markdown %}
+{% block title %}{% trans "Keranjang Belanja" %}{% endblock %}
+{% include "partials/messages.html" %}
+{% block content %}
+<div class="page-wrapper">
+  <div class="row">
+    <article class="page-article">
+      <header class="entry-header">
+        <h1 class="entry-title">Keranjang Belanja Anda</h1>
+      </header>
+      {% if order_items %}
+        <form class="form-class" method="post" action="{% url 'shopie:cart_update' %}">
+          {% csrf_token %}
+          {{ formset.management_form }}
+          <table class="cart-table large-12" role="grid">
+            <thead>
+              <tr>
+                <th>Product name</th>
+                <th>Unit price</th>
+                <th>Quantity</th>
+                <th>&nbsp;</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for form in formset %}
+              {% with form.quantity as field %}
+                <tr>
+                  <td>{{ form.instance.product.name }}</td>
+                  <td>{{ form.instance.product.unit_price }}</td>
+                  <td>{{ form.id }}{{ field.errors }}{{ field }}</td>
+                  <td>{{ form.instance.line_total }}</td>
+                </tr>
+                {% for extra_price_field in form.instance.extra_price_fields.all %}
+                  <tr>
+                    <td colspan="2">&nbsp;</td>
+                    <td>{{ extra_price_field.label }}</td>
+                    <td>{{ extra_price_field.value }}</td>
+                  </tr>
+                {% endfor %}
+                <tr><td colspan="2">&nbsp;</td><td>Line Total:</td><td>{{ form.instance.line_total }}</td></tr>
+              {% endwith %}
+              {% endfor %}
+            </tbody>
+
+            <tfoot>
+              <tr><td colspan="2">&nbsp;</td><td>Cart Subtotal</td><td>{{order.order_subtotal}}</td></tr>
+              {% for extra_price_field in order.extra_price_fields.all %}
+                <tr>
+                  <td colspan="2">&nbsp;</td>
+                  <td>{{ extra_price_field.label }}</td>
+                  <td>{{ extra_price_field.value }}</td>
+                </tr>
+              {% endfor %}
+              <tr><td colspan="2">&nbsp;</td><td><b>Cart Total</b></td><td><b>{{order.order_total}}</b></td></tr>
+            </tfoot>
+          </table>
+          <div class="row">
+            <div class="large-6 small-12 column">
+              <p><input type="submit" class="small button secondary round" value="Update Shopping Cart" ></p>
+            </div>
+            <div class="large-6 small-12 column">
+              <p class="large-push-7">
+                <a class="small button success round" href="{%url 'shopie:checkout' %}">Proceed to checkout</a>
+              </p>
+            </div>
+          </div>
+        </form>
+      {% else %}
+        {% markdown %}
+Keranjang belanja Anda kosong. Silahkan [memilih produk dahulu]({% url 'shopie:shop' %}).
+        {% endmarkdown %}
+      {% endif %}
+    </article>
+  </div>
+</div>
+{% endblock %}

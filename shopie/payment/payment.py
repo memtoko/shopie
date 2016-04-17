@@ -16,6 +16,16 @@ class PaymentCheckoutStep(CheckoutStepMixin, FormView):
     def process(self):
         pass
 
+    def get_context_data(self, **kwargs):
+        ctx = super(PaymentCheckoutStep, self).get_context_data(**kwargs)
+        order = get_or_create_current_order(self.request)
+        order_items = order.items.all()
+        ctx.update({
+            'order': order,
+            'order_items': order_items
+        })
+        return ctx
+
     def get_form_kwargs(self):
         kwargs = super(PaymentCheckoutStep, self).get_form_kwargs()
         instance = None
@@ -23,7 +33,9 @@ class PaymentCheckoutStep(CheckoutStepMixin, FormView):
             instance = self.object
         else:
             instance = get_or_create_current_order(self.request)
-        kwargs.update({'instance': instance})
+        kwargs.update({
+            'instance': instance
+        })
         return kwargs
 
     def form_valid(self, form):

@@ -121,7 +121,7 @@ class OrderQuerySet(models.QuerySet):
             return self.get_or_create(**kwargs)
 
 def order_number_generator():
-    segments = (3,5,3) # 999.99999.999 possibility
+    segments = (3,7,3)
     while True:
         collections = []
         for item in segments:

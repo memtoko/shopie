@@ -1,17 +1,8 @@
-from django.conf.urls import patterns, include
+from django.conf.urls import url, include
 
 from . import payment_backend_pool
 
-urlpatterns = patterns('')
-
 # For every backend defined in the backend pool, load all the URLs it defines
-# in its get_urls() method.
-for backend in payment_backend_pool.get_backend_list():
-    regexp = '^%s/' % backend.url_namespace
-    urls = backend.get_urls()
-    if urls is not None:
-        pattern = patterns('',
-            (regexp, include(backend.get_urls()))
-        )
-
-        urlpatterns = pattern + urlpatterns
+# in its get_urls
+backends = payment_backend_pool.get_backend_list()
+urlpatterns = [url('^gates/%s/' % x.url_namespace, include(x.get_urls())) for x in backends if x.get_urls() is not None]

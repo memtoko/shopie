@@ -13,11 +13,12 @@ from shopie.forms.issue import IssueCreationForm, ReplyCreationForm
 
 class IssueListView(ShopViewMixins, ListView):
 
-    model = Product
+    model = Issue
     ordering = "updated_at"
     generic_template = "shopie/issue/issue_list.html"
     paginate_by = 20
     query_pk_and_slug = True
+    product = None
 
     def get_queryset(self):
         if self.queryset is not None:
@@ -32,6 +33,7 @@ class IssueListView(ShopViewMixins, ListView):
             except Product.DoesNotExist:
                 raise Http404("Issue for product doesnot exists yet.")
             else:
+                self.product = product
                 queryset = product.issues.all()
         return queryset
 
@@ -42,22 +44,17 @@ class IssueListView(ShopViewMixins, ListView):
             ctx.update({
                     'form_issue': form
                 })
-        # try to get the the product
-        issues = ctx.get('object_list', None)
-        if issues:
-            issue = issues[0]
-            product = getattr(issue, 'target_content_type', None)
-            if product is not None:
-                ctx.update({
-                        'product': product
-                    })
+        if self.product is not None:
+            ctx.update({
+                    'product': self.product
+                })
         return ctx
 
     @method_decorator(login_required)
     def post(self, *args, **kwargs):
         try:
             product_pk = int(self.request.POST['product_pk'])
-            product = Product.objects.get(pk=pk)
+            product = Product.objects.get(pk=product_pk)
         except (KeyError, ValueError, Product.DoesNotExist):
             return HttpResponseBadRequest("Bad request input")
         issue = Issue(target=product, user=self.request.user)
@@ -65,15 +62,16 @@ class IssueListView(ShopViewMixins, ListView):
         if form.is_valid():
             issue = form.save()
             return HttpResponseRedirect(
-                    reverse("issue_detail",
+                    reverse("shopie:issue_detail",
                     kwargs={
-                        'slug':issue.slug,
+                        'product_slug':product.slug,
+                        'product_pk': product.pk,
                         'pk':issue.pk
                     }))
         else:
             message_api.warning(self.request, "Ups, form input tidak valid.")
             return HttpResponseRedirect(
-                reverse('product_issues',
+                reverse('shopie:product_issues',
                 kwargs={
                     'slug': product.slug,
                     'pk': product.pk
@@ -86,7 +84,8 @@ class IssueDetailView(ShopViewMixins, DetailView):
 
     def get_context_data(self, **kwargs):
         ctx = super(IssueDetailView, self).get_context_data(**kwargs)
-        replies = Reply.objects.filter(issue=ctx.get('object'))
+        issue = ctx.get('object')
+        replies = issue.replies.all()
         ctx.update({
             'replies': replies
         })

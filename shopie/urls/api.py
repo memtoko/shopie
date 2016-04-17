@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, url, include
+from django.conf.urls import url, include
 
 from rest_framework.urlpatterns import format_suffix_patterns
 from rest_framework import routers
@@ -18,6 +18,6 @@ router.register('orders', OrderViewSet)
 router.register('order-items', OrderItemViewSet)
 router.register('media', MediaViewSet)
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^api/v1/', include(router.urls)),
-)
+]

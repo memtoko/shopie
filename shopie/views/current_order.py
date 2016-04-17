@@ -94,7 +94,7 @@ class CurrentOrderView(TemplateResponseMixin, CurrentOrderItem):
             product_quantity = int(self.request.POST.get('add_item_quantity', 1))
         except (KeyError, ValueError):
             message_api.warning(self.request, 'error, silahkan pilih product')
-            return HttpResponseRedirect(reverse('cart'))
+            return HttpResponseRedirect(reverse('shopie:cart'))
 
         product = Product.objects.get(pk=product_id)
         order = get_or_create_current_order(self.request, save=True)
@@ -124,5 +124,3 @@ class CurrentOrderView(TemplateResponseMixin, CurrentOrderItem):
         ctx = self.get_context_data(**kwargs)
         ctx.update({'formset': formset, })
         return self.render_to_response(ctx)
-
-

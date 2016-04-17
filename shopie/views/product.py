@@ -5,7 +5,7 @@ from shopie.models import Product
 
 class ShopView(ShopViewMixins, ListView):
     generic_template = "shopie/product/product_list.html"
-    paginate_by = 20
+    paginate_by = 10
 
     def get_queryset(self):
         queryset = Product.objects.root().select_related('author')

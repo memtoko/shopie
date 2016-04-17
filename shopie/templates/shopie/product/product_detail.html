@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load markdown %}
+{% block title %}{{ object.name }}{% endblock %}
+
+{% block bodyclass %}single-product product-{{ object.pk }}{% endblock %}
+{% block content %}
+<div class="product-intro">
+<div class="row">
+  <div class="title center">
+    <h1 class="entry title">{{ object.name }}</h1>
+    <div class="large-8 columns large-centered text-center">
+      <div class="sub-intro">{{ object.short_description|markdown }}</div>
+    </div>
+    <div class="button-group" data-grouptype="Atau">
+      <a href="#purchase" class="button secondary radius">Beli sekarang</a>
+      <a href="#product-about-text" class="button primary radius">Pelajari dulu</a>
+    </div>
+  </div>
+</div>
+</div>
+<div class="product-cta noise"><div class="wrap">
+  <div class="row">
+    <div class="large-6 small-12 columns center-column">
+    <ul class="action-lists">
+      <li class="title"><p>Support: </p></li>
+      <li>
+        <p><a href="{% url 'shopie:product_issues' object.slug object.pk %}"><span class="octicon octicon-issue-opened"> issues</span></a></p>
+      </li>
+      <li>
+        <p><a href="/wiki/"><span class="octicon octicon-book"> documentation</span></a></p>
+      </li>
+    </ul>
+    </div>
+  </div>
+</div></div>
+<div id="product-about-text" class="product-about">
+  <div class="row">
+    <div class="large-9 small-12 columns center-column">
+      <div class="entry_content">
+        {{ object.description|markdown }}
+      </div>
+    </div>
+  </div>
+</div>
+<div id="purchase" class="product-purchase-box">
+  <div class="row">
+    <div class="title center">
+      <h1 class="entry title">Beli sekarang</h1>
+      <div class="sub-intro"><p>30 hari garansi uang kembali</p></div>
+    </div>
+    {% if object.is_parent %}
+      {% include "shopie/product/add_to_cart/variable.html" %}
+    {% else %}
+      {% include "shopie/product/add_to_cart/simple.html" %}
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

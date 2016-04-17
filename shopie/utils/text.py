@@ -15,7 +15,12 @@ from markdown.extensions.tables import TableExtension
 from markdown.extensions.nl2br import Nl2BrExtension
 
 def slugify(base, instance=None, slug_field='slug'):
-    slug = base = _slugify(str(base).replace('_', ' '))
+    if not isinstance(base, str):
+        base = str(base)
+    slug = base = _slugify(base.replace('_', ' '))
+    length = len(base)
+    if length > 235:
+        base = base[:235]
     if instance:
         def get_query():
             query = instance.objects.filter(**{slug_field: slug})
