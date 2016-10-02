@@ -1,26 +1,42 @@
-EMBERAPP = shopiejs
-CSSBUILD = shopie/static/shopie/css
-JSBUILD = shopie/static/shopie/js
+.DEFAULT_GOAL = help
 
-.PHONY: init js-dev js-production run copy-static-dev js-dev js-production
+NPMBIN		:= node_modules/.bin
+
+FRONTENDAPP = shopiejs
+CSSBUILD 	= shopie/static/shopie/css
+JSBUILD 	= shopie/static/shopie/js
+
+.PHONY: run init copy-static
+
+# - Command
+help:
+	@echo ""
+	@echo "AVAILABLE TASKS"
+	@echo ""
+	@echo "  compile ................ Compiles frontend app."
+	@echo "  clean .................. Removes build artifacts."
+	@echo "  test ................... Runs the tests for the project."
+	@echo "  lint ................... Lints all source files."
+	@echo ""
 
 init:
-	cd $(EMBERAPP) && npm install
-	bower --allow-root install
+	# weird, most npm modules doesnt work if we invoke them from here
+	cd $(FRONTENDAPP) && npm install && cd ..
 
 run:
 	python manage.py runserver 0.0.0.0:8000
 
-copy-static-dev: js-dev
-	cp $(EMBERAPP)/dist/assets/*.css $(CSSBUILD)
-	cp $(EMBERAPP)/dist/assets/*.js $(JSBUILD)
+copy-static: compile
+	cp $(FRONTENDAPP)/dist/*.js $(JSBUILD)
+	#cp $(FRONTENDAPP)/dist/*.css $(CSSBUILD)
 
-copy-static-prod: js-production
-	cp $(EMBERAPP)/dist/assets/*.css $(CSSBUILD)
-	cp $(EMBERAPP)/dist/assets/*.js $(JSBUILD)
+lint:
+	sh $(NPMBIN)/eslint "src" "test"
 
-js-dev:
-	cd $(EMBERAPP) && ember build
+compile-js:
+	cd $(FRONTENDAPP) && sh $(NPMBIN)/rollup -c rollup.config.js
 
-js-production:
-	cd $(EMBERAPP) && ember build --environment=production
+compile-css:
+	# to do compile our css
+
+compile: compile-js

@@ -6,7 +6,6 @@ __pycache__/
 *.db
 *.log
 *.db-journal
-
 # C extensions
 *.so
 
@@ -37,3 +36,4 @@ logs
 # Local development stuff
 /dev
 manage.py
+*.sqlite3
