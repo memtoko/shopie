@@ -3,7 +3,10 @@
     "plugins": [
       "external-helpers",
       "transform-function-bind",
-      "transform-object-rest-spread"
+      "transform-object-rest-spread",
+      ["babel-plugin-module-alias", [
+        { "src": "./src", "expose": "shopie" }
+      ]]
     ],
     "exclude": "node_modules/**"
 }

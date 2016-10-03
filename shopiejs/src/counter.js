@@ -1,11 +1,11 @@
 import { h } from './dom/vnode'
-import { data } from './data/adt'
+import { data, show } from './core/adt'
 import { noEffects } from 'jonggrang.core'
 
 const Action = data('counter.Action', {
   Increment: () => ({}),
   Decrement: () => ({})
-})
+}).derive(show)
 
 const { Increment, Decrement } = Action
 
