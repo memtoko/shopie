@@ -10,7 +10,7 @@ end_of_line = lf
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-[*.hbs]
+[*.purs]
 insert_final_newline = false
 indent_size = 2
 
