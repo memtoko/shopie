@@ -3,7 +3,8 @@
   "scripts": {
     "postinstall": "bower install",
     "build": "pulp browserify --optimise --to dist/app.js",
-    "watch": "pulp -w browserify --to dist/app.js"
+    "watch": "pulp -w browserify --to dist/app.js",
+    "build:css": "myth styles/app.css dist/app.css --sourcemap=true --compress=true"
   },
   "dependencies": {
     "virtual-dom": "^2.1.1"
