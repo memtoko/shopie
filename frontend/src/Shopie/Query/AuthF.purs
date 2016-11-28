@@ -2,23 +2,37 @@ module Shopie.Query.AuthF where
 
 import Prelude
 
-import Shopie.Query.SessionF (SessionF)
+import Data.Maybe (Maybe)
 
+import Shopie.Auth.Types (AuthResult, Creds, Email, UserId)
 
 -- | The auth query algebra
-data AuthF s c m a
-  = AuthSF (SessionF s a)
-  | Lift (m a)
-  | Halt String
-  | Login c a
-  | Forgotten c a
-  | Logout a
+data AuthF a
+  = Authenticate Creds (AuthResult -> a)
+  | GetAuthId Creds (Maybe UserId -> a)
+  | Invalidate (AuthResult -> a)
+  | Forgotten Email a
 
-instance functorAuthF :: Functor m => Functor (AuthF s c m) where
+instance functorAuthF :: Functor AuthF where
   map f = case _ of
-    AuthSF g -> AuthSF (map f g)
-    Lift q -> Lift (map f q)
-    Halt msg -> Halt msg
-    Login c a -> Login c (f a)
-    Forgotten c a -> Forgotten c (f a)
-    Logout a -> Logout (f a)
+    Authenticate c g -> Authenticate c (f <<< g)
+    GetAuthId c g -> GetAuthId c (f <<< g)
+    Invalidate g -> Invalidate (f <<< g)
+    Forgotten e a -> Forgotten e (f a)
+
+-- | Bus
+data AuthMessage
+  = AuthSuccess
+  | AuthFailure
+  | InvalidateRequest
+  | ForgotRequestSuccess
+
+derive instance authMessageEq :: Eq AuthMessage
+
+-- | Not really need this, just handy when debugging
+instance authMessageShow :: Show AuthMessage where
+  show = case _ of
+    AuthSuccess -> "AuthSuccess"
+    AuthFailure -> "AuthFailure"
+    InvalidateRequest -> "InvalidateRequest"
+    ForgotRequestSuccess -> "ForgotRequestSuccess"

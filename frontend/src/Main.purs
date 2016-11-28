@@ -4,12 +4,12 @@ import Prelude
 
 import Control.Monad.Eff (Eff)
 
-import Halogen as H
 import Halogen.Util (runHalogenAff, awaitBody)
 
-import Component.Auth (initialAuth, auth)
+import Shopie.Effects (ShopieEffects)
 
-main :: Eff (H.HalogenEffects ()) Unit
+
+main :: Eff (ShopieEffects ()) Unit
 main = runHalogenAff do
   body <- awaitBody
-  H.runUI auth (H.parentState initialAuth) body
+  pure unit

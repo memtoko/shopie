@@ -1,4 +1,10 @@
-module Component.Spinner where
+module Shopie.Button.Spinner
+  ( SpinnerQuery(..)
+  , SpinnerS
+  , SpinnerSlot(..)
+  , mkSpinner
+  , spinner
+  ) where
 
 import Prelude
 
@@ -35,21 +41,21 @@ mkSpinner cls t = { text: t, class_: cls, submitted: false }
 -- | The component
 spinner :: forall g. H.Component SpinnerS SpinnerQuery g
 spinner = H.component { render, eval }
-  where
-  render :: SpinnerS -> H.ComponentHTML SpinnerQuery
-  render st =
-    HH.button
-      [ HP.class_ $ HH.className st.class_
-      , HE.onClick $ HE.input_ Submit
-      ]
-      [ if st.submitted then
-          HH.span [ HP.class_ $ HH.className "spinner" ] []
-        else
-          HH.text st.text
-      ]
 
-  eval :: SpinnerQuery ~> H.ComponentDSL SpinnerS SpinnerQuery g
-  eval (Submit next) = next <$ H.modify (_ { submitted = true } )
-  eval (IsSubmmitted cont) = cont <$> H.gets (_.submitted)
-  eval (ToggleSpinner b next) = next <$ H.modify (_ { submitted = b } )
-  eval (UpdateText t next) = next <$ H.modify (_ { text = t } )
+render :: SpinnerS -> H.ComponentHTML SpinnerQuery
+render st =
+  HH.button
+    [ HP.class_ $ HH.className st.class_
+    , HE.onClick $ HE.input_ Submit
+    ]
+    [ if st.submitted then
+        HH.span [ HP.class_ $ HH.className "spinner" ] []
+      else
+        HH.text st.text
+    ]
+
+eval :: forall g. SpinnerQuery ~> H.ComponentDSL SpinnerS SpinnerQuery g
+eval (Submit next) = next <$ H.modify (_ { submitted = true } )
+eval (IsSubmmitted cont) = cont <$> H.gets (_.submitted)
+eval (ToggleSpinner b next) = next <$ H.modify (_ { submitted = b } )
+eval (UpdateText t next) = next <$ H.modify (_ { text = t } )
