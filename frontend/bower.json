@@ -13,6 +13,7 @@
     "purescript-aff-bus": "^1.0.0",
     "purescript-aff-future": "^1.0.0",
     "purescript-argonaut": "^2.0.0",
+    "purescript-const": "^2.0.0",
     "purescript-console": "^2.0.0",
     "purescript-freeap": "^2.0.0",
     "purescript-foreign": "^3.0.0",

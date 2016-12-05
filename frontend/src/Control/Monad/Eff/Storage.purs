@@ -1,8 +1,10 @@
-module Control.Monad.Storage
+module Control.Monad.Eff.Storage
   ( setSessionStorage
   , getSessionStorage
+  , removeSessionStorage
   , setLocalStorage
   , getLocalStorage
+  , removeLocalStorage
   ) where
 
 import Prelude
@@ -38,6 +40,10 @@ getSessionStorage k =
       (Left $ "There is no session storage item for key " <> k)
       (jsonParser >=> decodeJson)
 
+foreign import removeSessionStorage
+  :: forall e. String
+  -> Eff (dom :: DOM | e) Unit
+
 setLocalStorage
   :: forall a e
   .  EncodeJson a
@@ -57,6 +63,10 @@ getLocalStorage k =
     maybe
       (Left $ "There is no local storage item for key " <> k)
       (jsonParser >=> decodeJson)
+
+foreign import removeLocalStorage
+  :: forall e. String
+  -> Eff (dom :: DOM | e) Unit
 
 foreign import _setSessionStorage
   :: forall e

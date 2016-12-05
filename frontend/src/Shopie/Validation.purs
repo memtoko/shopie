@@ -2,76 +2,62 @@ module Shopie.Validation where
 
 import Prelude
 
-import Control.Applicative.Free (FreeAp, liftFreeAp)
+import Control.Applicative.Lift (Errors, failure)
 
-import Data.Either (Either(..))
-import Data.Function.Uncurried (Fn3, runFn3)
 import Data.Int (fromString)
-import Data.String (length)
-import Data.Maybe (Maybe, maybe)
+import Data.Map as M
+import Data.Maybe (maybe)
+
+import Text.Email.Validate as EV
 
 
--- | Validator tries to read value or generates error message.
-type Validator a = String -> Either String a
+type Label = M.Map String String
 
--- | Convenient synonym for field name.
-type FieldName = String
+nes'
+  :: forall m
+   . Semigroup m
+  => (String -> m)
+  -> String
+  -> Errors m String
+nes' f v
+  | v == ""   = failure (f "is empty")
+  | otherwise = pure v
 
--- | Convenient synonym for help name
-type HelpMessage = String
+nes :: String -> String -> Errors Label String
+nes lb = nes' $ M.singleton lb
 
--- |  A single field of a form.
-newtype Field a = Field
-  { name :: FieldName -- Field name
-  , help :: HelpMessage -- Help message
-  , validator :: Validator a -- Pure validation function.
-  }
+int'
+  :: forall m
+   . Semigroup m
+  => (String -> m)
+  -> String
+  -> Errors m Int
+int' f v = maybe (failure (f "is not an integers")) pure (fromString v)
 
--- | Validation form is just a free applicative over Field.
-type Form = FreeAp Field
+int :: String -> String -> Errors Label Int
+int lb = int' $ M.singleton lb
 
--- | Build a form with a single field.
-field :: forall a. FieldName -> Validator a -> HelpMessage -> Form a
-field n v h = liftFreeAp $ Field { name: n, help: h, validator: v }
+email'
+  :: forall m
+   . Semigroup m
+  => (String -> m)
+  -> String
+  -> Errors m String
+email' f v = maybe (failure $ f "is not a valid email") (pure <<< show) (EV.emailAddress v)
 
--- | Non empty string validation
-nes :: FieldName -> Form String
-nes n = field n validate (n <> " field cant be an empty string")
-  where
-    validate :: String -> Either String String
-    validate v =
-      if v == "" then Left (n <> ": Invalid String") else Right v
+email :: String -> String -> Errors Label String
+email lb = email' $ M.singleton lb
 
--- | Validate a value is an integer
-int :: FieldName -> Form Int
-int n = field n (validate <<< fromString) "Enter an integer value"
-  where
-    validate :: forall a. Maybe a -> Either String a
-    validate = maybe (Left (n <> ": Invalid Int")) Right
+-- | Take a Map and update by union operations on records errors fields.
+unionError :: forall r. Label -> { errors :: Label | r } -> { errors :: Label | r }
+unionError m r = r { errors = M.union m r.errors }
 
--- | Validate a value is an email address
-email :: FieldName -> Form String
-email n = field n (\v -> runFn3 _validateEmail Left Right v) "Enter an email address"
+-- | Clear error fields.
+clearError :: forall r. { errors :: Label | r } -> { errors :: Label | r }
+clearError = (_ { errors = M.empty } )
 
--- | Validate a value at least has a given minimum value
-min :: FieldName -> Int -> Form String
-min n m = field n validate helpMsg
-  where
-    helpMsg = "Ensure " <> n <> " value is greater than or equal to " <> (show m)
-    validate v =
-      if (length v) < m then
-        Left ("minimum string length is " <> (show m))
-      else
-        Right v
+deleteError :: forall a r. String -> a -> { errors :: Label | r } -> { errors :: Label | r }
+deleteError k _ s = s { errors = M.delete k s.errors }
 
-max :: FieldName -> Int -> Form String
-max n m = field n validate helpMsg
-  where
-    helpMsg = "Ensure " <> n <> "value is less than or equal to " <> (show m)
-    validate v =
-      if (length v) > m then
-        Left ("maximum value exceeded")
-      else
-        Right v
-
-foreign import _validateEmail :: Fn3 (forall x y. x -> Either x y) (forall x y. y -> Either x y) String (Either String String)
+setError :: forall r. Label -> { errors :: Label | r } -> { errors :: Label | r }
+setError e s = s { errors = e }

@@ -1,4 +1,4 @@
-module Shopie.Query.ShopieM
+module Shopie.ShopieM.ShopieM
   ( ShopieMoD
   , ShopieApD
   , ShopieF(..)
@@ -26,9 +26,9 @@ import Data.Newtype (class Newtype, over)
 
 import Shopie.Auth.Types (class AuthDSL, Email)
 import Shopie.Draad (Draad)
-import Shopie.Query.AuthF (AuthF(..))
-import Shopie.Query.ForkF as SF
-import Shopie.Query.Notification (class NotifyQ, Notification(Notification))
+import Shopie.ShopieM.AuthF (AuthF(..))
+import Shopie.ShopieM.ForkF as SF
+import Shopie.ShopieM.Notification (class NotifyQ, Notification(Notification))
 
 
 -- | A type Synonim for ShopieM where the g part is Draad
@@ -111,7 +111,7 @@ instance notifyQShopieM :: NotifyQ (ShopieM g m) where
 
 instance authDSLShopieM :: AuthDSL (ShopieM g m) where
   authenticate = ShopieM <<< liftF <<< AuthSF <<< flip Authenticate id
-  getAuthId = ShopieM <<< liftF <<< AuthSF <<< flip GetAuthId id
+  maybeAuthId = ShopieM $ liftF $ AuthSF $ MaybeAuthId id
   invalidate = ShopieM $ liftF $ AuthSF $ Invalidate id
 
 forgotten :: forall g m. Email -> ShopieM g m Unit

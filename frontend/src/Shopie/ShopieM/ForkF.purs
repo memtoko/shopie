@@ -1,4 +1,4 @@
-module Shopie.Query.ForkF where
+module Shopie.ShopieM.ForkF where
 
 import Prelude
 

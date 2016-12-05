@@ -1,6 +1,5 @@
 module Shopie.Ajax where
 
-
 import Prelude
 
 import Network.HTTP.Affjax as AJ
