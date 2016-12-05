@@ -9,9 +9,25 @@
     "dist"
   ],
   "dependencies": {
-    "purescript-console": "^2.0.0",
-    "purescript-halogen": "^0.12.0",
     "purescript-affjax": "^3.0.0",
-    "normalize.css": "3.0.3"
+    "purescript-aff-bus": "^1.0.0",
+    "purescript-aff-future": "^1.0.0",
+    "purescript-argonaut": "^2.0.0",
+    "purescript-console": "^2.0.0",
+    "purescript-freeap": "^2.0.0",
+    "purescript-foreign": "^3.0.0",
+    "purescript-fork": "^1.0.0",
+    "purescript-halogen": "^0.12.0",
+    "purescript-js-timers": "^2.0.0",
+    "purescript-parallel": "^2.1.0",
+    "purescript-validation": "^2.0.0",
+    "normalize.css": "3.0.3",
+    "purescript-markdown": "^8.0.0",
+    "purescript-markdown-halogen": "^3.0.0",
+    "purescript-random": "^2.0.0",
+    "purescript-routing": "^3.0.0"
+  },
+  "devDependencies": {
+    "purescript-psci-support": "^2.0.0"
   }
 }
