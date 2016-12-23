@@ -7,7 +7,7 @@ import Halogen.HTML as HH
 import Halogen.HTML.Events as HE
 import Halogen.HTML.Properties as HP
 
-import Shopie.Query.Notification as QN
+import Shopie.ShopieM.Notification as QN
 
 
 data NotifQuery a
@@ -43,9 +43,9 @@ render n =
         ]
     ]
 
-eval ::forall g. NotifQuery ~> H.ComponentDSL NotificationItem NotifQuery g
+eval :: forall g. NotifQuery ~> H.ComponentDSL NotificationItem NotifQuery g
 eval (Remove next) = pure next
-eval (ToggleRemoved b next) = next <$ H.modify (_ { removed = b })
+eval (ToggleRemoved b next) = H.modify (_ { removed = b }) $> next
 eval (IsRemoved reply) = reply <$> H.gets (_.removed)
 
 levelCSS :: QN.Level -> String
@@ -53,5 +53,5 @@ levelCSS n = "sh-notification " <> "sh-notification-passive " <> color
   where
     color = case n of
       QN.Info -> "green"
-      QN.Error -> "read"
+      QN.Error -> "red"
       QN.Warning -> "orange"

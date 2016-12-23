@@ -39,9 +39,13 @@ logout = Logout <$ (homeSlash *> lit "logout")
 order :: Match Locations
 order = Order <$> (homeSlash *> lit "order" *> crud)
 
+profile :: Match Locations
+profile = Profile <$ (homeSlash *> lit "profile")
+
 routing :: Match Locations
 routing =
   order <|>
+  profile <|>
   login <|>
   logout <|>
   home

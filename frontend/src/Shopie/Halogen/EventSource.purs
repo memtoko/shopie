@@ -1,3 +1,7 @@
+{-
+  Lifted from Slamdata
+-}
+
 module Shopie.Halogen.EventSource where
 
 import Prelude
@@ -38,7 +42,6 @@ sendLater' ms act = do
   canceller <- H.fromAff makeVar
   H.subscribe' $ emitOnceEventSource ms act canceller
   H.fromAff $ takeVar canceller
-
 
 raise
   :: forall s f g eff

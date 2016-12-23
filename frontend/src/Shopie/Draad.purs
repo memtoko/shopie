@@ -13,15 +13,16 @@ import Data.Maybe (Maybe(Nothing))
 
 import Shopie.Auth.Types (Oauth2Client, BearerToken, UserId)
 import Shopie.Effects (ShopieEffects)
-import Shopie.Query.AuthF (AuthMessage)
-import Shopie.Query.Notification (Notification)
+import Shopie.Route.Types (Locations)
+import Shopie.ShopieM.AuthF (AuthMessage)
+import Shopie.ShopieM.Notification (Notification)
 
 
 -- | for now we only need this
 newtype Draad = Draad
   { notify :: Bus.BusRW Notification
   , auth :: Bus.BusRW AuthMessage
-  --, route :: Bus.BusRW Routes
+  , route :: Bus.BusRW Locations
   , oauth2b :: Ref Oauth2Client
   , tokenAuth :: Ref (Maybe BearerToken)
   , apiEndpoint :: Ref String
@@ -38,7 +39,7 @@ makeDraad
 makeDraad oauth tok' api = fromAff do
   notify <- Bus.make
   auth <- Bus.make
-  --route <- Bus.make
+  route <- Bus.make
   oauth2b <- fromEff $ newRef oauth
   tok <- fromEff $ newRef tok'
   endP <- fromEff $ newRef api
@@ -46,7 +47,7 @@ makeDraad oauth tok' api = fromAff do
   pure $ Draad
     { notify: notify
     , auth: auth
-    --, route: route
+    , route: route
     , oauth2b: oauth2b
     , tokenAuth: tok
     , apiEndpoint: endP

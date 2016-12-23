@@ -2,7 +2,7 @@
 
 NPMBIN		:= node_modules/.bin
 
-FRONTENDAPP = shopiejs
+FRONTENDAPP = frontend
 CSSBUILD 	= shopie/static/shopie/css
 JSBUILD 	= shopie/static/shopie/js
 
@@ -28,15 +28,17 @@ run:
 
 copy-static: compile
 	cp $(FRONTENDAPP)/dist/*.js $(JSBUILD)
-	#cp $(FRONTENDAPP)/dist/*.css $(CSSBUILD)
+	cp $(FRONTENDAPP)/dist/*.css $(CSSBUILD)
 
 lint:
 	sh $(NPMBIN)/eslint "src" "test"
 
 compile-js:
-	cd $(FRONTENDAPP) && sh $(NPMBIN)/rollup -c rollup.config.js
+	cd $(FRONTENDAPP) && npm run build
+	cd ..
 
 compile-css:
-	# to do compile our css
+	cd $(FRONTENDAPP) && npm run build:css
+	cd ..
 
-compile: compile-js
+compile: compile-js compile-css

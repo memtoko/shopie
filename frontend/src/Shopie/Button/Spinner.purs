@@ -8,11 +8,13 @@ module Shopie.Button.Spinner
 
 import Prelude
 
+import Data.Maybe (Maybe(Just))
+
 import Halogen as H
 import Halogen.HTML.Indexed as HH
 import Halogen.HTML.Properties.Indexed as HP
 import Halogen.HTML.Events.Indexed as HE
-
+import Halogen.HTML.Events.Handler as HEH
 
 -- | The query algebra
 data SpinnerQuery a
@@ -46,7 +48,7 @@ render :: SpinnerS -> H.ComponentHTML SpinnerQuery
 render st =
   HH.button
     [ HP.class_ $ HH.className st.class_
-    , HE.onClick $ HE.input_ Submit
+    , HE.onClick (\_ -> HEH.preventDefault *> HEH.stopPropagation $> Just (H.action Submit))
     ]
     [ if st.submitted then
         HH.span [ HP.class_ $ HH.className "spinner" ] []

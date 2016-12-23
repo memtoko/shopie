@@ -1,4 +1,4 @@
-module Shopie.Query.Notification
+module Shopie.ShopieM.Notification
   ( Level(..)
   , Notification(..)
   , class NotifyQ
@@ -8,10 +8,14 @@ module Shopie.Query.Notification
   , warning
   ) where
 
-import Prelude
+import Shopie.Prelude
+
+import Control.Monad.Free (Free, liftF)
+
+import Halogen.Query.EventSource as ES
+import Halogen.Query.HalogenF as HF
 
 import Data.Time.Duration (Milliseconds)
-import Data.Maybe (Maybe)
 
 -- | Notification level
 data Level
@@ -35,6 +39,21 @@ instance eqNotification :: Eq Notification where
 
 class NotifyQ m where
   notify :: Notification -> m Unit
+
+instance notifyQMaybeT :: (Monad m, NotifyQ m) => NotifyQ (MaybeT m) where
+  notify = lift <<< notify
+
+instance notifyQExceptT :: (Monad m, NotifyQ m) => NotifyQ (ExceptT e m) where
+  notify = lift <<< notify
+
+instance notifyQFree :: NotifyQ f => NotifyQ (Free f) where
+  notify = liftF <<< notify
+
+instance notifyQHalogenF :: NotifyQ g => NotifyQ (HF.HalogenFP ES.EventSource s f g) where
+  notify = HF.QueryHF <<< notify
+
+instance notifyQHalogenFP :: NotifyQ g => NotifyQ (HF.HalogenFP ES.ParentEventSource s f (Free (HF.HalogenFP ES.EventSource s' f' g))) where
+  notify = HF.QueryHF <<< notify
 
 info :: forall m. NotifyQ m => String -> Maybe Milliseconds -> m Unit
 info m t = notify $ Notification { level: Info, message: m, timeout: t }

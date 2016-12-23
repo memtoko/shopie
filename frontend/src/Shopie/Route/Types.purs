@@ -32,12 +32,12 @@ class RouteLink a where
 
 instance routeLinkRoutes :: RouteLink Locations where
   link = case _ of
-    Home -> "#/"
-    Login -> "#/login"
-    Logout -> "#/logout"
-    Profile -> "#/profile"
-    Order a -> "#/profile" <> link a
-    NotFound -> "#/404"
+    Home -> "/"
+    Login -> "/login"
+    Logout -> "/logout"
+    Profile -> "/profile"
+    Order a -> "/profile" <> link a
+    NotFound -> "/404"
 
 instance routeLinkCRUD :: RouteLink CRUD where
   link Index = ""

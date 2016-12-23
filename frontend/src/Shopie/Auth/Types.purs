@@ -1,12 +1,15 @@
 module Shopie.Auth.Types where
 
-import Prelude
+import Shopie.Prelude
+
+import Control.Monad.Eff (Eff)
+import Control.Monad.Free (Free, liftF)
 
 import Data.Argonaut (class EncodeJson, class DecodeJson, decodeJson, encodeJson, jsonEmptyObject, (~>), (:=), (.?))
-import Data.Maybe (Maybe(..))
-import Data.Newtype (class Newtype)
-import Data.Tuple (Tuple)
+import DOM (DOM)
 
+import Halogen.Query.EventSource as ES
+import Halogen.Query.HalogenF as HF
 
 -- | UserId, this can be an email or username.
 newtype UserId = UserId String
@@ -98,10 +101,35 @@ instance showAuthResult :: Show AuthResult where
 class AuthDSL m where
   -- | authenticate a given credentials
   authenticate :: Creds -> m AuthResult
-  -- | getAuthId
-  getAuthId :: Creds -> m (Maybe UserId)
+  -- | Retrieves user credentials, if user is authenticated.
+  maybeAuthId :: m (Maybe UserId)
   -- | invalidate the current user. Should be okay calling this multiple times.
   invalidate :: m AuthResult
+
+instance authDSLMaybeT :: (Monad m, AuthDSL m) => AuthDSL (MaybeT m) where
+  authenticate = lift <<< authenticate
+  maybeAuthId  = lift $ maybeAuthId
+  invalidate   = lift $ invalidate
+
+instance authDSLExceptT :: (Monad m, AuthDSL m) => AuthDSL (ExceptT e m) where
+  authenticate = lift <<< authenticate
+  maybeAuthId  = lift $ maybeAuthId
+  invalidate   = lift $ invalidate
+
+instance authDSLFree :: AuthDSL f => AuthDSL (Free f) where
+  authenticate = liftF <<< authenticate
+  maybeAuthId  = liftF $ maybeAuthId
+  invalidate   = liftF $ invalidate
+
+instance authDSLHalogenF :: AuthDSL g => AuthDSL (HF.HalogenFP ES.EventSource s f g) where
+  authenticate = HF.QueryHF <<< authenticate
+  maybeAuthId  = HF.QueryHF $ maybeAuthId
+  invalidate   = HF.QueryHF $ invalidate
+
+instance authDSLHalogenFP :: AuthDSL g => AuthDSL (HF.HalogenFP ES.ParentEventSource s f (Free (HF.HalogenFP ES.EventSource s' f' g))) where
+  authenticate = HF.QueryHF <<< authenticate
+  maybeAuthId  = HF.QueryHF $ maybeAuthId
+  invalidate   = HF.QueryHF $ invalidate
 
 -- | Oauth2Passwords records
 type Oauth2Passwords =
@@ -117,3 +145,16 @@ type Oauth2Client =
   , endpoint :: String
   , revokeEndPoint :: String
   }
+
+type ReadClient =
+  { clientId :: String
+  , clientSecret :: String
+  }
+
+readClient :: forall eff. Eff (dom :: DOM | eff) (Maybe ReadClient)
+readClient = _readClient Nothing Just
+
+foreign import _readClient
+  :: forall a eff. Maybe a
+  -> (a -> Maybe a)
+  -> Eff (dom :: DOM | eff) (Maybe ReadClient)

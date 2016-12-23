@@ -20,6 +20,13 @@ exports._getSessionStorage = function (just, nothing, key) {
   };
 };
 
+exports.removeSessionStorage = function (key) {
+  return function () {
+    window.sessionStorage.removeItem(str);
+    return {};
+  };
+};
+
 // localStorage, it's similiar to sessionStorage, The only difference is that,
 // while data stored in localStorage has no expiration time
 
@@ -34,5 +41,12 @@ exports._getLocalStorage = function (just, nothing, key) {
   return function () {
     var result = window.localStorage.getItem(key);
     return result === null ? nothing : just(result);
+  };
+};
+
+exports.removeLocalStorage = function (key) {
+  return function () {
+    window.sessionStorage.removeItem(str);
+    return {};
   };
 };
