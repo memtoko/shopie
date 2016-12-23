@@ -76,6 +76,7 @@ mapLift f (Lifted g) = Lifted (f g)
 -- | A sequence of computations fails if any of its components do
 type Errors e a = Lift (Const e) a
 
+-- | Convert to Either.
 runErrors :: forall e. Errors e ~> Either e
 runErrors (Lifted (Const e)) = Left e
 runErrors (Pure x) = Right x

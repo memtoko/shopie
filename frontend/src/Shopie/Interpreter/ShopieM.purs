@@ -11,11 +11,10 @@ import Control.Monad.Aff.Bus as Bus
 import Control.Monad.Aff.Unsafe (unsafeCoerceAff)
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Class (liftEff)
-import Control.Monad.Eff.Clock as CL
 import Control.Monad.Eff.Exception (Error, error)
+import Control.Monad.Eff.Now as Now
 import Control.Monad.Eff.Random as RD
 import Control.Monad.Eff.Ref (Ref, readRef, writeRef)
-import Control.Monad.Eff.Storage as EFS
 import Control.Monad.Free (foldFree)
 import Control.Monad.Fork (fork)
 import Control.Monad.Reader (ReaderT, runReaderT)
@@ -41,6 +40,8 @@ import Shopie.ShopieM (AuthF(..), AuthMessage(..), ShopieF(..), ShopieM(..),
                        ShopieAp(..), Draad(..), ShopieEffects)
 import Shopie.ShopieM.ForkF as SF
 import Shopie.User.Model as UM
+import Shopie.Utils.Storage as US
+
 
 runShopieM
   :: forall eff
@@ -84,7 +85,7 @@ evalAuthF = case _ of
       Right atok' -> do
         lift $ liftAff $ do
           liftEff $ writeRef tokenAuth (Just atok')
-          liftEff $ EFS.setLocalStorage "shopie:auth-storage" atok'
+          liftEff $ US.setLocalStorage "shopie:auth-storage" atok'
           endP <- liftEff $ readRef apiEndpoint
           mui <- fetchCurrentUser endP atok'
           liftEff $ writeRef userInfo mui
@@ -116,7 +117,7 @@ evalAuthF = case _ of
     user' <- liftEff $ readRef userInfo
     when (isJust user') $ do
       liftEff $ writeRef userInfo Nothing
-      liftEff $ EFS.removeLocalStorage "shopie:auth-storage"
+      liftEff $ US.removeLocalStorage "shopie:auth-storage"
     pure $ k $ Invalidated "invalidated success!"
   Forgotten em next -> do
     Draad { auth, tokenAuth, apiEndpoint } <- ask
@@ -129,7 +130,7 @@ evalAuthF = case _ of
 
   where
     restoreSess :: String -> Eff (ShopieEffects eff) (Either Error BearerToken)
-    restoreSess s = lmap error <$> EFS.getLocalStorage s
+    restoreSess s = lmap error <$> US.getLocalStorage s
 
 maybeAuthIdFromSes
   :: forall a eff
@@ -139,7 +140,7 @@ maybeAuthIdFromSes
 maybeAuthIdFromSes k bt@(BearerToken tok) = do
   Draad { apiEndpoint, userInfo, oauth2b, tokenAuth } <- ask
   oauth2b' <- liftEff $ readRef oauth2b
-  dn <- liftEff $ map (unwrap <<< unInstant) CL.now
+  dn <- liftEff $ map (unwrap <<< unInstant) Now.now
   if tok.expiresIn < dn
     then do
       rtok <- liftAff $ refreshTokenR oauth2b' bt
@@ -248,7 +249,7 @@ scheduleRefreshP
 scheduleRefreshP oa t = go t
   where
     go bt@(BearerToken token) = do
-      n <- lift $ liftEff $ map (unwrap <<< unInstant) CL.now
+      n <- lift $ liftEff $ map (unwrap <<< unInstant) Now.now
       offset <- lift $ liftEff $ map callCulateOffset RD.random
       if token.expiresIn > (n - offset)
         then do
@@ -268,7 +269,7 @@ refreshTokC
 refreshTokC ref = forever do
   t <- Co.await
   lift $ liftEff $ writeRef ref (Just t)
-  lift $ liftEff $ EFS.setLocalStorage "shopie:auth-storage" t
+  lift $ liftEff $ US.setLocalStorage "shopie:auth-storage" t
   pure Nothing
 
 normalizeExpiration :: BearerToken -> BearerToken

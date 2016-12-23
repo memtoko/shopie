@@ -1,40 +1,18 @@
-module Control.Error.Util where
+module Shopie.Utils.Error where
 
 import Prelude
 
-import Control.Monad.Maybe.Trans (MaybeT(..), runMaybeT)
-import Control.Monad.Except.Trans (ExceptT(..), runExceptT)
+import Control.Monad.Maybe.Trans (MaybeT(..))
+import Control.Monad.Except.Trans (ExceptT(..))
 
 import Data.Bifunctor (bimap)
-import Data.Either (Either(..), either)
-import Data.Maybe (Maybe(..), maybe)
+import Data.Either (Either, either)
+import Data.Maybe (Maybe, maybe)
 
 
--- | Suppress the 'Left' value of an 'Either'.
-hush :: forall a. Either a ~> Maybe
-hush = either (const Nothing) Just
-
--- | Suppress the 'Left' value of an 'ExceptT'
-hushT :: forall m a. Functor m => ExceptT a m ~> MaybeT m
-hushT = MaybeT <<< map hush <<< runExceptT
-
--- | Tag the 'Nothing' value of a 'Maybe'
-note :: forall a. a -> Maybe ~> Either a
-note b = maybe (Left b) Right
-
--- | Tag the 'Nothing' value of a 'MaybeT'
-noteT :: forall m a. Functor m => a -> MaybeT m ~> ExceptT a m
-noteT a = ExceptT <<< (map (note a)) <<< runMaybeT
-
--- | Lift a 'Maybe' to the 'MaybeT' monad
-hoistMaybe :: forall m. Applicative m => Maybe ~> MaybeT m
-hoistMaybe = MaybeT <<< pure
-
--- |
-foldExceptT :: forall m a b c. Bind m => (a -> m c) -> (b -> m c) -> ExceptT a m b -> m c
+foldExceptT :: forall m a b c. Monad m => (a -> m c) -> (b -> m c) -> ExceptT a m b -> m c
 foldExceptT f g (ExceptT m) =  m >>= either f g
 
--- |
 bimapExceptT
   :: forall m a b f e
    . Functor m
@@ -45,7 +23,7 @@ bimapExceptT
 bimapExceptT f g (ExceptT m) = ExceptT (map (bimap f g) m)
 
 -- |
-foldMaybeT :: forall m a b. Bind m => m b -> (a -> m b) -> MaybeT m a -> m b
+foldMaybeT :: forall m a b. Monad m => m b -> (a -> m b) -> MaybeT m a -> m b
 foldMaybeT mb hb (MaybeT m) = m >>= maybe mb hb
 
 -- | Lift maybe value to an Applicative. If the given maybe Nothing then use

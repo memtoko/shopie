@@ -1,6 +1,6 @@
 module Shopie.Effects where
 
-import Control.Monad.Eff.Clock (CLOCK)
+import Control.Monad.Eff.Now (NOW)
 import Control.Monad.Eff.Console (CONSOLE)
 import Control.Monad.Eff.Random (RANDOM)
 import Control.Monad.Eff.Ref (REF)
@@ -14,7 +14,7 @@ type ShopieEffects eff = HalogenEffects (RawShopieEffects eff)
 type RawShopieEffects eff =
   ( ajax :: AJAX
   , console :: CONSOLE
-  , clock :: CLOCK
+  , now :: NOW
   , random :: RANDOM
   , ref :: REF
   | eff

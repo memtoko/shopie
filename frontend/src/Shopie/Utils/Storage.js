@@ -1,6 +1,6 @@
 "use strict";
 
-// module Control.Monad.Eff.Storage
+// module Shopie.Utils.Storage
 
 // Session storage, will persist / accessible by the window that created it is open.
 
