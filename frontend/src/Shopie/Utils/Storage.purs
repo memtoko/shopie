@@ -1,4 +1,4 @@
-module Control.Monad.Eff.Storage
+module Shopie.Utils.Storage
   ( setSessionStorage
   , getSessionStorage
   , removeSessionStorage

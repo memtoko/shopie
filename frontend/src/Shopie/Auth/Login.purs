@@ -3,7 +3,6 @@ module Shopie.Auth.Login where
 import Shopie.Prelude
 
 import Control.Applicative.Lift (Errors, runErrors)
-import Control.Error.Util (recoverM, censorMF)
 import Control.Monad.Aff (later')
 import Control.Monad.Aff.Bus as Bus
 
@@ -20,6 +19,7 @@ import Shopie.Button.Spinner (SpinnerS, SpinnerQuery(..), SpinnerSlot(..),
                               spinner, mkSpinner)
 import Shopie.ShopieM (class NotifyQ, AuthMessage(..), Draad(..), ShopieEffects, ShopieMoD,
                        error, forgotten, info)
+import Shopie.Utils.Error (recoverM, censorMF)
 import Shopie.Validation as SV
 
 

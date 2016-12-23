@@ -15,6 +15,8 @@
     "purescript-argonaut": "^2.0.0",
     "purescript-const": "^2.0.0",
     "purescript-console": "^2.0.0",
+    "purescript-errors": "^2.1.0",
+    "purescript-functors": "^1.0.0",
     "purescript-freeap": "^2.0.0",
     "purescript-foreign": "^3.0.0",
     "purescript-fork": "^1.0.0",
@@ -25,8 +27,11 @@
     "normalize.css": "3.0.3",
     "purescript-markdown": "^8.0.0",
     "purescript-markdown-halogen": "^3.0.0",
+    "purescript-now": "^2.0.0",
+    "purescript-pathy": "^3.0.2",
     "purescript-random": "^2.0.0",
-    "purescript-routing": "^3.0.0"
+    "purescript-routing": "^3.0.0",
+    "purescript-validation": "^2.0.0"
   },
   "devDependencies": {
     "purescript-psci-support": "^2.0.0"
